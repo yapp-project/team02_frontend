@@ -22,5 +22,5 @@ and enter to `localhost:3000`
 
 - React v16
 - React-Router v4
-- React-Redux, Redux-Thunk
+- React-Redux, Redux-Saga
 - Sass
