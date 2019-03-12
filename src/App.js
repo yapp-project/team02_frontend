@@ -1,7 +1,12 @@
 import React, { Component } from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, withRouter } from "react-router-dom";
+import { connect } from "react-redux";
+import { MainView } from "./containers";
 
-import { MainView } from "./views";
+const mapStateToProps = state => {
+  return {};
+};
+const mapDispatchToProps = dispatch => ({});
 
 class App extends Component {
   render() {
@@ -15,4 +20,9 @@ class App extends Component {
   }
 }
 
-export default App;
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(App)
+);

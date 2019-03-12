@@ -1,5 +1,6 @@
+$bg-color: red;
 .body {
-  background: red;
   width: 200px;
   height: 150px;
+  color: $bg-color;
 }
