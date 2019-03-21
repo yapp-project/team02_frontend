@@ -1,0 +1,29 @@
+.searchform {
+  position: absolute;
+  left: 0%;
+  right: 0%;
+  top: 0%;
+  bottom: 50%;
+  margin: auto;
+  background: green;
+
+  .combo {
+    width: 100px;
+  }
+
+  button.search {
+    width: 100px;
+    height: 150px;
+    background: white;
+  }
+
+  input.search {
+    width: 200px;
+    height: 50px;
+    background: white;
+  }
+
+  .recommend {
+    background: white;
+  }
+}

@@ -5,7 +5,7 @@ const cx = classNames.bind(styles);
 
 const Button = ({ className, value, onClick }) => {
   return (
-    <button className={cx(styles.button, className)} onClick={onClick}>
+    <button className={cx(className, { button: !className })} onClick={onClick}>
       {value}
     </button>
   );
