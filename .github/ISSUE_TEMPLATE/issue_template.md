@@ -1,3 +1,11 @@
+---
+name: issue_template report
+about: Create a issue
+title: ''
+assignees: ''
+
+---
+
 ### 개요
 
 * 개요 1
