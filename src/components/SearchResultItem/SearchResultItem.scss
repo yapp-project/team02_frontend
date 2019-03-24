@@ -1,0 +1,80 @@
+/*mouseover했을때 나오게*/
+.item_img {
+  width: inherit;
+  height: inherit;
+}
+
+.information_rect {
+  visibility: hidden;
+  position: absolute;
+  background-color: lightgray;
+
+  width: 100%;
+  top: 275px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 15px;
+  cursor: Default;
+
+  .cocktailName {
+    font-weight: bold;
+    font-size: 20px;
+    width: 300px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  .bottom {
+    display: flex;
+    justify-content: space-between;
+
+    .userName {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .right {
+      display: flex;
+      .like {
+        width: 25px;
+        height: 25px;
+        background-image: url("../../images/baseline-favorite_border-24px.svg");
+        background-repeat: no-repeat;
+      }
+      .number {
+        height: 100%;
+        text-align: center;
+        vertical-align: middle;
+        line-height: 25px;
+      }
+    }
+  }
+}
+/*사진 밑에 붙는*/
+// .item_img {
+//   width: inherit;
+//   height: inherit;
+//   vertical-align: middle;
+// }
+// .information_rect {
+//   background-color: yellow;
+//   text-align: center;
+//   display: flex;
+//   justify-content: space-between;
+//   width: 100%;
+
+//   .name {
+//     font-size: 15px;
+//     font-weight: bold;
+//   }
+
+//   .like {
+//     width: 25px;
+//     height: 25px;
+//     background-image: url("../../images/baseline-favorite_border-24px.svg");
+//     background-repeat: no-repeat;
+//   }
+// }
