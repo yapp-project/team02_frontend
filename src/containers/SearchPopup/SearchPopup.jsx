@@ -3,6 +3,7 @@ import classNames from "classnames/bind";
 import styles from "./SearchPopup.scss";
 import { connect } from "react-redux";
 import { Button, Div, Edit, Popup, Combo } from "../../components";
+import SearchResult from "../SearchResult/SearchResult";
 
 const cx = classNames.bind(styles);
 
@@ -30,7 +31,8 @@ class SearchPopup extends Component {
     material_min: 0,
     material_max: 0,
     recommend: {},
-    selectedOption: null
+    selectedOption: null,
+    bSaerch: false
   };
 
   /**
@@ -41,36 +43,67 @@ class SearchPopup extends Component {
     this.setState({ selectedOption });
   };
 
+  onSearh = () => {
+    this.setState({ bSaerch: !this.state.bSaerch });
+  };
+
   /**
    * Layout
    * 검색 form Layout
    * key : List 사용 시 유니크한 값 설정 필요
    */
   search_form = () => {
-    const { selectedOption } = this.state;
-
+    const { selectedOption, bSaerch } = this.state;
+    const customStyles = {
+      control: base => ({
+        ...base,
+        height: 70,
+        minHeight: 70,
+        margin: 0
+      }),
+      menu: base => ({
+        ...base,
+        margin: 0
+      })
+    };
     return [
-      <Combo
-        className={cx("combo")}
-        value={selectedOption}
-        options={options}
-        handleChange={this.handleChange}
-        defaultValue={options[0]}
-        key="combo"
+      <Div
+        className={cx("topcotainer")}
+        key="top_div"
+        content={[
+          <Combo
+            className={cx("combo")}
+            value={selectedOption}
+            options={options}
+            handleChange={this.handleChange}
+            defaultValue={options[0]}
+            key="combo"
+            styles={customStyles}
+          />,
+          <Edit
+            className={cx("search")}
+            placeholder="검색어를 입력해주세요"
+            key="edit_search"
+          />,
+          <Button
+            className={cx("search")}
+            value="검색"
+            key="btn_search"
+            onClick={this.onSearh}
+          />
+        ]}
       />,
-      <Edit
-        className={cx("search")}
-        placeholder="검색어를 입력해주세요"
-        key="edit_search"
+      <Div
+        className={cx("recommend")}
+        content="추천단어"
+        key="div_recommend"
       />,
-      <Button className={cx("search")} value="검색" key="btn_search" />,
-      <Div className={cx("recommend")} content="추천단어" key="div_recommend" />
+      bSaerch ? <SearchResult /> : null
     ];
   };
 
   render() {
     const { onClick = null, id = "search" } = this.props; //부모로부터 click event, id 인자로 받음
-
     return (
       <Popup
         id={id}

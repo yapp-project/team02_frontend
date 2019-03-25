@@ -48,11 +48,10 @@ class MainView extends Component {
 
   render() {
     return (
-      <div>
-        <div className={cx("body")}>메인페이지입니다.</div>
+      <div className={cx("body")}>
+        메인페이지입니다.
         <Button value="로그인" onClick={this.onShowLogin} />
         <Button value="검색" onClick={this.onShowSearch} />
-
         {this.state.showPopup ? (
           <LoginPopup id={loginPopupID} onClick={this.onShowLogin} />
         ) : null}
