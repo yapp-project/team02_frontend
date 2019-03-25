@@ -1,0 +1,38 @@
+.searchform {
+  position: absolute;
+  left: 0%;
+  right: 0%;
+  top: 0%;
+  margin: auto;
+  background: white;
+
+  .topcotainer {
+    margin-top: 10px;
+    display: flex;
+    background: white;
+    height: 70px;
+    justify-content: center;
+
+    .combo {
+      width: 120px;
+    }
+    input.search {
+      width: 300px;
+      background: white;
+      margin-left: 10px;
+      margin-right: 10px;
+    }
+    button.search {
+      width: 70px;
+      background: white;
+    }
+  }
+
+  .recommend {
+    margin-top: 5px;
+    background: white;
+    border-top: 3px solid black;
+    border-bottom: 3px solid black;
+    padding-top: 3px;
+  }
+}
