@@ -71,7 +71,7 @@ const Div = ({ title, detail }) => {
                 placeholder="레시피 이름"
               />
             </div>
-
+            
             <div className={cx("descripe")}>
               <span>도수</span>
 
