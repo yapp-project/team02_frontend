@@ -1,6 +1,13 @@
 $bg-color: red;
+
+html,
+body {
+  margin: 0;
+  width: 100%;
+  overflow: hidden;
+}
+
 .body {
-  width: 200px;
-  height: 150px;
-  color: $bg-color;
+  margin: 0;
+  height: 100%;
 }

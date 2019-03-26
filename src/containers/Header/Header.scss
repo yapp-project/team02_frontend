@@ -1,0 +1,131 @@
+$icon-color: red;
+
+.test {
+  height: 2000px;
+}
+
+.show {
+  display: block;
+}
+
+.close {
+  display: none;
+}
+
+.header-container-top {
+  position: fixed;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  border: 1px solid #707070;
+  box-sizing: border-box;
+}
+
+.header-container-top::after {
+  display: block;
+  content: '';
+  clear: both;
+}
+
+.icon {
+  width: 134px;
+  height: 40px;
+  margin: 20px 0 0 36px;
+  float: left;
+  background: $icon-color;
+}
+
+.header-container-top Button {
+  float: right;
+}
+
+.header-container-top .search {
+  width: 60px;
+  height: 60px;
+  border-radius: 30px;
+  margin: 10px 15px 0 0;
+}
+
+.header-container-top .login {
+  width: 177px;
+  height: 60px;
+  border-radius: 15px;
+  margin: 10px 29px 0 0;
+}
+
+.header-container-bottom {
+  position: fixed;
+  width: 100%;
+  margin-top: 30px;
+  padding: 0 29px 0 36px;
+  top: 80px;
+  left: 0;
+  box-sizing: border-box;
+}
+
+.header-container-bottom::after {
+  display: block;
+  position: fixed;
+  left:0;
+  content: '';
+  height: 100vh;
+  width: 100%;
+  background-color: #000;
+  opacity: 0.2;
+}
+
+.header-search-container {
+  height: 100%;
+  width: 100%;
+}
+
+.header-search-container-main {
+  height: 100%;
+}
+
+.header-search-input {
+  position: relative;
+  width: 100%;
+  padding: 10px 0;
+  border: 1px solid #707070;
+  border-left: 0;
+  border-right: 0;
+  box-sizing: border-box
+}
+
+#search-input {
+  width: 100%;
+  height: 40px;
+  font-size: 24px;
+  line-height: 24px;
+  border: none;
+  box-sizing: border-box;
+}
+
+.header-recommendation {
+  height: 100%;
+}
+
+.header-recommendation-list ul {
+  padding: 16px 40px;
+  margin: 0;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  white-space:nowrap
+}
+
+.header-recommendation-list li {
+  display:inline-block;
+  height: 32px;
+  border: 1px solid #707070;
+  border-radius: 30px;
+  line-height: 32px;
+  text-align: center;
+  padding: 0 10px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.header-recommendation-list li:first-child {
+  margin-left: 0;
+}
