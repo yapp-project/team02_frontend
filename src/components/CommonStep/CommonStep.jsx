@@ -31,6 +31,7 @@ const Div = ({ contents, onChangeStepStatus }) => {
             
             <span className={cx("common-container-detail")}>
               <span className={cx("common-container-contour")}></span>
+              
               {contents[0].detail}
             </span>
           </div>
