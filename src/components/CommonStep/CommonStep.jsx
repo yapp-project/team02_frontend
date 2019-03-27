@@ -5,7 +5,7 @@ import { Edit, Button } from "../../components";
 
 const cx = classNames.bind(styles);
 
-const Div = ({ contents, onChangeStepStatus }) => {
+const Div = ({ contents, onChangeStepStatus, onSaveRecipe }) => {
   return (
     <div className={cx("common-container")}>
       <div className={cx("common-container-header")}>
@@ -21,7 +21,7 @@ const Div = ({ contents, onChangeStepStatus }) => {
           <span>STEP 3</span>
         </span>
 
-        <span className={cx("save")}>저장하기</span>
+        <span className={cx("save")} onClick={onSaveRecipe}>저장하기</span>
       </div>
 
       <div className={cx("common-container-body")}>
@@ -31,7 +31,7 @@ const Div = ({ contents, onChangeStepStatus }) => {
             
             <span className={cx("common-container-detail")}>
               <span className={cx("common-container-contour")}></span>
-              
+
               {contents[0].detail}
             </span>
           </div>
@@ -140,6 +140,36 @@ const Div = ({ contents, onChangeStepStatus }) => {
               <span className={cx("images-item")}></span>
               <span className={cx("images-item")}></span>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <div className={cx("done-container close")}>
+        <div className={cx("done-notification-area")}>
+          <span className={cx("done-closeButton")} onClick={onSaveRecipe}></span>
+
+          <span className={cx("done-icon")}></span>
+
+          <span className={cx("done-title")}>Thank you!</span>
+
+          <span className={cx("done-content")}>
+            나만의 레시피가 성공적으로 등록되었습니다!
+            <br></br>
+            많은 사람들과 레시피를 공유해보세요.
+          </span>
+
+          <div className={cx("button-area")}>
+            <Button
+              className={cx("confirm")}
+              value="레시피 확인하기"
+              // onClick={this.onSearh}
+            />
+            
+            <Button
+              className={cx("enrollment")}
+              value="새 레시피 등록하기"
+              // onClick={this.onSearh}
+            />
           </div>
         </div>
       </div>

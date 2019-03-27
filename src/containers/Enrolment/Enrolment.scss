@@ -404,4 +404,104 @@
     clear: both;
   }
 
+  .done-container {
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(0,0,0,0.5);
+
+    .done-notification-area {
+      width: 800px;
+      height: 640px;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%,-50%);
+      border: 1px solid #707070;
+      border-radius: 20px;
+      background: #fff;
+    }
+
+    .done-closeButton {
+      display: block;
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      right: 25px;
+      top: 25px;
+      border: 1px solid #000;
+      cursor: pointer;
+    }
+
+    .done-icon {
+      display: block;
+      width: 200px;
+      height: 200px;
+      margin-top: 62px;
+      margin-left: auto;
+      margin-right: auto;
+      border: 1px solid #707070;
+      border-radius: 100px;
+      background-color: inherit;
+    }
+
+    .done-title {
+      display: block;
+      margin-top: 15px;
+      font-family: NotoSans;
+      font-size: 80px;
+      font-weight: bold;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: 1.36;
+      letter-spacing: normal;
+      text-align: center;
+      color: #707070;
+    }
+
+    .done-content {
+      display: block;
+      font-family: NanumGothicOTF;
+      font-size: 15px;
+      font-weight: normal;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: 1.67;
+      letter-spacing: normal;
+      text-align: center;
+      color: #707070;
+      white-space: pre-line;
+    }
+
+    .button-area {
+      width: 100%;
+      margin-top: 50px;
+      text-align: center;
+
+      button {
+        display: inline-block;
+        width: 245px;
+        height: 80px;
+        border-radius: 20px;
+        font-family: NanumGothicOTF;
+        font-size: 20px;
+        font-weight: bold;
+        font-style: normal;
+        font-stretch: normal;
+        line-height: 1.5;
+        letter-spacing: normal;
+        text-align: center;
+        color: #707070;
+      }
+
+      button:first-child {
+        margin-right: 80px;
+      }
+    }
+
+  }
+
 }

@@ -79,18 +79,26 @@ class Header extends Component {
     }
   };
 
-  common_form = (contents, onChangeStepStatus) => {
+  onSaveRecipe = event => {
+    let doneView = document.querySelector(".done-container");
+
+    doneView.classList.toggle("close");
+  };
+
+  common_form = (contents, onChangeStepStatus, onSaveRecipe) => {
     return [
       <CommonStep
         contents={contents}
         onChangeStepStatus={onChangeStepStatus}
+        onSaveRecipe={onSaveRecipe}
       />
     ];
   };
 
   render() {
     return (
-      <Div className="content" content={this.common_form(this.contents, this.onChangeStepStatus)}></Div>
+      <Div className="content" content={this.common_form(this.contents, this.onChangeStepStatus, this.onSaveRecipe)}></Div>
+
     );
   }
 }
