@@ -1,24 +1,24 @@
 import React from "react";
 import classNames from "classnames/bind";
 import styles from "./CommonStep.scss";
-import { Edit } from "../../components";
+import { Edit, Button } from "../../components";
 
 const cx = classNames.bind(styles);
 
-const Div = ({ title, detail }) => {
+const Div = ({ contents, onChangeStepStatus }) => {
   return (
     <div className={cx("common-container")}>
       <div className={cx("common-container-header")}>
-        <span className={cx("step-1")}>
-          <span className={cx("step")}>STEP1</span>
+        <span className={cx("step-1 select-step")} onClick={onChangeStepStatus}>
+          <span>STEP 1</span>
         </span>
 
-        <span className={cx("step-2")}>
-          <span className={cx("step")}>STEP2</span>
+        <span className={cx("step-2")} onClick={onChangeStepStatus}>
+          <span>STEP 2</span>
         </span>
 
-        <span className={cx("step-3")}>
-          <span className={cx("step")}>STEP3</span>
+        <span className={cx("step-3")} onClick={onChangeStepStatus}>
+          <span>STEP 3</span>
         </span>
 
         <span className={cx("save")}>저장하기</span>
@@ -27,11 +27,11 @@ const Div = ({ title, detail }) => {
       <div className={cx("common-container-body")}>
         <div className={cx("common-content")}>
           <div className={cx("common-content-left")}>
-            <span className={cx("common-container-title")}>{title}</span>
+            <span className={cx("common-container-title")}>{contents[0].title}</span>
             
             <span className={cx("common-container-detail")}>
               <span className={cx("common-container-contour")}></span>
-              {detail}
+              {contents[0].detail}
             </span>
           </div>
         </div>
@@ -71,7 +71,7 @@ const Div = ({ title, detail }) => {
                 placeholder="레시피 이름"
               />
             </div>
-            
+
             <div className={cx("descripe")}>
               <span>도수</span>
 
@@ -96,11 +96,50 @@ const Div = ({ title, detail }) => {
         </div>
 
         <div className={cx("common-container-step2 close")}>
-          hello
+          <div className={cx("step2-container")}>
+            <Button
+              className={cx("shake")}
+              value="Shake Me!"
+              // onClick={this.onSearh}
+            />
+
+            <div className={cx("stuff-container")}>
+              <span className={cx("stuff-add")}></span>
+
+              <div className={cx("stuff-item")}>
+                <span className={cx("stuff-item-color")}></span>
+
+                <Edit
+                  className={cx("stuff-item-input-stuff")}
+                  placeholder="재료 이름"
+                />
+
+                <Edit
+                  className={cx("stuff-item-input-volume")}
+                  placeholder="용량 ml"
+                />
+
+                <span className={cx("stuff-item-ratio")}>30%</span>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className={cx("common-container-step3 close")}>
-          hello
+          <div className={cx("step3-container")}>
+            <span className={cx("thums-image")}></span>
+
+            <div className={cx("other-image")}>
+              <span className={cx("images-item")}></span>
+              <span className={cx("images-item")}></span>
+              <span className={cx("images-item")}></span>
+              <span className={cx("images-item")}></span>
+              <span className={cx("images-item")}></span>
+              <span className={cx("images-item")}></span>
+              <span className={cx("images-item")}></span>
+              <span className={cx("images-item")}></span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
