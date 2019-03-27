@@ -4,8 +4,8 @@ import styles from "./SearchResult.scss";
 import { connect } from "react-redux";
 import { SearchResultItem } from "../../components";
 
-import cocktail1 from "../../images/a1.jpeg";
-import cocktail2 from "../../images/a2.jpg";
+import cocktail1 from "../../static/images/a1.jpeg";
+import cocktail2 from "../../static/images/a2.jpg";
 
 const cx = classNames.bind(styles);
 
