@@ -15,10 +15,14 @@ body {
   background-color: $main-color;
 
   .headerview {
+    //position: fixed;
     width: 100%;
+    height: 80px;
+    //z-index: 2;
     color: $logo-color;
     font-size: $logo-size;
     font-family: $logo-family;
+    background-color: $main-color;
   }
 
   .bodyview {
@@ -94,6 +98,7 @@ body {
           font-size: 35px;
           height: 35px;
           margin-left: 126px;
+          cursor: pointer;
 
           &:first-child {
             margin-left: 0px;
@@ -108,11 +113,16 @@ body {
       .images {
         margin-top: 37.2px;
         margin-left: 393px;
-        height: 605px;
+        margin-bottom: 80px;
+        height: 590px;
         width: 1518px;
         overflow: hidden;
         white-space: nowrap;
         overflow-x: auto;
+        -ms-overflow-style: none; // IE에서 스크롤바 감춤
+        &::-webkit-scrollbar {
+          display: none !important; // 윈도우 크롬 등
+        }
 
         .cocktail {
           display: inline;

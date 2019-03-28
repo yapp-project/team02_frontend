@@ -74,14 +74,16 @@ class MainView extends Component {
   render() {
     return (
       <div className={cx("mainview")}>
-        <div>
-          <div className={cx("headerview")}>
-            헤더레이아웃 위치
-            <Button value="로그인" onClick={this.onShowLogin} />
-            <Button value="검색" onClick={this.onShowSearch} />
-          </div>
+        <div className={cx("headerview")}>
+          헤더레이아웃 위치
+          <Button value="로그인" onClick={this.onShowLogin} />
+          <Button value="검색" onClick={this.onShowSearch} />
         </div>
+
         <div className={cx("bodyview")}>
+          {this.state.showPopup ? (
+            <LoginPopup id={loginPopupID} onClick={this.onShowLogin} />
+          ) : null}
           <div className={cx("top")}>
             <div className={cx("image")}>이미지</div>
             <div className={cx("contents")}>
@@ -110,9 +112,6 @@ class MainView extends Component {
           </div>
         </div>
 
-        {this.state.showPopup ? (
-          <LoginPopup id={loginPopupID} onClick={this.onShowLogin} />
-        ) : null}
         {this.state.showSearch ? (
           <SearchPopup id={searchPopupID} onClick={this.onShowSearch} />
         ) : null}

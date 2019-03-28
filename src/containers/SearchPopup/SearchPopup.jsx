@@ -4,6 +4,7 @@ import styles from "./SearchPopup.scss";
 import { connect } from "react-redux";
 import { Button, Div, Edit, Popup, Combo } from "../../components";
 import SearchResult from "../SearchResult/SearchResult";
+import { isAbsolute } from "path";
 
 const cx = classNames.bind(styles);
 
@@ -13,11 +14,27 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = {};
 
+const SEARCH_FITER_TIME = 0; //태그기반 검색 선택
+const SEARCH_FITER_SCRAP = 1; //재료기반 검색 선택
 const SEARCH_BASE_TAG = 0; //태그기반 검색 선택
 const SEARCH_BASE_MATERIAL = 1; //재료기반 검색 선택
-const options = [
-  { value: SEARCH_BASE_TAG, label: "태그" },
-  { value: SEARCH_BASE_MATERIAL, label: "재료" }
+const filter = [
+  { value: SEARCH_FITER_TIME, label: "최신순" },
+  { value: SEARCH_FITER_SCRAP, label: "스크랩순" }
+];
+const type = [
+  { value: SEARCH_BASE_TAG, label: "태그 기반" },
+  { value: SEARCH_BASE_MATERIAL, label: "재료 기반" }
+];
+const dummy_data = [
+  "Citrus",
+  "Bombay",
+  "Vodka",
+  "Bombay",
+  "Bombay",
+  "Bombay",
+  "Bombay",
+  "Bombay"
 ];
 
 /**
@@ -57,13 +74,44 @@ class SearchPopup extends Component {
     const customStyles = {
       control: base => ({
         ...base,
-        height: 70,
-        minHeight: 70,
-        margin: 0
+        height: 47,
+        minHeight: 47,
+        margin: 0,
+        border: 0,
+        backgroundColor: "#080f24",
+        color: "#ffffff"
       }),
       menu: base => ({
         ...base,
-        margin: 0
+        margin: 0,
+        color: "#ffffff",
+        backgroundColor: "#080f24",
+        "font-size": 20
+      }),
+      indicatorSeparator: base => ({
+        ...base,
+        backgroundColor: "transparent"
+      }),
+      dropdownIndicator: base => ({
+        ...base,
+        color: "#ffffff",
+        "&:hover": {
+          color: "#ffffff"
+        }
+      }),
+      singleValue: base => ({
+        ...base,
+        color: "#fff"
+      }),
+      valueContainer: base => ({
+        ...base,
+        color: "#ffffff",
+        "font-size": 20
+      }),
+      input: base => ({
+        ...base,
+        color: "#ffffff",
+        "font-size": 20
       })
     };
     return [
@@ -71,31 +119,46 @@ class SearchPopup extends Component {
         className={cx("topcotainer")}
         key="top_div"
         content={[
-          <Combo
-            className={cx("combo")}
-            value={selectedOption}
-            options={options}
-            handleChange={this.handleChange}
-            defaultValue={options[0]}
-            key="combo"
-            styles={customStyles}
-          />,
           <Edit
             className={cx("search")}
             placeholder="검색어를 입력해주세요"
             key="edit_search"
+            onInput={this.onSearh}
           />,
-          <Button
-            className={cx("search")}
-            value="검색"
-            key="btn_search"
-            onClick={this.onSearh}
+          <Combo
+            className={cx("filter")}
+            value={selectedOption}
+            options={filter}
+            handleChange={this.handleChange}
+            isSearchable={false}
+            defaultValue={filter[0]}
+            key="filter"
+            styles={customStyles}
+          />,
+          <Combo
+            className={cx("type")}
+            value={selectedOption}
+            options={type}
+            handleChange={this.handleChange}
+            isSearchable={false}
+            defaultValue={type[0]}
+            key="type"
+            styles={customStyles}
           />
         ]}
       />,
       <Div
         className={cx("recommend")}
-        content="추천단어"
+        content={[
+          dummy_data.map(item => {
+            return (
+              <div id={item} key={item} tabIndex="-1" className={cx("text")}>
+                #{item}
+              </div>
+            );
+          }),
+          <div className={cx("next")}>></div>
+        ]}
         key="div_recommend"
       />,
       bSaerch ? <SearchResult /> : null
