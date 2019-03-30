@@ -1,4 +1,14 @@
 @import "../../static/colors.scss";
+@font-face {
+  font-family: "LasEnterPersonalUseOnly";
+  font-weight: 500;
+  src: url("../../static/LasEnter_PersonalUseOnly.ttf") format("truetype");
+}
+@font-face {
+  font-family: "MyriadPro-It";
+  font-weight: normal;
+  src: url("../../static/MyriadPro-It.otf") format("opentype");
+}
 
 html,
 body {
@@ -15,10 +25,8 @@ body {
   background-color: $main-color;
 
   .headerview {
-    //position: fixed;
     width: 100%;
     height: 80px;
-    //z-index: 2;
     color: $logo-color;
     font-size: $logo-size;
     font-family: $logo-family;
@@ -31,7 +39,7 @@ body {
     height: 100%;
     background-color: $main-color;
 
-    .top {
+    .topcontainer {
       width: 100%;
       display: flex;
 
@@ -63,12 +71,10 @@ body {
             font-family: $contents-family;
           }
           .button {
-            width: 37px;
-            height: 37px;
+            width: 40px;
+            height: 40px;
             background-color: transparent;
-            border: solid 2px #83d1e6;
-            color: #83d1e6;
-            font-size: 23px;
+            background-image: url("../../static/images/plusbtn.svg");
             margin-left: 28px;
             outline-style: none;
             cursor: pointer;
@@ -86,11 +92,22 @@ body {
         }
       }
     }
-    .bottom {
+    .bottomcontainer {
+      position: absolute;
       margin-top: 42.8px;
+      width: 100%;
+      height: 100%;
+
       .hashtag {
         display: flex;
         margin-left: 393px;
+        overflow: hidden;
+        overflow-x: auto;
+        white-space: nowrap;
+        -ms-overflow-style: none; // IE에서 스크롤바 감춤
+        &::-webkit-scrollbar {
+          display: none !important; // 윈도우 크롬 등
+        }
 
         div {
           color: $contents-color;
@@ -114,29 +131,89 @@ body {
         margin-top: 37.2px;
         margin-left: 393px;
         margin-bottom: 80px;
-        height: 590px;
-        width: 1518px;
+        height: 100%;
+        width: 100%;
         overflow: hidden;
-        white-space: nowrap;
+
+        //스크롤 안되게 할려면 여기 주석
         overflow-x: auto;
         -ms-overflow-style: none; // IE에서 스크롤바 감춤
         &::-webkit-scrollbar {
           display: none !important; // 윈도우 크롬 등
         }
 
-        .cocktail {
-          display: inline;
-          position: relative;
-          width: 360px;
-          height: 590px;
-          margin-right: 26px;
-          &:hover {
-            img {
-              opacity: 0.7;
-            }
+        .innercontainer {
+          max-height: 590px;
+          width: 100%;
+          height: 100%;
+          white-space: nowrap;
 
-            div {
-              visibility: visible;
+          .cocktail {
+            display: inline-block;
+            position: relative;
+            width: 360px;
+            height: 100%;
+            margin-right: 26px;
+            &:hover {
+              img {
+                opacity: 0.7;
+              }
+
+              div {
+                visibility: visible;
+              }
+            }
+          }
+
+          .prevcontainer {
+            position: absolute;
+            width: 116.3px;
+            height: 100%;
+            max-height: 590px;
+            top: 72px;
+            z-index: 10;
+
+            .prevbspan {
+              position: absolute;
+              background-image: url("../../static/images/mainrightarrow.svg");
+              background-repeat: no-repeat;
+              -webkit-transform: rotate(180deg);
+              transform: rotate(180deg);
+              width: 100%;
+              height: 116.3px;
+              top: 40%;
+              cursor: pointer;
+              display: none;
+            }
+          }
+
+          .nextcontainer {
+            position: absolute;
+            width: 116.3px;
+            height: 100%;
+            max-height: 590px;
+            top: 72px;
+            right: 0;
+            z-index: 10;
+
+            .nextspan {
+              position: absolute;
+              background-image: url("../../static/images/mainrightarrow.svg");
+              background-repeat: no-repeat;
+              width: 100%;
+              height: 116.3px;
+              top: 40%;
+              cursor: pointer;
+              display: none;
+            }
+          }
+
+          &:hover {
+            .prevbspan {
+              display: block;
+            }
+            .nextspan {
+              display: block;
             }
           }
         }

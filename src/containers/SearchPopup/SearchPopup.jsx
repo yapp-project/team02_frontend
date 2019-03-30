@@ -4,7 +4,6 @@ import styles from "./SearchPopup.scss";
 import { connect } from "react-redux";
 import { Button, Div, Edit, Popup, Combo } from "../../components";
 import SearchResult from "../SearchResult/SearchResult";
-import { isAbsolute } from "path";
 
 const cx = classNames.bind(styles);
 
@@ -37,6 +36,22 @@ const dummy_data = [
   "Bombay"
 ];
 
+const styleStrategies = [
+  {
+    mediaQuery: "(max-width: 719.9px)",
+    style: { numberOfColumns: 1, gutterHeight: 5, gutterWidth: 0 }
+  },
+  {
+    mediaQuery: "(min-width: 720px) and (max-width: 1023.9px)",
+    style: { numberOfColumns: 2, gutterHeight: 15, gutterWidth: 15 }
+  },
+  {
+    mediaQuery: "(min-width: 1024px)",
+    style: { numberOfColumns: 3, gutterHeight: 30, gutterWidth: 30 }
+  }
+];
+const transition = "top 100ms ease-in-out, left 100ms ease-in-out";
+
 /**
  * @author AnGwangHo
  * @description 검색 팝업으로 독립적으로 구성된다.
@@ -60,8 +75,21 @@ class SearchPopup extends Component {
     this.setState({ selectedOption });
   };
 
-  onSearh = () => {
-    this.setState({ bSaerch: !this.state.bSaerch });
+  onSearh = event => {
+    const { keyCode } = event;
+    if (keyCode === 13) this.setState({ bSaerch: !this.state.bSaerch });
+  };
+
+  onNextScrollClick = event => {
+    const target = document.getElementById("recommend");
+    const _scrollLeft = target.scrollLeft;
+    target.scrollTo(_scrollLeft + 185, 0);
+  };
+
+  onPrevScrollClick = event => {
+    const target = document.getElementById("recommend");
+    const _scrollLeft = target.scrollLeft;
+    target.scrollTo(_scrollLeft - 185, 0);
   };
 
   /**
@@ -123,7 +151,7 @@ class SearchPopup extends Component {
             className={cx("search")}
             placeholder="검색어를 입력해주세요"
             key="edit_search"
-            onInput={this.onSearh}
+            onKeyUp={this.onSearh}
           />,
           <Combo
             className={cx("filter")}
@@ -148,6 +176,7 @@ class SearchPopup extends Component {
         ]}
       />,
       <Div
+        id="recommend"
         className={cx("recommend")}
         content={[
           dummy_data.map(item => {
@@ -157,7 +186,12 @@ class SearchPopup extends Component {
               </div>
             );
           }),
-          <div className={cx("next")}>></div>
+          <div className={cx("prev")}>
+            <span className={cx("arrow")} onClick={this.onPrevScrollClick} />
+          </div>,
+          <div className={cx("next")}>
+            <span className={cx("arrow")} onClick={this.onNextScrollClick} />
+          </div>
         ]}
         key="div_recommend"
       />,
@@ -168,12 +202,14 @@ class SearchPopup extends Component {
   render() {
     const { onClick = null, id = "search" } = this.props; //부모로부터 click event, id 인자로 받음
     return (
-      <Popup
-        id={id}
-        className={cx("searchform")}
-        content={this.search_form()}
-        onClick={onClick}
-      />
+      <div>
+        <Popup
+          id={id}
+          className={cx("searchform")}
+          content={this.search_form()}
+          onClick={onClick}
+        />
+      </div>
     );
   }
 }

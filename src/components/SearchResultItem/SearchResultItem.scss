@@ -13,12 +13,14 @@
   top: 50%;
   transform: translate(-50%, -50%);
   font-size: 15px;
+  background-color: rgba(8, 15, 36, 0.3);
   cursor: Default;
 
   .inner {
     position: absolute;
     width: 100%;
     bottom: 0px;
+    color: white;
 
     .cocktailName {
       font-family: SegoeUI;
@@ -54,10 +56,12 @@
         display: flex;
         margin-right: 20.3px;
         .like {
-          width: 25px;
-          height: 25px;
-          background-image: url("../../static/images/baseline-favorite_border-24px.svg");
+          width: 18px;
+          height: 100%;
+          background-image: url("../../static/images/Heart.svg");
           background-repeat: no-repeat;
+          background-position: center;
+          margin-right: 10.2px;
         }
         .number {
           height: 100%;

@@ -1,18 +1,163 @@
 .loginform {
   position: absolute;
-  left: 25%;
-  right: 25%;
-  top: 25%;
-  bottom: 25%;
+  left: 30%;
+  right: 30%;
+  top: 15%;
+  bottom: 15%;
   margin: auto;
-  background: yellow;
+  background: #0f1835;
+  text-align: center;
+
+  .logininner {
+    // height: 100%;
+    // display: inline-block;
+
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+
+    .title {
+      width: 100%;
+      height: 64px;
+      font-family: LasEnterPersonalUseOnly;
+      font-size: 55px;
+      font-weight: normal;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: 1.16;
+      letter-spacing: normal;
+      text-align: center;
+      color: #ff365d;
+      margin-bottom: 31.1px;
+      cursor: default;
+    }
+    .id,
+    .pwd {
+      background-color: #080f24;
+      width: 357px;
+      height: 40px;
+      border-radius: 18px;
+      border-color: transparent;
+      font-size: 12px;
+      outline: none;
+      margin-bottom: 30px;
+      color: #ff365d;
+      text-indent: 17px;
+
+      &::placeholder {
+        color: #ff365d;
+      }
+
+      &:focus {
+        font-size: 20px;
+        border: solid 2px #ff365d;
+      }
+    }
+    .login {
+      width: 357px;
+      height: 40px;
+      border-radius: 18px;
+      border-color: transparent;
+      background-color: #ff365d;
+      font-size: 20px;
+      color: #080f24;
+      text-align: center;
+      margin-bottom: 29.7px;
+      cursor: pointer;
+    }
+    .etc {
+      display: flex;
+      color: #7a7a7a;
+      font-family: NotoSansCJKkr;
+      font-size: 15px;
+      height: 22px;
+      margin: 0 auto;
+
+      .inner {
+        margin: 0 auto;
+        .forgot {
+          width: 149px;
+          display: inline-block;
+          line-height: 22px;
+          cursor: pointer;
+        }
+        .register {
+          margin-left: 57px;
+          width: 55px;
+          display: inline-block;
+          line-height: 22px;
+          cursor: pointer;
+        }
+      }
+    }
+  }
 }
 .registerform {
   position: absolute;
-  left: 25%;
-  right: 25%;
-  top: 25%;
-  bottom: 25%;
+  left: 30%;
+  right: 30%;
+  top: 15%;
+  bottom: 15%;
   margin: auto;
-  background: white;
+  background: #0f1835;
+  text-align: center;
+
+  .registerinner {
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+
+    .title {
+      width: 100%;
+      height: 64px;
+      font-family: LasEnterPersonalUseOnly;
+      font-size: 55px;
+      font-weight: normal;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: 1.16;
+      letter-spacing: normal;
+      text-align: center;
+      color: #ff365d;
+      margin-bottom: 31.1px;
+      cursor: default;
+    }
+    .id,
+    .pwd,
+    .pwdrecheck {
+      background-color: #080f24;
+      width: 357px;
+      height: 40px;
+      border-radius: 18px;
+      border-color: transparent;
+      font-size: 12px;
+      outline: none;
+      margin-bottom: 30px;
+      color: #ff365d;
+      text-indent: 17px;
+
+      &::placeholder {
+        color: #ff365d;
+      }
+
+      &:focus {
+        font-size: 20px;
+        border: solid 2px #ff365d;
+      }
+    }
+    .register {
+      width: 357px;
+      height: 40px;
+      border-radius: 18px;
+      border-color: transparent;
+      background-color: #7a7a7a;
+      font-size: 20px;
+      color: #080f24;
+      text-align: center;
+      margin-bottom: 29.7px;
+      cursor: pointer;
+    }
+  }
 }

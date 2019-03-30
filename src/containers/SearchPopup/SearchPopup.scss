@@ -15,6 +15,7 @@
 
     input.search {
       width: 1220.5px;
+      min-width: 300px;
       height: auto;
       background-color: $main-color;
       margin-left: 201.5px;
@@ -30,7 +31,8 @@
       bottom: 0;
       margin-top: auto;
       margin-bottom: auto;
-      width: 100px;
+      width: 123px;
+      min-width: 123px;
     }
     .type {
       top: 0;
@@ -39,13 +41,14 @@
       margin-bottom: auto;
       margin-left: 70px;
       width: 123px;
+      min-width: 123px;
       margin-right: 201px;
     }
   }
 
   .recommend {
     background-color: $main-color;
-    height: 119.5px;
+    height: auto;
     color: #7a7a7a;
     font-size: 35px;
     display: flex;
@@ -53,15 +56,22 @@
     margin-right: 200px;
     margin-left: 201.5px;
     overflow: hidden;
+    overflow-x: auto;
+    -ms-overflow-style: none; // IE에서 스크롤바 감춤
+    &::-webkit-scrollbar {
+      display: none !important; // 윈도우 크롬 등
+    }
+    margin-bottom: 29.4px;
 
     .text {
       width: auto;
-      height: 48px;
+      height: 35px;
       margin-left: 25px;
-      padding: 12px 28px 12px 28px;
-      border-radius: 34px;
-      border: solid 2px #83d1e6;
-      text-align: center;
+      padding: 10.5px 26px 10.5px 26px;
+      // border-radius: 34px;
+      // border: solid 2px #83d1e6;
+      line-height: 43px;
+      font-family: MyriadPro-It;
       cursor: pointer;
 
       &:first-child {
@@ -70,16 +80,55 @@
       &:focus {
         color: #83d1e6;
         outline: none;
+        border-radius: 34px;
+        padding: 8px 26px 10px 26px;
+        border: solid 2px #83d1e6;
+      }
+    }
+    .prev {
+      position: absolute;
+      width: 24px;
+      height: 60px;
+      margin-right: 200px;
+      color: $white;
+
+      .arrow {
+        display: none;
+        vertical-align: bottom;
+        height: 24px;
+        width: 100%;
+        background-image: url("../../static/images/rightarrow.svg");
+        background-repeat: no-repeat;
+        -webkit-transform: rotate(180deg);
+        transform: rotate(180deg);
+        cursor: pointer;
       }
     }
     .next {
       position: absolute;
-      height: 48px;
-      margin-top: 12px;
+      width: 24px;
+      height: 60px;
       margin-right: 200px;
       right: 0;
       color: $white;
-      cursor: pointer;
+
+      .arrow {
+        display: none;
+        vertical-align: bottom;
+        height: 24px;
+        width: 100%;
+        background-image: url("../../static/images/rightarrow.svg");
+        background-repeat: no-repeat;
+        // -webkit-transform: rotate(180deg);
+        // transform: rotate(180deg);
+        cursor: pointer;
+      }
+    }
+
+    &:hover {
+      .arrow {
+        display: inline-block;
+      }
     }
   }
 }

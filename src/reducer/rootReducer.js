@@ -3,5 +3,6 @@
  * @description similar to index.js, combine Reducer
  */
 import { combineReducers } from "redux";
+import userReducer from "./userReducer";
 
-export default combineReducers({});
+export default combineReducers({ userReducer });
