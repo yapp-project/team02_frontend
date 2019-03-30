@@ -67,8 +67,86 @@ class Header extends Component {
                 <span>댓글</span>
               </div>
 
-              <div className={cx("detail-content-main-side-info")}>
+              <div className={cx("detail-content-main-side-info close")}>
+                <span className={cx("side-info")}>레시피 이름</span>
+                <span className={cx("side-info content")}>레시피 이름</span>
 
+                <span className={cx("side-info")}>한줄 설명</span>
+                <span className={cx("side-info content")}>한줄 설명</span>
+
+                <span className={cx("side-info")}>도수</span>
+                <ul className={cx("side-info-alcohol")}>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                </ul>
+
+                <span className={cx("side-info")}>태그</span>
+                <span className={cx("side-info content")}>#태그명 #태그명 #태그명</span>
+              </div>
+
+              <div className={cx("detail-content-main-side-stuff close")}>
+                <div className={cx("detail-content-main-side-stuff-container")}>
+                  <div className={cx("detail-content-main-side-stuff-item")}>
+                    <span className={cx("stuff-color")}></span>
+                    <span className={cx("stuff-name")}>재료이름</span>
+                    <span className={cx("stuff-volume")}>용량ml</span>
+                    <span className={cx("stuff-ratio")}>30%</span>
+                  </div>
+
+                  <div className={cx("detail-content-main-side-stuff-item")}>
+                    <span className={cx("stuff-color")}></span>
+                    <span className={cx("stuff-name")}>재료이름</span>
+                    <span className={cx("stuff-volume")}>용량ml</span>
+                    <span className={cx("stuff-ratio")}>30%</span>
+                  </div>
+
+                  <div className={cx("detail-content-main-side-stuff-item")}>
+                    <span className={cx("stuff-color")}></span>
+                    <span className={cx("stuff-name")}>재료이름</span>
+                    <span className={cx("stuff-volume")}>용량ml</span>
+                    <span className={cx("stuff-ratio")}>30%</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className={cx("detail-content-main-side-photo close")}>
+                <div className={cx("detail-content-main-side-photo-container")}>
+                  <span className={cx("photo-item")}></span>
+                  <span className={cx("photo-item")}></span>
+                  <span className={cx("photo-item")}></span>
+                  <span className={cx("photo-item")}></span>
+                  <span className={cx("photo-item")}></span>
+                  <span className={cx("photo-item")}></span>
+                </div>
+              </div>
+
+              <div className={cx("detail-content-main-side-comment")}>
+                <div className={cx("detail-content-main-side-comment-container")}>
+                  <div className={cx("detail-content-main-side-comment-item")}>
+                    <span className={cx("comment-name")}>닉네임</span>
+                    <span className={cx("comment-content")}>댓글내용</span>
+                    <span className={cx("comment-time")}>00:00</span>
+                  </div>
+
+                  <div className={cx("detail-content-main-side-comment-item")}>
+                    <span className={cx("comment-name")}>닉네임</span>
+                    <span className={cx("comment-content")}>댓글내용</span>
+                    <span className={cx("comment-time")}>00:00</span>
+                  </div>
+
+                  <div className={cx("detail-content-main-side-comment-item")}>
+                    <span className={cx("comment-name")}>닉네임</span>
+                    <span className={cx("comment-content")}>댓글내용</span>
+                    <span className={cx("comment-time")}>00:00</span>
+                  </div>
+                </div>
+
+                <div className={cx("detail-content-main-side-comment-input")}>
+                  댓글 ui here
+                </div>
               </div>
 
             </div>
