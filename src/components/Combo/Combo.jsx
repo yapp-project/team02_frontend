@@ -5,12 +5,20 @@ import styles from "./Combo.scss";
 
 const cx = classNames.bind(styles);
 
-const Combo = ({ className, options, handleChange, defaultValue, styles }) => {
+const Combo = ({
+  className,
+  options,
+  handleChange,
+  defaultValue,
+  styles,
+  isSearchable
+}) => {
   return (
     <Select
       className={cx(className, { default: !className })}
       options={options}
       onChange={handleChange}
+      isSearchable={false}
       defaultValue={defaultValue}
       styles={styles}
     />
