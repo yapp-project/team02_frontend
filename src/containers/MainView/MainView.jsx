@@ -89,59 +89,53 @@ class MainView extends Component {
   render() {
     return (
       <div className={cx("mainview")}>
-        <div className={cx("headerview")}>
-          헤더레이아웃 위치
-          <Button value="로그인" onClick={this.onShowLogin} />
-          <Button value="검색" onClick={this.onShowSearch} />
+        <div className={cx("header")}>
+          <span className={cx("logo")} />
+          <div className={cx("functions")}>
+            우측 기능버튼
+            <Button value="로그인" onClick={this.onShowLogin} />
+            <Button value="검색" onClick={this.onShowSearch} />
+          </div>
         </div>
-
-        <div className={cx("bodyview")}>
-          {this.state.showPopup ? (
-            <LoginPopup
-              id={loginPopupID}
-              onClick={this.onShowLogin}
-              onCloseLogin={this.onCloseLogin}
-            />
-          ) : null}
-          <div className={cx("topcontainer")}>
-            <div className={cx("image")}>이미지</div>
-            <div className={cx("contents")}>
-              <div className={cx("title")}>Drink Me</div>
-              <div className={cx("bottom")}>
-                <div className={cx("text")}>
-                  세상의 다양한 칵테일 레시피를 공유하다.
-                </div>
-                {/* <Button className={cx("button")} value="+" /> */}
-                <div className={cx("button")} />
-                <div className={cx("button_text")}>레시피 등록하기</div>
-              </div>
+        <div className={cx("explanation_rect")}>
+          <div className={cx("left")}>
+            <div className={cx("logo")} />
+          </div>
+          <div className={cx("title")}>Drink Me!</div>
+          <div className={cx("contents")}>
+            세상의 다양한 칵테일 레시피를 공유하다.
+          </div>
+          <div className={cx("register_rect")}>
+            <div className={cx("button")} />
+            <div className={cx("button_text")}>레시피 등록하기</div>
+          </div>
+        </div>
+        <div className={cx("hashtag_rect")}>
+          <div className={cx("hashtag_container")}>
+            <div className={cx("hastag_inner")}>
+              <button className={cx("hashtag")}>#Citrus</button>
+              <button className={cx("hashtag")}>#Vodka</button>
+              <button className={cx("hashtag")}>#Bombay</button>
+              <button className={cx("hashtag")}>#Bombay</button>
+              <button className={cx("hashtag")}>#Bombay</button>
+              <button className={cx("hashtag")}>#Bombay</button>
             </div>
           </div>
-          <div className={cx("bottomcontainer")}>
-            <div className={cx("hashtag")}>
-              <div tabIndex="-1">#Citrus</div>
-              <div tabIndex="-1">#Vodka</div>
-              <div tabIndex="-1">#Bombay</div>
-              <div tabIndex="-1">#Bombay</div>
-              <div tabIndex="-1">#Bombay</div>
-              <div tabIndex="-1">#Bombay</div>
+        </div>
+        <div id="images" className={cx("images")}>
+          <div className={cx("innercontainer")}>
+            <div className={cx("prevcontainer")}>
+              <span
+                className={cx("prevbspan")}
+                onClick={this.onPrevScrollClick}
+              />
             </div>
-            <div id="images" className={cx("images")}>
-              <div className={cx("innercontainer")}>
-                <div className={cx("prevcontainer")}>
-                  <span
-                    className={cx("prevbspan")}
-                    onClick={this.onPrevScrollClick}
-                  />
-                </div>
-                {this.recommend_cocktail({ data: dummy_data })}
-                <div className={cx("nextcontainer")}>
-                  <span
-                    className={cx("nextspan")}
-                    onClick={this.onNextScrollClick}
-                  />
-                </div>
-              </div>
+            {this.recommend_cocktail({ data: dummy_data })}
+            <div className={cx("nextcontainer")}>
+              <span
+                className={cx("nextspan")}
+                onClick={this.onNextScrollClick}
+              />
             </div>
           </div>
         </div>
