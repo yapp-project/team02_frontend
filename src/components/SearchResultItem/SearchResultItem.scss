@@ -7,48 +7,68 @@
 .information_rect {
   visibility: hidden;
   position: absolute;
-  background-color: lightgray;
-
   width: 100%;
-  top: 275px;
+  height: 100%;
   left: 50%;
+  top: 50%;
   transform: translate(-50%, -50%);
   font-size: 15px;
+  background-color: rgba(8, 15, 36, 0.3);
   cursor: Default;
 
-  .cocktailName {
-    font-weight: bold;
-    font-size: 20px;
-    width: 300px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-    cursor: pointer;
-  }
+  .inner {
+    position: absolute;
+    width: 100%;
+    bottom: 0px;
+    color: white;
 
-  .bottom {
-    display: flex;
-    justify-content: space-between;
-
-    .userName {
+    .cocktailName {
+      font-family: SegoeUI;
+      font-weight: bold;
+      font-size: 25px;
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden;
+      cursor: pointer;
+      width: 100px;
+      height: 33px;
+      margin-left: 16.7px;
+      margin-bottom: 12px;
     }
 
-    .right {
+    .bottom {
       display: flex;
-      .like {
-        width: 25px;
-        height: 25px;
-        background-image: url("../../images/baseline-favorite_border-24px.svg");
-        background-repeat: no-repeat;
+      flex-direction: row;
+      justify-content: space-between;
+      top: 0px;
+      margin-bottom: 23px;
+
+      .userName {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        margin-left: 16.7px;
+        font-family: SegoeUI;
+        font-size: 15px;
       }
-      .number {
-        height: 100%;
-        text-align: center;
-        vertical-align: middle;
-        line-height: 25px;
+
+      .right {
+        display: flex;
+        margin-right: 20.3px;
+        .like {
+          width: 18px;
+          height: 100%;
+          background-image: url("../../static/images/Heart.svg");
+          background-repeat: no-repeat;
+          background-position: center;
+          margin-right: 10.2px;
+        }
+        .number {
+          height: 100%;
+          text-align: center;
+          vertical-align: middle;
+          line-height: 25px;
+        }
       }
     }
   }

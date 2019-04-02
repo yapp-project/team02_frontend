@@ -1,38 +1,134 @@
+@import "../../static/colors.scss";
+
 .searchform {
   position: absolute;
   left: 0%;
   right: 0%;
-  top: 0%;
   margin: auto;
-  background: white;
+  background-color: $main-color;
 
   .topcotainer {
-    margin-top: 10px;
     display: flex;
-    background: white;
-    height: 70px;
+    height: 145.3px;
     justify-content: center;
+    background-color: $main-color;
 
-    .combo {
-      width: 120px;
-    }
     input.search {
-      width: 300px;
-      background: white;
-      margin-left: 10px;
-      margin-right: 10px;
+      width: 1220.5px;
+      min-width: 300px;
+      height: auto;
+      background-color: $main-color;
+      margin-left: 201.5px;
+      font-family: MyriadPro;
+      font-size: 35px;
+      color: #ffffff;
+      border: 0px;
+      outline: none;
     }
-    button.search {
-      width: 70px;
-      background: white;
+
+    .filter {
+      top: 0;
+      bottom: 0;
+      margin-top: auto;
+      margin-bottom: auto;
+      width: 123px;
+      min-width: 123px;
+    }
+    .type {
+      top: 0;
+      bottom: 0;
+      margin-top: auto;
+      margin-bottom: auto;
+      margin-left: 70px;
+      width: 123px;
+      min-width: 123px;
+      margin-right: 201px;
     }
   }
 
   .recommend {
-    margin-top: 5px;
-    background: white;
-    border-top: 3px solid black;
-    border-bottom: 3px solid black;
-    padding-top: 3px;
+    background-color: $main-color;
+    height: auto;
+    color: #7a7a7a;
+    font-size: 35px;
+    display: flex;
+    width: auto;
+    margin-right: 200px;
+    margin-left: 201.5px;
+    overflow: hidden;
+    overflow-x: auto;
+    -ms-overflow-style: none; // IE에서 스크롤바 감춤
+    &::-webkit-scrollbar {
+      display: none !important; // 윈도우 크롬 등
+    }
+    margin-bottom: 29.4px;
+
+    .text {
+      width: auto;
+      height: 35px;
+      margin-left: 25px;
+      padding: 10.5px 26px 10.5px 26px;
+      // border-radius: 34px;
+      // border: solid 2px #83d1e6;
+      line-height: 43px;
+      font-family: MyriadPro-It;
+      cursor: pointer;
+
+      &:first-child {
+        margin-left: 0px;
+      }
+      &:focus {
+        color: #83d1e6;
+        outline: none;
+        border-radius: 34px;
+        padding: 8px 26px 10px 26px;
+        border: solid 2px #83d1e6;
+      }
+    }
+    .prev {
+      position: absolute;
+      width: 24px;
+      height: 60px;
+      margin-right: 200px;
+      color: $white;
+
+      .arrow {
+        display: none;
+        vertical-align: bottom;
+        height: 24px;
+        width: 100%;
+        background-image: url("../../static/images/rightarrow.svg");
+        background-repeat: no-repeat;
+        -webkit-transform: rotate(180deg);
+        transform: rotate(180deg);
+        cursor: pointer;
+      }
+    }
+    .next {
+      position: absolute;
+      width: 24px;
+      height: 60px;
+      margin-right: 200px;
+      right: 0;
+      color: $white;
+
+      .arrow {
+        display: none;
+        vertical-align: bottom;
+        height: 24px;
+        width: 100%;
+        background-image: url("../../static/images/rightarrow.svg");
+        background-repeat: no-repeat;
+        // -webkit-transform: rotate(180deg);
+        // transform: rotate(180deg);
+        cursor: pointer;
+      }
+    }
+
+    &:hover {
+      .arrow {
+        display: inline-block;
+      }
+    }
   }
 }

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const SERVER_END_POINT = "http://localhost:8080"; //SERVER URL
+const SERVER_END_POINT = ""; //SERVER URL
 const basicRequest = (type, { url, headers, body }) => {
   const config = {
     method: type,

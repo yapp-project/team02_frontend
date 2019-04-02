@@ -1,13 +1,223 @@
-$bg-color: red;
+@import "../../static/colors.scss";
+@font-face {
+  font-family: "LasEnterPersonalUseOnly";
+  font-weight: 500;
+  src: url("../../static/LasEnter_PersonalUseOnly.ttf") format("truetype");
+}
+@font-face {
+  font-family: "MyriadPro-It";
+  font-weight: normal;
+  src: url("../../static/MyriadPro-It.otf") format("opentype");
+}
 
 html,
 body {
   margin: 0;
   width: 100%;
+  height: 100%;
   overflow: hidden;
 }
 
-.body {
+.mainview {
   margin: 0;
+  width: 100%;
   height: 100%;
+  background-color: $main-color;
+
+  .headerview {
+    width: 100%;
+    height: 80px;
+    color: $logo-color;
+    font-size: $logo-size;
+    font-family: $logo-family;
+    background-color: $main-color;
+  }
+
+  .bodyview {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: $main-color;
+
+    .topcontainer {
+      width: 100%;
+      display: flex;
+
+      .image {
+        width: 87px;
+        height: 130px;
+        background-color: pink;
+        margin-left: 282.3px;
+      }
+      .contents {
+        margin-left: 25px;
+        .title {
+          width: 248px;
+          height: 64px;
+          color: $title-color;
+          font-size: $title-size;
+          font-family: $title-family;
+          margin-bottom: 2px;
+        }
+        .bottom {
+          display: flex;
+          flex-direction: row;
+          flex-wrap: wrap;
+          align-items: center;
+
+          .text {
+            color: $contents-color;
+            font-size: $contents-size;
+            font-family: $contents-family;
+          }
+          .button {
+            width: 40px;
+            height: 40px;
+            background-color: transparent;
+            background-image: url("../../static/images/plusbtn.svg");
+            margin-left: 28px;
+            outline-style: none;
+            cursor: pointer;
+          }
+          .button_text {
+            width: 131px;
+            height: 20px;
+            color: #83d1e6;
+            font-size: 20px;
+            font-family: Arita-dotum-Medium_TTF;
+            text-align: left;
+            margin-left: 10px;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+    .bottomcontainer {
+      position: absolute;
+      margin-top: 42.8px;
+      width: 100%;
+      height: 100%;
+
+      .hashtag {
+        display: flex;
+        margin-left: 393px;
+        overflow: hidden;
+        overflow-x: auto;
+        white-space: nowrap;
+        -ms-overflow-style: none; // IE에서 스크롤바 감춤
+        &::-webkit-scrollbar {
+          display: none !important; // 윈도우 크롬 등
+        }
+
+        div {
+          color: $contents-color;
+          font-family: Arita-dotum-_TTF;
+          font-size: 35px;
+          height: 35px;
+          margin-left: 126px;
+          cursor: pointer;
+
+          &:first-child {
+            margin-left: 0px;
+          }
+
+          &:focus {
+            color: $white;
+            outline: none;
+          }
+        }
+      }
+      .images {
+        margin-top: 37.2px;
+        margin-left: 393px;
+        margin-bottom: 80px;
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+
+        //스크롤 안되게 할려면 여기 주석
+        overflow-x: auto;
+        -ms-overflow-style: none; // IE에서 스크롤바 감춤
+        &::-webkit-scrollbar {
+          display: none !important; // 윈도우 크롬 등
+        }
+
+        .innercontainer {
+          max-height: 590px;
+          width: 100%;
+          height: 100%;
+          white-space: nowrap;
+
+          .cocktail {
+            display: inline-block;
+            position: relative;
+            width: 360px;
+            height: 100%;
+            margin-right: 26px;
+            &:hover {
+              img {
+                opacity: 0.7;
+              }
+
+              div {
+                visibility: visible;
+              }
+            }
+          }
+
+          .prevcontainer {
+            position: absolute;
+            width: 116.3px;
+            height: 100%;
+            max-height: 590px;
+            top: 72px;
+            z-index: 10;
+
+            .prevbspan {
+              position: absolute;
+              background-image: url("../../static/images/mainrightarrow.svg");
+              background-repeat: no-repeat;
+              -webkit-transform: rotate(180deg);
+              transform: rotate(180deg);
+              width: 100%;
+              height: 116.3px;
+              top: 40%;
+              cursor: pointer;
+              display: none;
+            }
+          }
+
+          .nextcontainer {
+            position: absolute;
+            width: 116.3px;
+            height: 100%;
+            max-height: 590px;
+            top: 72px;
+            right: 0;
+            z-index: 10;
+
+            .nextspan {
+              position: absolute;
+              background-image: url("../../static/images/mainrightarrow.svg");
+              background-repeat: no-repeat;
+              width: 100%;
+              height: 116.3px;
+              top: 40%;
+              cursor: pointer;
+              display: none;
+            }
+          }
+
+          &:hover {
+            .prevbspan {
+              display: block;
+            }
+            .nextspan {
+              display: block;
+            }
+          }
+        }
+      }
+    }
+  }
 }

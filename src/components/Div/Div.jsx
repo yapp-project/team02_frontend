@@ -4,9 +4,9 @@ import styles from "./Div.scss";
 
 const cx = classNames.bind(styles);
 
-const Div = ({ className, content, onClick }) => {
+const Div = ({ id, className, content, onClick }) => {
   return (
-    <div className={cx(className)} onClick={onClick}>
+    <div id={id} className={cx(className)} onClick={onClick}>
       {content}
     </div>
   );
