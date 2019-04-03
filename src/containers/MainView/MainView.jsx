@@ -124,22 +124,16 @@ class MainView extends Component {
         </div>
         <div id="images" className={cx("images")}>
           <div className={cx("innercontainer")}>
-            <div className={cx("prevcontainer")}>
-              <span
-                className={cx("prevbspan")}
-                onClick={this.onPrevScrollClick}
-              />
-            </div>
-            {this.recommend_cocktail({ data: dummy_data })}
-            <div className={cx("nextcontainer")}>
-              <span
-                className={cx("nextspan")}
-                onClick={this.onNextScrollClick}
-              />
+            <span
+              className={cx("prevbspan")}
+              onClick={this.onPrevScrollClick}
+            />
+            <span className={cx("nextspan")} onClick={this.onNextScrollClick} />
+            <div className={cx("cocktailcontainer")}>
+              {this.recommend_cocktail({ data: dummy_data })}
             </div>
           </div>
         </div>
-
         {this.state.showSearch ? (
           <SearchPopup id={searchPopupID} onClick={this.onShowSearch} />
         ) : null}
