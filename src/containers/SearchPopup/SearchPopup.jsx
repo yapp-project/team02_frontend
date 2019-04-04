@@ -200,17 +200,7 @@ class SearchPopup extends Component {
   };
 
   render() {
-    const { onClick = null, id = "search" } = this.props; //부모로부터 click event, id 인자로 받음
-    return (
-      <div>
-        <Popup
-          id={id}
-          className={cx("searchform")}
-          content={this.search_form()}
-          onClick={onClick}
-        />
-      </div>
-    );
+    return <div>{this.search_form()}</div>;
   }
 }
 

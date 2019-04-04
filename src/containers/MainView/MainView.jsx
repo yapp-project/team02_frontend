@@ -1,11 +1,15 @@
 import React, { Component } from "react";
 import classNames from "classnames/bind";
 import styles from "./MainView.scss";
+//컴포넌트
 import { connect } from "react-redux";
 import { Button } from "../../components";
+import { SearchResultItem } from "../../components";
+//layout
 import LoginPopup from "../LoginPopup/LoginPopup";
 import SearchPopup from "../SearchPopup/SearchPopup";
-import { SearchResultItem } from "../../components";
+import Header from "../Header/Header";
+//image
 import cocktail1 from "../../static/images/a1.jpeg";
 import cocktail2 from "../../static/images/a2.jpg";
 
@@ -16,8 +20,8 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {};
-const loginPopupID = "login";
-const searchPopupID = "search";
+// const loginPopupID = "login";
+// const searchPopupID = "search";
 
 const dummy_data = [
   { no: 0, Image: cocktail1, name: "칵테일1", like: 10 },
@@ -33,33 +37,33 @@ class MainView extends Component {
     showSearch: false
   };
 
-  onShowLogin = event => {
-    const _bShowPopup = this.state.showPopup;
+  // onShowLogin = event => {
+  //   const _bShowPopup = this.state.showPopup;
 
-    if (_bShowPopup) {
-      if (event.target.id === loginPopupID) {
-        this.setState({ showPopup: false });
-      }
-    } else {
-      this.setState({ showPopup: !_bShowPopup });
-    }
-  };
+  //   if (_bShowPopup) {
+  //     if (event.target.id === loginPopupID) {
+  //       this.setState({ showPopup: false });
+  //     }
+  //   } else {
+  //     this.setState({ showPopup: !_bShowPopup });
+  //   }
+  // };
 
   onCloseLogin = () => {
     this.setState({ showPopup: false });
   };
 
-  onShowSearch = event => {
-    const _bShowSearch = this.state.showSearch;
+  // onShowSearch = event => {
+  //   const _bShowSearch = this.state.showSearch;
 
-    if (_bShowSearch) {
-      if (event.target.id === searchPopupID) {
-        this.setState({ showSearch: false });
-      }
-    } else {
-      this.setState({ showSearch: !_bShowSearch });
-    }
-  };
+  //   if (_bShowSearch) {
+  //     if (event.target.id === searchPopupID) {
+  //       this.setState({ showSearch: false });
+  //     }
+  //   } else {
+  //     this.setState({ showSearch: !_bShowSearch });
+  //   }
+  // };
 
   //보여주기용 임시 추후 인자 넘기는걸로 수정
   recommend_cocktail = ({ data }) => {
@@ -90,12 +94,7 @@ class MainView extends Component {
     return (
       <div className={cx("mainview")}>
         <div className={cx("header")}>
-          <span className={cx("logo")} />
-          <div className={cx("functions")}>
-            우측 기능버튼
-            <Button value="로그인" onClick={this.onShowLogin} />
-            <Button value="검색" onClick={this.onShowSearch} />
-          </div>
+          <Header />
         </div>
         <div className={cx("explanation_rect")}>
           <div className={cx("left")}>
@@ -136,9 +135,6 @@ class MainView extends Component {
             </div>
           </div>
         </div>
-        {this.state.showSearch ? (
-          <SearchPopup id={searchPopupID} onClick={this.onShowSearch} />
-        ) : null}
       </div>
     );
   }

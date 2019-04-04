@@ -32,28 +32,7 @@ body {
   //헤더 Style
   .header {
     height: 80px;
-    color: $logo-color;
-    font-size: $logo-size;
-    font-family: $logo-family;
-
     grid-column: 1 / span 5;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-
-    .logo {
-      float: left;
-      width: 154px;
-      height: 51px;
-      background-image: url("../../static/images/logo/header_log_h.png");
-      background-repeat: no-repeat;
-      background-size: contain;
-    }
-    .functions {
-      display: flex;
-      align-items: center;
-    }
   }
   //중간 text Style
   .explanation_rect {
