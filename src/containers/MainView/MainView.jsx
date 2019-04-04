@@ -103,7 +103,9 @@ class MainView extends Component {
           </div>
           <div className={cx("title")}>Drink Me!</div>
           <div className={cx("contents")}>
-            세상의 다양한 칵테일 레시피를 공유하다.
+            <div className={cx("text")}>
+              세상의 다양한 칵테일 레시피를 공유하다.
+            </div>
           </div>
           <div className={cx("register_rect")}>
             <div className={cx("button")} />

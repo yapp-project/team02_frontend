@@ -60,11 +60,12 @@ body {
     grid-column: 1 / span 5;
     display: grid;
     grid-template-columns: 20.5% 755px auto;
-    grid-template-rows: 57px 66px;
+    grid-template-rows: 92.8px 57px 66px;
+    // padding-top: 92.8px;
 
     .left {
       grid-column: 1 / span 1;
-      grid-row: 1 / span 2;
+      grid-row: 2 / span 2;
       .logo {
         float: right;
         width: 74px;
@@ -78,7 +79,7 @@ body {
     }
     .title {
       grid-column: 2 / span 2;
-      grid-row: 1 / span 1;
+      grid-row: 2 / span 1;
       color: $title-color;
       font-size: $title-size;
       font-family: MyriadPro-It;
@@ -86,13 +87,18 @@ body {
 
     .contents {
       grid-column: 2 / span 1;
-      grid-row: 2 / span 1;
+      grid-row: 3 / span 1;
       color: $contents-color;
       font-size: $contents-size;
       font-family: $contents-family;
-      line-height: 1.5;
+      display: flex;
+      align-items: center;
+      .text {
+        height: auto;
+      }
     }
     .register_rect {
+      grid-row: 3 / span 1;
       display: flex;
       align-items: center;
       padding-left: 28px;
@@ -122,25 +128,27 @@ body {
     @media (max-width: 1200px) {
       & {
         grid-template-columns: 20.5% auto;
-        grid-template-rows: 57px auto;
+        grid-template-rows: 57px auto 66px;
       }
       .left {
         grid-row: 1 / span 4;
       }
       .title {
-        grid-column: 2 / span 1;
+        grid-column: 2 / span 2;
+        grid-row: 1 / span 1;
       }
       .contents {
-        grid-column: 2 / span 1;
-        grid-row: 2 / span 2;
+        grid-column: 2 / span 2;
+        grid-row: 2 / span 1;
       }
       .register_rect {
-        grid-column: 2 / span 1;
+        grid-column: 2 / span 2;
+        grid-row: 3 / span 1;
         padding-left: 0px;
       }
     }
 
-    @media (max-width: 400px) {
+    @media (max-width: 470px) {
       & {
         grid-template-columns: auto;
         grid-template-rows: 57px auto;
@@ -193,6 +201,12 @@ body {
           border: 0;
           line-height: 1.5;
 
+          @media (max-width: 470px) {
+            & {
+              margin-left: 30px;
+            }
+          }
+
           &:first-child {
             margin-left: 0%;
           }
@@ -204,7 +218,7 @@ body {
       }
     }
 
-    @media (max-width: 400px) {
+    @media (max-width: 470px) {
       & {
         padding-left: 0;
       }
@@ -217,6 +231,7 @@ body {
     max-width: 1518px;
     width: auto;
     height: 100%;
+    background-color: $main-color;
 
     display: flex;
 
@@ -292,7 +307,7 @@ body {
       }
     }
 
-    @media (max-width: 400px) {
+    @media (max-width: 470px) {
       & {
         padding-left: 5%;
       }
