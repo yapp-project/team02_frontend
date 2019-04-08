@@ -30,10 +30,12 @@ class Enrolment extends Component {
       "enrolmentData": {
         "info": {"cup": "하이볼", "name": "", "describe": "", "alcohol": 0, "tags" :""},
         "stuff": [
-          {"color": "", "name": "", "volume": "", "ratio": ""}
-        ]
+          {"color": "#4d191a", "name": "", "volume": "", "ratio": 0}
+        ],
+        "totalVolume": 0
       },
-      "stuffID": 0
+      "stuffID": 0,
+      "color_idx": ""
     };
     
     this.onChangeStepStatus = this.onChangeStepStatus.bind(this);
@@ -131,6 +133,8 @@ class Enrolment extends Component {
           onDeleteStuff={this.onDeleteStuff}
           onSaveStuffName={this.onSaveStuffName}
           onSaveStuffVolume={this.onSaveStuffVolume}
+          onSelectColor={this.onSelectColor}
+          validateNumber={this.validateNumber}
         /> });
         break;
       case "STEP 3":
@@ -252,15 +256,36 @@ class Enrolment extends Component {
 
   onSaveStuffVolume = (event, idx) => {
     let enrolmentData = {...this.state.enrolmentData};
+    let beforeVolume = enrolmentData.stuff[idx].volume === "" ? 0 : parseInt(enrolmentData.stuff[idx].volume);
+    let afterVolume = parseInt(event.target.value);
+
+    enrolmentData.totalVolume -= beforeVolume;
+    enrolmentData.totalVolume += afterVolume;
     enrolmentData.stuff[idx].volume = event.target.value;
+
+    enrolmentData.stuff.forEach(val => {
+      val.ratio = Math.floor(val.volume / enrolmentData.totalVolume * 100);
+    });
+
     this.setState({enrolmentData});
+
+    this.setState({ step: <Step2
+      stuff={this.state.enrolmentData.stuff}
+      idx={this.state.stuffID}
+      onAddStuff={this.onAddStuff}
+      onDeleteStuff={this.onDeleteStuff}
+      onSaveStuffName={this.onSaveStuffName}
+      onSaveStuffVolume={this.onSaveStuffVolume}
+      onSelectColor={this.onSelectColor}
+      validateNumber={this.validateNumber}
+    /> });
   };
 
   onAddStuff = () => {
     let enrolmentData = {...this.state.enrolmentData};
     let lastIndexID = this.state.stuffID;
 
-    enrolmentData.stuff.push({"color": "", "name": "", "volume": "", "ratio": ""});
+    enrolmentData.stuff.push({"color": "#4d191a", "name": "", "volume": "", "ratio": 0});
 
     this.setState({enrolmentData});
     this.setState({stuffID: lastIndexID++});
@@ -272,6 +297,8 @@ class Enrolment extends Component {
       onDeleteStuff={this.onDeleteStuff}
       onSaveStuffName={this.onSaveStuffName}
       onSaveStuffVolume={this.onSaveStuffVolume}
+      onSelectColor={this.onSelectColor}
+      validateNumber={this.validateNumber}
     /> });
   };
 
@@ -283,18 +310,30 @@ class Enrolment extends Component {
 
     this.setState(enrolmentData);
 
-    this.setState({ step: <Step2
-      stuff={this.state.enrolmentData.stuff}
-      idx={this.state.stuffID}
-      onAddStuff={this.onAddStuff}
-      onDeleteStuff={this.onDeleteStuff}
-      onSaveStuffName={this.onSaveStuffName}
-      onSaveStuffVolume={this.onSaveStuffVolume}
-    /> });
-    
+    event.target.parentNode.parentNode.parentNode.remove();
   }
 
-  onSaveRecipe = event => {
+  onSelectColor = event => {
+    if (event.target.getAttribute("stuff")) {
+      let colorNumber = event.target.getAttribute("stuff");
+      this.setState({color_idx: colorNumber});
+
+      document.querySelector(`#color-picker_${colorNumber}`).classList.toggle(this.doneClose);
+    } else {
+      let colorNumber = this.state.color_idx;
+      let enrolmentData = {...this.state.enrolmentData};
+      let rgb = document.querySelector(`#item-color_${colorNumber}`).style.backgroundColor.replace(/^(rgb|rgba)\(/,'').replace(/\)$/,'').replace(/\s/g,'').split(',');
+
+      document.querySelector(`#color-picker_${colorNumber}`).classList.toggle(this.doneClose);
+
+      enrolmentData.stuff[colorNumber].color = "#" + ((1 << 24) + (parseInt(rgb[0]) << 16) + (parseInt(rgb[1]) << 8) + parseInt(rgb[2])).toString(16).slice(1);
+      
+      this.setState(enrolmentData);
+      console.log(this.state);
+    }
+  };
+
+  onSaveRecipe = () => {
     let doneView = document.querySelector("#done-container");
 
     doneView.classList.toggle(this.doneClose);

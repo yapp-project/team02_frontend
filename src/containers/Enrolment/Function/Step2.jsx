@@ -19,15 +19,17 @@ const EnrolmentStep2 = (props) => {
             <div className={cx("stuff-container")}>
                 <span id="add-button" className={cx("stuff-add")} onClick={props.onAddStuff}></span>
 
+                
                 {
                     props.stuff.map((input, index) => {
-                        console.log(input);
                         return <StuffItem
                             idx={index}
                             stuff={input}
                             onDeleteStuff={props.onDeleteStuff}
                             onSaveStuffName={props.onSaveStuffName}
                             onSaveStuffVolume={props.onSaveStuffVolume}
+                            onSelectColor={props.onSelectColor}
+                            validateNumber={props.validateNumber}
                         />
                     })
                 }
