@@ -5,9 +5,7 @@ import styles from "./MainView.scss";
 import { connect } from "react-redux";
 import { Button } from "../../components";
 import { SearchResultItem } from "../../components";
-//layout
-import LoginPopup from "../LoginPopup/LoginPopup";
-import SearchPopup from "../SearchPopup/SearchPopup";
+
 import Header from "../Header/Header";
 //image
 import cocktail1 from "../../static/images/a1.jpeg";
@@ -20,8 +18,6 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {};
-// const loginPopupID = "login";
-// const searchPopupID = "search";
 
 const dummy_data = [
   { no: 0, Image: cocktail1, name: "칵테일1", like: 10 },
@@ -116,10 +112,18 @@ class MainView extends Component {
             <div className={cx("hastag_inner")}>
               <button className={cx("hashtag")}>#Citrus</button>
               <button className={cx("hashtag")}>#Vodka</button>
-              <button className={cx("hashtag")}>#Bombay</button>
-              <button className={cx("hashtag")}>#Bombay</button>
-              <button className={cx("hashtag")}>#Bombay</button>
-              <button className={cx("hashtag")}>#Bombay</button>
+              <button className={cx("hashtag")} key="0">
+                #Bombay
+              </button>
+              <button className={cx("hashtag")} key="1">
+                #Bombay
+              </button>
+              <button className={cx("hashtag")} key="2">
+                #Bombay
+              </button>
+              <button className={cx("hashtag")} key="3">
+                #Bombay
+              </button>
             </div>
           </div>
         </div>

@@ -1,8 +1,15 @@
 export const actions = {
+  COMMUNICATION: {
+    REQUEST: "COMMUNICATION_REQUEST",
+    ING: "COMMUNICATION_ING",
+    END: "COMMUNICATION_END",
+    ERROR: "COMMUNICATION_ERROR"
+  },
   LOGIN: {
     REQUEST: "LOGIN_REQUEST",
     SUCCESS: "LOGIN_SUCCESS",
-    FAILED: "LOGIN_FAILED"
+    FAILED: "LOGIN_FAILED",
+    LOGOUT: "LOGIN_LOGOUT"
   },
   IDCHECK: {
     REQUEST: "IDCHECK_REQUEST",
@@ -53,6 +60,14 @@ export function registerSuccess(result) {
     }
   };
 }
+export function registerFailed(result) {
+  return {
+    type: actions.REGISTER.FAILED,
+    payload: {
+      result
+    }
+  };
+}
 
 export function checkIDRequest(userid) {
   return {
@@ -62,11 +77,25 @@ export function checkIDRequest(userid) {
     }
   };
 }
-export function checkIDSuccess(bIDCheck) {
+export function checkIDSuccess(result) {
   return {
     type: actions.IDCHECK.SUCCESS,
     payload: {
-      IDCheck: bIDCheck
+      result
     }
+  };
+}
+export function checkIDFailed(result) {
+  return {
+    type: actions.IDCHECK.FAILED,
+    payload: {
+      result
+    }
+  };
+}
+
+export function logout() {
+  return {
+    type: actions.LOGIN.LOGOUT
   };
 }

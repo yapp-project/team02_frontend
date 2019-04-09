@@ -3,6 +3,7 @@
 .topcotainer {
   display: flex;
   height: 145.3px;
+  align-items: center;
   justify-content: center;
   background-color: $main-color;
 
@@ -20,22 +21,16 @@
   }
 
   .filter {
-    top: 0;
-    bottom: 0;
-    margin-top: auto;
-    margin-bottom: auto;
     width: 123px;
     min-width: 123px;
+    height: auto;
   }
   .type {
-    top: 0;
-    bottom: 0;
-    margin-top: auto;
-    margin-bottom: auto;
     margin-left: 70px;
     width: 123px;
     min-width: 123px;
     margin-right: 201px;
+    height: auto;
   }
 }
 
@@ -73,9 +68,9 @@
     &:focus {
       color: #83d1e6;
       outline: none;
-      border-radius: 34px;
-      padding: 8px 26px 10px 26px;
-      border: solid 2px #83d1e6;
+      // border-radius: 34px;
+      // padding: 8px 26px 10px 26px;
+      // border: solid 2px #83d1e6;
     }
   }
   .prev {

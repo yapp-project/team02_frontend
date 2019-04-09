@@ -4,17 +4,22 @@ import styles from "./Header.scss";
 import { connect } from "react-redux";
 import { Button } from "../../components";
 
-//layou
+//layout
 import SearchPopup from "../SearchPopup/SearchPopup";
 import LoginPopup from "../LoginPopup/LoginPopup";
+
+import { loginRequest, logout } from "../../action/userAction";
 
 const cx = classNames.bind(styles);
 
 const mapStateToProps = state => {
-  return state;
+  return {
+    bLoginResult: state.userReducer.bLoginResult,
+    set_auth: state.userReducer.set_auth
+  };
 };
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = { loginRequest, logout };
 const loginPopupID = "login";
 const searchPopupID = "search";
 
@@ -23,6 +28,20 @@ class Header extends Component {
     bShowSearch: false,
     bShowLogin: false
   };
+
+  componentDidMount() {
+    const auth = JSON.parse(localStorage.getItem("myData")); //localstorage에서 가져옴
+    if (auth) {
+      this.props.loginRequest(auth.userid, auth.password);
+    }
+  }
+
+  componentDidUpdate() {
+    const { bShowLogin } = this.state;
+    if (this.props.bLoginResult && bShowLogin) {
+      this.setState({ bShowLogin: false });
+    }
+  }
 
   onChangeSearchStatus = event => {
     this.setState({ bShowSearch: !this.state.bShowSearch });
@@ -35,7 +54,9 @@ class Header extends Component {
         this.setState({ bShowLogin: false });
       }
     } else {
-      this.setState({ bShowLogin: !_bShowSearch });
+      if (this.props.bLoginResult) {
+        this.props.logout();
+      } else this.setState({ bShowLogin: !_bShowSearch });
     }
   };
 
@@ -48,7 +69,7 @@ class Header extends Component {
           <div className={cx("icon")} />
           <Button
             className={cx("login")}
-            value="Login"
+            value={this.props.bLoginResult ? "LogOut" : "Login"}
             onClick={this.onShowLogin}
           />
           <Button
@@ -63,9 +84,9 @@ class Header extends Component {
             close: !bShowSearch
           })}
         >
-          {/* <div className={cx("header-search-container")}> */}
-          <SearchPopup />
-          {/* </div> */}
+          <div className={cx("header-search-container")}>
+            <SearchPopup />
+          </div>
         </div>
         {bShowLogin ? <LoginPopup onClick={this.onShowLogin} /> : null}
       </div>
