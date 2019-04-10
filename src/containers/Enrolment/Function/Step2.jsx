@@ -1,11 +1,12 @@
 import React from "react";
 import classNames from "classnames/bind";
 import styles from "./Enrolment.scss";
-import { Edit, Button } from "../../../components";
+import { Button } from "../../../components";
+import StuffItem from "./StuffItem";
 
 const cx = classNames.bind(styles);
 
-const EnrolmentStep2 = () => {
+const EnrolmentStep2 = (props) => {
   return (
     <div className={cx("step", "step2")}>
         <div className={cx("step2-container")}>
@@ -16,23 +17,23 @@ const EnrolmentStep2 = () => {
             />
 
             <div className={cx("stuff-container")}>
-                <span className={cx("stuff-add")}></span>
+                <span id="add-button" className={cx("stuff-add")} onClick={props.onAddStuff}></span>
 
-                <div className={cx("stuff-item")}>
-                    <span className={cx("stuff-item-color")}></span>
-
-                    <Edit
-                        className={cx("stuff-item-input-stuff")}
-                        placeholder="재료 이름"
-                    />
-
-                    <Edit
-                        className={cx("stuff-item-input-volume")}
-                        placeholder="용량 ml"
-                    />
-
-                    <span className={cx("stuff-item-ratio")}>30%</span>
-                </div>
+                
+                {
+                    props.stuff.map((input, index) => {
+                        return <StuffItem
+                            idx={index}
+                            stuff={input}
+                            onDeleteStuff={props.onDeleteStuff}
+                            onSaveStuffName={props.onSaveStuffName}
+                            onSaveStuffVolume={props.onSaveStuffVolume}
+                            onSelectColor={props.onSelectColor}
+                            validateNumber={props.validateNumber}
+                        />
+                    })
+                }
+                
             </div>
         </div>
     </div>
