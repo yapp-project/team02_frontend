@@ -50,6 +50,11 @@ class LoginPopup extends Component {
     ) {
       this.setState({ bShowLogin: true, bShowRegister: false });
     }
+    if (this.state.bActionRequest && !this.props.bIDCheckResult) {
+      this.setState({ bActionRequest: false });
+      alert("동일한 ID가 존재합니다");
+      document.getElementById("id").focus();
+    }
   }
 
   /**
@@ -87,6 +92,7 @@ class LoginPopup extends Component {
       alert("passwd 재확인을 입력해주세요");
       document.getElementById("pwdrecheck").focus();
     } else {
+      this.setState({ bActionRequest: true });
       this.props.registerRequest(this.state.ID, this.state.passwd);
     }
   };
