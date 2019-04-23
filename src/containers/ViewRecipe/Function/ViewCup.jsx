@@ -4,7 +4,7 @@ import styles from "./ViewRecipe.scss";
 
 const cx = classNames.bind(styles);
 
-const RecipeCup = () => {
+const RecipeCup = (props) => {
   return (
     <span className={cx("detail-content-main-view-cup")}></span>
   );

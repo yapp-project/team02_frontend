@@ -5,11 +5,11 @@ import { Button } from "../../../components";
 
 const cx = classNames.bind(styles);
 
-const EnrolmentStep3 = ({onSaveRecipe}) => {
+const EnrolmentDone = (props) => {
   return (
-    <div className={cx("done-container close")}>
+    <div id="done-container" className={cx("done-container", "close")}>
         <div className={cx("done-notification-area")}>
-            <span className={cx("done-closeButton")} onClick={onSaveRecipe}></span>
+            <span className={cx("done-closeButton")} onClick={props.onSaveRecipe}></span>
 
             <span className={cx("done-icon")}></span>
 
@@ -39,4 +39,4 @@ const EnrolmentStep3 = ({onSaveRecipe}) => {
   );
 };
 
-export default EnrolmentStep3;
+export default EnrolmentDone;

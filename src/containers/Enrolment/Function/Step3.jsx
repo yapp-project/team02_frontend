@@ -4,7 +4,7 @@ import styles from "./Enrolment.scss";
 
 const cx = classNames.bind(styles);
 
-const EnrolmentStep3 = () => {
+const EnrolmentStep3 = (props) => {
   return (
     <div className={cx("step", "step3")}>
         <div className={cx("step3-container")}>

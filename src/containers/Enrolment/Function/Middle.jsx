@@ -4,7 +4,7 @@ import styles from "./Enrolment.scss";
 
 const cx = classNames.bind(styles);
 
-const EnrolmentMiddle = () => {
+const EnrolmentMiddle = (props) => {
   return (
     <div className={cx("middle")}>
         <span></span>
