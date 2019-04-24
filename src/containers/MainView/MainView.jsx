@@ -1,11 +1,13 @@
 import React, { Component } from "react";
 import classNames from "classnames/bind";
 import styles from "./MainView.scss";
+//컴포넌트
 import { connect } from "react-redux";
 import { Button } from "../../components";
-import LoginPopup from "../LoginPopup/LoginPopup";
-import SearchPopup from "../SearchPopup/SearchPopup";
 import { SearchResultItem } from "../../components";
+
+import Header from "../Header/Header";
+//image
 import cocktail1 from "../../static/images/a1.jpeg";
 import cocktail2 from "../../static/images/a2.jpg";
 
@@ -16,8 +18,6 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {};
-const loginPopupID = "login";
-const searchPopupID = "search";
 
 const dummy_data = [
   { no: 0, Image: cocktail1, name: "칵테일1", like: 10 },
@@ -33,33 +33,33 @@ class MainView extends Component {
     showSearch: false
   };
 
-  onShowLogin = event => {
-    const _bShowPopup = this.state.showPopup;
+  // onShowLogin = event => {
+  //   const _bShowPopup = this.state.showPopup;
 
-    if (_bShowPopup) {
-      if (event.target.id === loginPopupID) {
-        this.setState({ showPopup: false });
-      }
-    } else {
-      this.setState({ showPopup: !_bShowPopup });
-    }
-  };
+  //   if (_bShowPopup) {
+  //     if (event.target.id === loginPopupID) {
+  //       this.setState({ showPopup: false });
+  //     }
+  //   } else {
+  //     this.setState({ showPopup: !_bShowPopup });
+  //   }
+  // };
 
   onCloseLogin = () => {
     this.setState({ showPopup: false });
   };
 
-  onShowSearch = event => {
-    const _bShowSearch = this.state.showSearch;
+  // onShowSearch = event => {
+  //   const _bShowSearch = this.state.showSearch;
 
-    if (_bShowSearch) {
-      if (event.target.id === searchPopupID) {
-        this.setState({ showSearch: false });
-      }
-    } else {
-      this.setState({ showSearch: !_bShowSearch });
-    }
-  };
+  //   if (_bShowSearch) {
+  //     if (event.target.id === searchPopupID) {
+  //       this.setState({ showSearch: false });
+  //     }
+  //   } else {
+  //     this.setState({ showSearch: !_bShowSearch });
+  //   }
+  // };
 
   //보여주기용 임시 추후 인자 넘기는걸로 수정
   recommend_cocktail = ({ data }) => {
@@ -89,66 +89,56 @@ class MainView extends Component {
   render() {
     return (
       <div className={cx("mainview")}>
-        <div className={cx("headerview")}>
-          헤더레이아웃 위치
-          <Button value="로그인" onClick={this.onShowLogin} />
-          <Button value="검색" onClick={this.onShowSearch} />
+        <div className={cx("header")}>
+          <Header />
         </div>
-
-        <div className={cx("bodyview")}>
-          {this.state.showPopup ? (
-            <LoginPopup
-              id={loginPopupID}
-              onClick={this.onShowLogin}
-              onCloseLogin={this.onCloseLogin}
+        <div className={cx("explanation_rect")}>
+          <div className={cx("left")}>
+            <div className={cx("logo")} />
+          </div>
+          <div className={cx("title")}>Drink Me!</div>
+          <div className={cx("contents")}>
+            <div className={cx("text")}>
+              세상의 다양한 칵테일 레시피를 공유하다.
+            </div>
+          </div>
+          <div className={cx("register_rect")}>
+            <div className={cx("button")} />
+            <div className={cx("button_text")}>레시피 등록하기</div>
+          </div>
+        </div>
+        <div className={cx("hashtag_rect")}>
+          <div className={cx("hashtag_container")}>
+            <div className={cx("hastag_inner")}>
+              <button className={cx("hashtag")}>#Citrus</button>
+              <button className={cx("hashtag")}>#Vodka</button>
+              <button className={cx("hashtag")} key="0">
+                #Bombay
+              </button>
+              <button className={cx("hashtag")} key="1">
+                #Bombay
+              </button>
+              <button className={cx("hashtag")} key="2">
+                #Bombay
+              </button>
+              <button className={cx("hashtag")} key="3">
+                #Bombay
+              </button>
+            </div>
+          </div>
+        </div>
+        <div id="images" className={cx("images")}>
+          <div className={cx("innercontainer")}>
+            <span
+              className={cx("prevbspan")}
+              onClick={this.onPrevScrollClick}
             />
-          ) : null}
-          <div className={cx("topcontainer")}>
-            <div className={cx("image")}>이미지</div>
-            <div className={cx("contents")}>
-              <div className={cx("title")}>Drink Me</div>
-              <div className={cx("bottom")}>
-                <div className={cx("text")}>
-                  세상의 다양한 칵테일 레시피를 공유하다.
-                </div>
-                {/* <Button className={cx("button")} value="+" /> */}
-                <div className={cx("button")} />
-                <div className={cx("button_text")}>레시피 등록하기</div>
-              </div>
-            </div>
-          </div>
-          <div className={cx("bottomcontainer")}>
-            <div className={cx("hashtag")}>
-              <div tabIndex="-1">#Citrus</div>
-              <div tabIndex="-1">#Vodka</div>
-              <div tabIndex="-1">#Bombay</div>
-              <div tabIndex="-1">#Bombay</div>
-              <div tabIndex="-1">#Bombay</div>
-              <div tabIndex="-1">#Bombay</div>
-            </div>
-            <div id="images" className={cx("images")}>
-              <div className={cx("innercontainer")}>
-                <div className={cx("prevcontainer")}>
-                  <span
-                    className={cx("prevbspan")}
-                    onClick={this.onPrevScrollClick}
-                  />
-                </div>
-                {this.recommend_cocktail({ data: dummy_data })}
-                <div className={cx("nextcontainer")}>
-                  <span
-                    className={cx("nextspan")}
-                    onClick={this.onNextScrollClick}
-                  />
-                </div>
-              </div>
+            <span className={cx("nextspan")} onClick={this.onNextScrollClick} />
+            <div className={cx("cocktailcontainer")}>
+              {this.recommend_cocktail({ data: dummy_data })}
             </div>
           </div>
         </div>
-
-        {this.state.showSearch ? (
-          <SearchPopup id={searchPopupID} onClick={this.onShowSearch} />
-        ) : null}
       </div>
     );
   }

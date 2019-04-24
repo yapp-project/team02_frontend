@@ -22,7 +22,7 @@ export async function setLogin({ userid, password }) {
 }
 
 export async function checkID(userid) {
-  const url = "user/check/id";
+  const url = "user/join/check/id";
   const body = {
     userid
   };

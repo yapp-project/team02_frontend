@@ -1,4 +1,5 @@
 @import "../../static/colors.scss";
+@import "../../static/variables.scss";
 @font-face {
   font-family: "LasEnterPersonalUseOnly";
   font-weight: 500;
@@ -9,214 +10,285 @@
   font-weight: normal;
   src: url("../../static/MyriadPro-It.otf") format("opentype");
 }
-
 html,
 body {
+  padding: 0;
   margin: 0;
-  width: 100%;
+  //width: 100%;
   height: 100%;
-  overflow: hidden;
+  //overflow: hidden;
+  div {
+    height: 100%;
+  }
 }
 
+//반응형 Layout Cover
 .mainview {
-  margin: 0;
-  width: 100%;
-  height: 100%;
   background-color: $main-color;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: 80px 215px 115px auto;
 
-  .headerview {
-    width: 100%;
+  //헤더 Style
+  .header {
     height: 80px;
-    color: $logo-color;
-    font-size: $logo-size;
-    font-family: $logo-family;
-    background-color: $main-color;
+    grid-column: 1 / span 5;
   }
+  //중간 text Style
+  .explanation_rect {
+    grid-column: 1 / span 5;
+    display: grid;
+    grid-template-columns: 20.5% 755px auto;
+    grid-template-rows: 92.8px 57px 66px;
+    // padding-top: 92.8px;
 
-  .bodyview {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background-color: $main-color;
+    .left {
+      grid-column: 1 / span 1;
+      grid-row: 2 / span 2;
+      .logo {
+        float: right;
+        width: 74px;
+        height: 117px;
+        margin-top: 6px;
+        margin-right: 20px;
+        background-image: url("../../static/images/logo/main_left_logo_h.png");
+        background-repeat: no-repeat;
+        background-size: contain;
+      }
+    }
+    .title {
+      grid-column: 2 / span 2;
+      grid-row: 2 / span 1;
+      color: $title-color;
+      font-size: $title-size;
+      font-family: MyriadPro-It;
+    }
 
-    .topcontainer {
-      width: 100%;
+    .contents {
+      grid-column: 2 / span 1;
+      grid-row: 3 / span 1;
+      color: $contents-color;
+      font-size: $contents-size;
+      font-family: $contents-family;
       display: flex;
+      align-items: center;
+      .text {
+        height: auto;
+      }
+    }
+    .register_rect {
+      grid-row: 3 / span 1;
+      display: flex;
+      align-items: center;
+      padding-left: 28px;
 
-      .image {
-        width: 87px;
-        height: 130px;
-        background-color: pink;
-        margin-left: 282.3px;
+      .button {
+        width: 40px;
+        height: 40px;
+        background-color: transparent;
+        background-image: url("../../static/images/plusbtn.svg");
+        background-repeat: no-repeat;
+        background-size: contain;
+
+        outline-style: none;
+        cursor: pointer;
+      }
+      .button_text {
+        margin-left: 10px;
+        height: 20px;
+        color: #83d1e6;
+        font-size: 20px;
+        font-family: Arita-dotum-Medium_TTF;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        cursor: pointer;
+      }
+    }
+    @media (max-width: 1200px) {
+      & {
+        grid-template-columns: 20.5% auto;
+        grid-template-rows: 57px auto 66px;
+      }
+      .left {
+        grid-row: 1 / span 4;
+      }
+      .title {
+        grid-column: 2 / span 2;
+        grid-row: 1 / span 1;
       }
       .contents {
-        margin-left: 25px;
-        .title {
-          width: 248px;
-          height: 64px;
-          color: $title-color;
-          font-size: $title-size;
-          font-family: $title-family;
-          margin-bottom: 2px;
-        }
-        .bottom {
-          display: flex;
-          flex-direction: row;
-          flex-wrap: wrap;
-          align-items: center;
+        grid-column: 2 / span 2;
+        grid-row: 2 / span 1;
+      }
+      .register_rect {
+        grid-column: 2 / span 2;
+        grid-row: 3 / span 1;
+        padding-left: 0px;
+      }
+    }
 
-          .text {
-            color: $contents-color;
-            font-size: $contents-size;
-            font-family: $contents-family;
+    @media (max-width: 470px) {
+      & {
+        grid-template-columns: auto;
+        grid-template-rows: 57px auto;
+        margin-top: 0;
+      }
+      .left {
+        display: none;
+      }
+      .title {
+        grid-column: 1;
+      }
+      .contents {
+        grid-column: 1;
+      }
+      .register_rect {
+        grid-column: 1;
+        padding-left: 0px;
+      }
+    }
+  }
+  //hashtag rect style
+  .hashtag_rect {
+    grid-column: 1 / span 5;
+    padding-left: 20.5%;
+
+    .hashtag_container {
+      overflow: hidden;
+      overflow-x: auto;
+      white-space: nowrap;
+      display: flex;
+      -ms-overflow-style: none; // IE에서 스크롤바 감춤
+      &::-webkit-scrollbar {
+        display: none !important; // 윈도우 크롬 등
+      }
+
+      .hastag_inner {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .hashtag {
+          background-color: transparent;
+          font-size: 35px;
+          color: #7a7a7a;
+          font-family: NotoSansCJKkr;
+          height: 52px;
+          margin-left: 126px;
+          cursor: pointer;
+          outline: none;
+          border: 0;
+          line-height: 1.5;
+
+          @media (max-width: 470px) {
+            & {
+              margin-left: 30px;
+            }
           }
-          .button {
-            width: 40px;
-            height: 40px;
-            background-color: transparent;
-            background-image: url("../../static/images/plusbtn.svg");
-            margin-left: 28px;
-            outline-style: none;
-            cursor: pointer;
+
+          &:first-child {
+            margin-left: 0%;
           }
-          .button_text {
-            width: 131px;
-            height: 20px;
+
+          &:focus {
             color: #83d1e6;
-            font-size: 20px;
-            font-family: Arita-dotum-Medium_TTF;
-            text-align: left;
-            margin-left: 10px;
-            cursor: pointer;
           }
         }
       }
     }
-    .bottomcontainer {
-      position: absolute;
-      margin-top: 42.8px;
-      width: 100%;
-      height: 100%;
 
-      .hashtag {
+    @media (max-width: 470px) {
+      & {
+        padding-left: 0;
+      }
+    }
+  }
+  //cocktail 결과 Layout style
+  .images {
+    grid-column: 1 / span 5;
+    padding-left: 20.5%;
+    max-width: 1518px;
+    width: auto;
+    height: 100%;
+    background-color: $main-color;
+
+    display: flex;
+
+    .innercontainer {
+      // position: absolute;
+      display: flex;
+      align-items: center;
+      flex-wrap: nowrap;
+      overflow: hidden;
+      width: 100%;
+      height: auto;
+      max-width: 1518px;
+      max-height: 590px;
+
+      .prevbspan {
+        position: absolute;
+        background-image: url("../../static/images/mainrightarrow.svg");
+        background-repeat: no-repeat;
+        -webkit-transform: rotate(180deg);
+        transform: rotate(180deg);
+        width: 116.3px;
+        height: 116.3px;
+
+        cursor: pointer;
+        display: none;
+        z-index: 50;
+      }
+      .nextspan {
+        position: absolute;
+        right: 0;
+        background-image: url("../../static/images/mainrightarrow.svg");
+        background-repeat: no-repeat;
+        width: 116.3px;
+        height: 116.3px;
+        cursor: pointer;
+        display: none;
+        z-index: 50;
+      }
+
+      //cocktail result layout
+      .cocktailcontainer {
         display: flex;
-        margin-left: 393px;
         overflow: hidden;
         overflow-x: auto;
-        white-space: nowrap;
         -ms-overflow-style: none; // IE에서 스크롤바 감춤
         &::-webkit-scrollbar {
           display: none !important; // 윈도우 크롬 등
         }
 
-        div {
-          color: $contents-color;
-          font-family: Arita-dotum-_TTF;
-          font-size: 35px;
-          height: 35px;
-          margin-left: 126px;
-          cursor: pointer;
-
-          &:first-child {
-            margin-left: 0px;
-          }
-
-          &:focus {
-            color: $white;
-            outline: none;
+        .cocktail {
+          display: inline-block;
+          position: relative;
+          width: 360px;
+          margin-right: 26px;
+          &:hover {
+            img {
+              opacity: 0.7;
+            }
+            div {
+              visibility: visible;
+            }
           }
         }
       }
-      .images {
-        margin-top: 37.2px;
-        margin-left: 393px;
-        margin-bottom: 80px;
-        height: 100%;
-        width: 100%;
-        overflow: hidden;
 
-        //스크롤 안되게 할려면 여기 주석
-        overflow-x: auto;
-        -ms-overflow-style: none; // IE에서 스크롤바 감춤
-        &::-webkit-scrollbar {
-          display: none !important; // 윈도우 크롬 등
+      &:hover {
+        .prevbspan {
+          display: block;
         }
-
-        .innercontainer {
-          max-height: 590px;
-          width: 100%;
-          height: 100%;
-          white-space: nowrap;
-
-          .cocktail {
-            display: inline-block;
-            position: relative;
-            width: 360px;
-            height: 100%;
-            margin-right: 26px;
-            &:hover {
-              img {
-                opacity: 0.7;
-              }
-
-              div {
-                visibility: visible;
-              }
-            }
-          }
-
-          .prevcontainer {
-            position: absolute;
-            width: 116.3px;
-            height: 100%;
-            max-height: 590px;
-            top: 72px;
-            z-index: 10;
-
-            .prevbspan {
-              position: absolute;
-              background-image: url("../../static/images/mainrightarrow.svg");
-              background-repeat: no-repeat;
-              -webkit-transform: rotate(180deg);
-              transform: rotate(180deg);
-              width: 100%;
-              height: 116.3px;
-              top: 40%;
-              cursor: pointer;
-              display: none;
-            }
-          }
-
-          .nextcontainer {
-            position: absolute;
-            width: 116.3px;
-            height: 100%;
-            max-height: 590px;
-            top: 72px;
-            right: 0;
-            z-index: 10;
-
-            .nextspan {
-              position: absolute;
-              background-image: url("../../static/images/mainrightarrow.svg");
-              background-repeat: no-repeat;
-              width: 100%;
-              height: 116.3px;
-              top: 40%;
-              cursor: pointer;
-              display: none;
-            }
-          }
-
-          &:hover {
-            .prevbspan {
-              display: block;
-            }
-            .nextspan {
-              display: block;
-            }
-          }
+        .nextspan {
+          display: block;
         }
+      }
+    }
+
+    @media (max-width: 470px) {
+      & {
+        padding-left: 5%;
       }
     }
   }

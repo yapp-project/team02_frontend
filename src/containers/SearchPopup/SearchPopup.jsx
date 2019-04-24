@@ -4,14 +4,15 @@ import styles from "./SearchPopup.scss";
 import { connect } from "react-redux";
 import { Button, Div, Edit, Popup, Combo } from "../../components";
 import SearchResult from "../SearchResult/SearchResult";
+import { searchRequest } from "../../action/searchAction";
 
 const cx = classNames.bind(styles);
 
 const mapStateToProps = state => {
-  return state;
+  return { searchresult: state.searchReducer.searchresult };
 };
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = { searchRequest };
 
 const SEARCH_FITER_TIME = 0; //태그기반 검색 선택
 const SEARCH_FITER_SCRAP = 1; //재료기반 검색 선택
@@ -63,21 +64,40 @@ class SearchPopup extends Component {
     material_min: 0,
     material_max: 0,
     recommend: {},
-    selectedOption: null,
+    selectedFilter: filter[0],
+    selectedType: type[0],
     bSaerch: false
   };
+
+  componentDidUpdate() {
+    // console.log("업데이트 됨 ㅣ " + this.state.selectedOption);
+  }
 
   /**
    * Event
    * handleChange : Combo item change
    */
-  handleChange = selectedOption => {
+  handleChangeFilter = selectedOption => {
+    this.setState({ selectedOption });
+  };
+  handleChangeType = selectedOption => {
     this.setState({ selectedOption });
   };
 
   onSearh = event => {
     const { keyCode } = event;
-    if (keyCode === 13) this.setState({ bSaerch: !this.state.bSaerch });
+    if (keyCode === 13) {
+      const value = event.target.value;
+      if (!value) {
+        alert("단어를 입력하세요!");
+        return false;
+      }
+      const word = value.split(" ");
+      const filter = this.state.selectedFilter.value;
+      const type = this.state.selectedType.value;
+      this.setState({ bSaerch: !this.state.bSaerch });
+      this.props.searchRequest({ data: { word, filter, type } });
+    }
   };
 
   onNextScrollClick = event => {
@@ -157,7 +177,7 @@ class SearchPopup extends Component {
             className={cx("filter")}
             value={selectedOption}
             options={filter}
-            handleChange={this.handleChange}
+            handleChange={this.handleChangeFilter}
             isSearchable={false}
             defaultValue={filter[0]}
             key="filter"
@@ -167,7 +187,7 @@ class SearchPopup extends Component {
             className={cx("type")}
             value={selectedOption}
             options={type}
-            handleChange={this.handleChange}
+            handleChange={this.handleChangeType}
             isSearchable={false}
             defaultValue={type[0]}
             key="type"
@@ -195,22 +215,14 @@ class SearchPopup extends Component {
         ]}
         key="div_recommend"
       />,
-      bSaerch ? <SearchResult /> : null
+      bSaerch && this.props.searchresult.cocktails.length > 0 ? (
+        <SearchResult data={this.props.searchresult} />
+      ) : null
     ];
   };
 
   render() {
-    const { onClick = null, id = "search" } = this.props; //부모로부터 click event, id 인자로 받음
-    return (
-      <div>
-        <Popup
-          id={id}
-          className={cx("searchform")}
-          content={this.search_form()}
-          onClick={onClick}
-        />
-      </div>
-    );
+    return <div>{this.search_form()}</div>;
   }
 }
 

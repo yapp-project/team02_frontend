@@ -3,41 +3,54 @@ import {
   actions,
   loginSuccess,
   checkIDSuccess,
-  registerSuccess
+  registerSuccess,
+  registerFailed,
+  checkIDFailed
 } from "../action/userAction";
 import { setJoin, checkID, setLogin } from "../api/userAPI";
 
 function* requestLogin(action) {
   try {
     const { userid, password } = action.payload;
-    const { auth } = yield call(setLogin, { userid, password });
-    console.log(auth);
-    yield put(loginSuccess(auth));
+    const result = yield call(setLogin, { userid, password });
+    console.log(result);
+    const localData = { userid: userid, password: password };
+    localStorage.setItem("myData", JSON.stringify(localData));
+    yield put(loginSuccess(result));
   } catch (error) {}
-}
-
-function* requestIDCheck(action) {
-  const { userid } = action.payload;
-
-  const result = yield call(checkID, userid);
-  console.log(result);
-
-  yield put(checkIDSuccess(result));
 }
 
 function* requestRegister(action) {
   const { userid, password } = action.payload;
+  console.log("회원가입 시작");
+  let result;
+  try {
+    result = yield call(checkID, userid);
+    yield put(checkIDSuccess(result));
+  } catch (error) {
+    yield put(checkIDFailed(false));
+  }
 
-  const result = yield call(setJoin, { userid, password });
-  console.log(result);
+  if (result) {
+    try {
+      const result = yield call(setJoin, { userid, password });
+      console.log(result);
+      yield put(registerSuccess(result));
+    } catch (error) {
+      console.log("회원가입 실패:");
+      yield put(registerFailed(false));
+    }
+  }
+}
 
-  yield put(registerSuccess(result));
+function logout() {
+  localStorage.removeItem("myData");
 }
 
 export default function* saga() {
   yield all([
     takeLatest(actions.LOGIN.REQUEST, requestLogin),
-    takeLatest(actions.IDCHECK.REQUEST, requestIDCheck),
-    takeLatest(actions.REGISTER.REQUEST, requestRegister)
+    takeLatest(actions.REGISTER.REQUEST, requestRegister),
+    takeLatest(actions.LOGIN.LOGOUT, logout)
   ]);
 }

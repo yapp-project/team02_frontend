@@ -1,9 +1,5 @@
 $icon-color: red;
 
-.test {
-  height: 2000px;
-}
-
 .show {
   display: block;
 }
@@ -23,19 +19,23 @@ $icon-color: red;
 
 .header-container-top::after {
   display: block;
-  content: '';
+  content: "";
   clear: both;
 }
 
 .icon {
-  width: 134px;
-  height: 40px;
-  margin: 20px 0 0 36px;
   float: left;
-  background: $icon-color;
+  width: 154px;
+  height: 51px;
+  background-image: url("../../static/images/logo/header_log_h.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  margin-top: 15px;
+  margin-left: 30px;
+  margin-bottom: 14px;
 }
 
-.header-container-top Button {
+.header-container-top button {
   float: right;
 }
 
@@ -43,7 +43,15 @@ $icon-color: red;
   width: 60px;
   height: 60px;
   border-radius: 30px;
+  border-color: transparent;
   margin: 10px 15px 0 0;
+  background-image: url("../../static/images/Search.svg");
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-size: inherit;
+  background-position: center;
+  outline: none;
+  cursor: pointer;
 }
 
 .header-container-top .login {
@@ -51,6 +59,7 @@ $icon-color: red;
   height: 60px;
   border-radius: 15px;
   margin: 10px 29px 0 0;
+  outline: none;
 }
 
 .header-container-bottom {
@@ -66,8 +75,8 @@ $icon-color: red;
 .header-container-bottom::after {
   display: block;
   position: fixed;
-  left:0;
-  content: '';
+  left: 0;
+  content: "";
   height: 100vh;
   width: 100%;
   background-color: #000;
@@ -90,7 +99,7 @@ $icon-color: red;
   border: 1px solid #707070;
   border-left: 0;
   border-right: 0;
-  box-sizing: border-box
+  box-sizing: border-box;
 }
 
 #search-input {
@@ -111,11 +120,11 @@ $icon-color: red;
   margin: 0;
   overflow-x: scroll;
   overflow-y: hidden;
-  white-space:nowrap
+  white-space: nowrap;
 }
 
 .header-recommendation-list li {
-  display:inline-block;
+  display: inline-block;
   height: 32px;
   border: 1px solid #707070;
   border-radius: 30px;

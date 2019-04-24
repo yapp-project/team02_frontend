@@ -4,72 +4,91 @@ import styles from "./Header.scss";
 import { connect } from "react-redux";
 import { Button } from "../../components";
 
+//layout
+import SearchPopup from "../SearchPopup/SearchPopup";
+import LoginPopup from "../LoginPopup/LoginPopup";
+
+import { loginRequest, logout } from "../../action/userAction";
+
 const cx = classNames.bind(styles);
 
 const mapStateToProps = state => {
-  return state;
+  return {
+    bLoginResult: state.userReducer.bLoginResult,
+    set_auth: state.userReducer.set_auth
+  };
 };
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = { loginRequest, logout };
+const loginPopupID = "login";
+const searchPopupID = "search";
 
 class Header extends Component {
   state = {
-    bShowSearch: false
+    bShowSearch: false,
+    bShowLogin: false
   };
+
+  componentDidMount() {
+    const auth = JSON.parse(localStorage.getItem("myData")); //localstorage에서 가져옴
+    if (auth) {
+      this.props.loginRequest(auth.userid, auth.password);
+    }
+  }
+
+  componentDidUpdate() {
+    const { bShowLogin } = this.state;
+    if (this.props.bLoginResult && bShowLogin) {
+      this.setState({ bShowLogin: false });
+    }
+  }
 
   onChangeSearchStatus = event => {
     this.setState({ bShowSearch: !this.state.bShowSearch });
   };
 
+  onShowLogin = event => {
+    const _bShowSearch = this.state.bShowLogin;
+    if (_bShowSearch) {
+      if (event.target.id === loginPopupID) {
+        this.setState({ bShowLogin: false });
+      }
+    } else {
+      if (this.props.bLoginResult) {
+        this.props.logout();
+      } else this.setState({ bShowLogin: !_bShowSearch });
+    }
+  };
+
   render() {
-    const { bShowSearch } = this.state;
+    const { bShowSearch, bShowLogin } = this.state;
 
     return (
-      <div className={cx("test")}>
-        <div className={cx("header-container")}>
-          <div className={cx("header-container-top")}>
-            <div className={cx("icon")}>this layout is icon</div>
-            <Button className={cx("login")} value="Login" onClick=""/>
-            <Button className={cx("search")} value="Search" onClick={this.onChangeSearchStatus}/>
-          </div>
+      <div className={cx("header-container")}>
+        <div className={cx("header-container-top")}>
+          <div className={cx("icon")} />
+          <Button
+            className={cx("login")}
+            value={this.props.bLoginResult ? "LogOut" : "Login"}
+            onClick={this.onShowLogin}
+          />
+          <Button
+            className={cx("search")}
+            onClick={this.onChangeSearchStatus}
+          />
+        </div>
 
-          <div className={cx("header-container-bottom", { show : bShowSearch, close : !bShowSearch })}>
-            <div className={cx("header-search-container")}>
-              <div className={cx("header-search-container-main")}>
-                <div className={cx("header-search-input")}>
-                  <input type="text" id="search-input" value="" placeholder="insert here"></input>
-                </div>
-
-                <div className={cx("header-recommendation")}>
-                  <div className={cx("header-recommendation-list")}>
-                    <ul>
-                      <li>맛있는!</li>
-                      <li>달콤한!</li>
-                      <li>안녕하세여!</li>
-                      <li>테그길이에따른칸수확인!</li>
-                      <li>테스트데이터!</li>
-                      <li>맛있는!</li>
-                      <li>달콤한!</li>
-                      <li>안녕하세여!</li>
-                      <li>테그길이에따른칸수확인!</li>
-                      <li>테스트데이터!</li>
-                      <li>맛있는!</li>
-                      <li>달콤한!</li>
-                      <li>안녕하세여!</li>
-                      <li>테그길이에따른칸수확인!</li>
-                      <li>테스트데이터!</li>
-                      <li>맛있는!</li>
-                      <li>달콤한!</li>
-                      <li>안녕하세여!</li>
-                      <li>테그길이에따른칸수확인!</li>
-                      <li>테스트데이터!</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
+        <div
+          className={cx("header-container-bottom", {
+            show: bShowSearch,
+            close: !bShowSearch
+          })}
+        >
+          <div className={cx("header-search-container")}>
+            <SearchPopup />
           </div>
         </div>
+        {bShowLogin ? <LoginPopup onClick={this.onShowLogin} /> : null}
       </div>
     );
   }

@@ -15,6 +15,7 @@ const mapStateToProps = state => {
   return {
     me: state.userReducer.me,
     bRegisterResult: state.userReducer.bRegisterResult,
+    bIDCheckResult: state.userReducer.bIDCheckResult,
     bLoginResult: state.userReducer.bLoginResult
   };
 };
@@ -35,14 +36,24 @@ class LoginPopup extends Component {
   state = {
     bShowLogin: true, //로그인 폼 보여주는지 여부
     bShowRegister: false, //회원가입 폼 보여주는 지 여부
+    bActionRequest: false,
     ID: null,
     passwd: null,
     recheck: false
   };
 
   componentDidUpdate() {
-    if (this.props.bLoginResult === 1) {
-      this.props.onCloseLogin();
+    if (
+      this.state.bShowRegister &&
+      this.props.bIDCheckResult &&
+      this.props.bRegisterResult
+    ) {
+      this.setState({ bShowLogin: true, bShowRegister: false });
+    }
+    if (this.state.bActionRequest && !this.props.bIDCheckResult) {
+      this.setState({ bActionRequest: false });
+      alert("동일한 ID가 존재합니다");
+      document.getElementById("id").focus();
     }
   }
 
@@ -54,12 +65,11 @@ class LoginPopup extends Component {
     this.setState({ bShowLogin: false, bShowRegister: true });
   };
 
-  // onShowLogin = event => {
-  //   this.setState({ bShowLogin: true, bShowRegister: false });
-  // };
+  onShowLogin = event => {
+    this.setState({ bShowLogin: true, bShowRegister: false });
+  };
 
   onLoginClick = event => {
-    console.log("로그인 버튼 누름");
     if (!this.state.ID) {
       alert("ID를 입력해주세요");
       document.getElementById("id").focus();
@@ -75,15 +85,16 @@ class LoginPopup extends Component {
     if (!this.state.ID) {
       alert("ID를 입력해주세요");
       document.getElementById("id").focus();
-    } else if (!this.state.passwd) {
-      alert("passwd를 입력해주세요");
+    } else if (!this.state.passwd || this.state.passwd.length < 8) {
+      alert("passwd를 8자 이상 입력해주세요");
       document.getElementById("pwd").focus();
-    } else if (!this.state.recheck) {
+    } else if (this.state.passwd !== this.state.recheck) {
       alert("passwd 재확인을 입력해주세요");
       document.getElementById("pwdrecheck").focus();
+    } else {
+      this.setState({ bActionRequest: true });
+      this.props.registerRequest(this.state.ID, this.state.passwd);
     }
-
-    this.props.registerRequest(this.state.ID, this.state.passwd);
   };
 
   onIDCheckClick = event => {
@@ -110,9 +121,7 @@ class LoginPopup extends Component {
     console.log("recheck : " + event.target.value);
     const _pwd = this.state.passwd;
     const _value = event.target.value;
-
-    if (_pwd === _value) this.setState({ recheck: true });
-    else this.setState({ recheck: false });
+    this.setState({ recheck: _value });
   };
 
   /**
