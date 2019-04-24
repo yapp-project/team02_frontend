@@ -15,3 +15,9 @@ export async function searchCocktails(word, type) {
   const res = await webRequestUtil.get({ url, body });
   return res.data;
 }
+
+export async function getRecommendTags() {
+  const url = "recipe/recipe/ingredientn";
+  const res = await webRequestUtil.get({ url });
+  return res.data;
+}
