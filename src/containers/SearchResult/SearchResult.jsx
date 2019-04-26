@@ -37,7 +37,7 @@ class SearchResult extends Component {
    * @description 칵테일 검색결과 레이아웃
    * @param data 검색결과 data[{no, Image, name},{}...]
    */
-  result_form = ({ data }) => {
+  result_form = data => {
     return data.map(item => {
       return (
         <ui className={cx("resultitem")} key={item.name}>
@@ -56,9 +56,7 @@ class SearchResult extends Component {
     const { data } = this.props;
     return (
       <div>
-        <ul className={cx("searchresultform")}>
-          {this.result_form({ data: data })}
-        </ul>
+        <ul className={cx("searchresultform")}>{this.result_form(data)}</ul>
       </div>
     );
   }

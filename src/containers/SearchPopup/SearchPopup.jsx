@@ -216,7 +216,7 @@ class SearchPopup extends Component {
         key="div_recommend"
       />,
       bSaerch && this.props.searchresult.cocktails.length > 0 ? (
-        <SearchResult data={this.props.searchresult} />
+        <SearchResult data={this.props.searchresult.cocktails} />
       ) : null
     ];
   };
