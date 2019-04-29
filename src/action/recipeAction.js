@@ -46,11 +46,11 @@ export function recipeAllSuccess(result) {
   };
 }
 
-export function recipeIDRequest(_id) {
+export function recipeIDRequest(id) {
   return {
     type: actions.BYID.REQUEST,
     payload: {
-      _id
+      id
     }
   };
 }

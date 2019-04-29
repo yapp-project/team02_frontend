@@ -6,10 +6,10 @@ export async function getRecipe() {
   return res.data;
 }
 
-export async function getRecipeByID({_id}) {
+export async function getRecipeByID({id}) {
   const url = "recipe/details";
   const body = {
-    _id
+    id
   };
   
   const res = await webRequestUtil.get({ url, body });

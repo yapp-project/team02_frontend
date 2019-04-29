@@ -106,6 +106,10 @@
     float: left;
     margin-left: 30px;
 
+    div {
+        height: auto;
+    }
+
     .title {
         font-size: 20px;
         font-weight: 500;
@@ -281,6 +285,10 @@
     position: relative;
     float: left;
     margin-left: 30px;
+
+    div {
+        height: auto;
+    }
 
     .shake {
         width: 100%;
@@ -467,6 +475,10 @@
     float: left;
     box-sizing: border-box;
     padding-right: 6.6667%;
+
+    div {
+        height: auto;
+    }
 
     .step3-container {
         width: 100%;

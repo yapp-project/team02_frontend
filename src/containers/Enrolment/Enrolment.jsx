@@ -9,14 +9,18 @@ import Step1 from "./Function/Step1";
 import Step2 from "./Function/Step2";
 import Step3 from "./Function/Step3";
 import Done from "./Function/Done";
+import { enrolmentRequest } from "../../action/enrolmentAction"
 
 const cx = classNames.bind(styles);
 
 const mapStateToProps = state => {
-  return state;
+  return {
+    state: state.enrolmentReducer.state,
+    result: state.enrolmentReducer.result
+  };
 };
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = { enrolmentRequest };
 
 class Enrolment extends Component {
   constructor (props){
@@ -90,12 +94,6 @@ class Enrolment extends Component {
 
   };
 
-  getSnapshotBeforeUpdate(prevProps, prevState) {
-  }
-
-  componentDidUpdate(prevProps, prevState, snapshot) {
-  }
-
   onChangeStepStatus = event => {
     let stepTarget = document.querySelectorAll(".step-1, .step-2, .step-3");
     let clickText = event.target.innerText.trim();
@@ -167,27 +165,27 @@ class Enrolment extends Component {
     switch (cupText) {
       case "하이볼":
         cupTarget[0].classList.add(this.selectCup);
-        enrolmentData.info.cup = "하이볼"
+        enrolmentData.info.cup = "하이볼";
         this.setState({ enrolmentData });
         break;
       case "리큐르":
         cupTarget[1].classList.add(this.selectCup);
-        enrolmentData.info.cup = "리큐르"
+        enrolmentData.info.cup = "리큐르";
         this.setState({ enrolmentData });
         break;
       case "허리케인":
         cupTarget[2].classList.add(this.selectCup);
-        enrolmentData.info.cup = "허리케인"
+        enrolmentData.info.cup = "허리케인";
         this.setState({ enrolmentData });
         break;
       case "마가렛":
         cupTarget[3].classList.add(this.selectCup);
-        enrolmentData.info.cup = "마가렛"
+        enrolmentData.info.cup = "마가렛";
         this.setState({ enrolmentData });
         break;
       case "마티니":
         cupTarget[4].classList.add(this.selectCup);
-        enrolmentData.info.cup = "마티니"
+        enrolmentData.info.cup = "마티니";
         this.setState({ enrolmentData });
         break;
       default:
@@ -335,6 +333,38 @@ class Enrolment extends Component {
 
   onSaveRecipe = () => {
     let doneView = document.querySelector("#done-container");
+    let cup = this.state.enrolmentData.info.name;
+    if (cup === '하이볼') cup = 0;
+    else if (cup === '리큐르') cup = 1;
+    else if (cup === '허리케인') cup = 2;
+    else if (cup === '마가렛') cup = 3;
+    else cup = 4;
+
+    // let tag = this.state.enrolmentData.info.tags;
+    
+    //태그 배열 형태로 나누는거 처리해야 됨
+    //재료 포멧은 정해야 될듯
+    let data = {
+      name: this.state.enrolmentData.info.name,
+      glass: cup,
+      percent: 50,
+      description: this.state.enrolmentData.info.describe,
+      tag: [],
+      ingredient: [{
+        "name" : "water",
+        "color" : "blue",
+        "ml" : 20
+        }, {
+        "name" : "hongcho",
+        "color" : "red",
+        "ml" : 10
+        }],
+      owner: '사용자'
+    }
+
+    // data.tag.push(tag);
+
+    this.props.enrolmentRequest(data);
 
     doneView.classList.toggle(this.doneClose);
   };

@@ -5,6 +5,7 @@
 import { combineReducers } from "redux";
 import userReducer from "./userReducer";
 import searchReducer from "./searchReducer";
-import recipeReducer from "./recipeReducer"
+import recipeReducer from "./recipeReducer";
+import enrolmentReducer from "./enrolmentReducer";
 
-export default combineReducers({ userReducer, searchReducer, recipeReducer });
+export default combineReducers({ userReducer, searchReducer, recipeReducer, enrolmentReducer });

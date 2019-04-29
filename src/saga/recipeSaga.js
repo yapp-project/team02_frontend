@@ -25,12 +25,10 @@ function* requestAll () {
 }
 
 function* requestRecipeByID(action) {
-  const { _id } = action.payload;
+  const { id } = action.payload;
   try {
-    const result = yield call(getRecipeByID, {_id});
+    const result = yield call(getRecipeByID, {id});
     yield put(recipeIDSuccess(result));
-    // const result = yield call(getRecipe);
-    // yield put(recipeAllSuccess(result));
   } catch (error) {}
 }
 
