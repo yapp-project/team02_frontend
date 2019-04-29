@@ -8,9 +8,6 @@ import { SearchResultItem } from "../../components";
 import { recommendRequest, searchRequest } from "../../action/searchAction";
 
 import Header from "../Header/Header";
-//image
-import cocktail1 from "../../static/images/a1.jpeg";
-import cocktail2 from "../../static/images/a2.jpg";
 
 const cx = classNames.bind(styles);
 
@@ -41,13 +38,12 @@ class MainView extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log("props update 완료 : ");
     //최초 통신한 경우 첫번째 태그에 대한 검색 결과 가져와야 함
     if (
       !prevProps.recommend.tags.length &&
       this.props.recommend.tags.length > 0
     ) {
-      const word = this.props.recommend.tags[0];
+      const word = this.props.recommend.tags[0].tag;
       this.setState({ selectTag: word });
       this.props.searchRequest({ word, type: 0, recommend: true });
     }
@@ -70,13 +66,12 @@ class MainView extends Component {
     this.setState({ showPopup: false });
   };
 
-  //보여주기용 임시 추후 인자 넘기는걸로 수정
   recommend_cocktail = ({ data }) => {
     return data.map(item => {
       return (
         <SearchResultItem
           className={cx("cocktail")}
-          key={item.no}
+          key={item._id}
           props={item}
         />
       );
@@ -104,10 +99,12 @@ class MainView extends Component {
     return tags.map(tag => {
       return (
         <Button
-          id={tag}
-          key={tag}
-          value={"#" + tag}
-          className={cx("hashtag", { selected: tag === this.state.selectTag })}
+          id={tag.tag}
+          key={tag._id}
+          value={"#" + tag.tag}
+          className={cx("hashtag", {
+            selected: tag.tag === this.state.selectTag
+          })}
           onClick={this.onButtonClick}
         />
       );
@@ -143,14 +140,14 @@ class MainView extends Component {
             </div>
           </div>
         </div>
-        <div id="images" className={cx("images")}>
+        <div className={cx("images")}>
           <div className={cx("innercontainer")}>
             <span
               className={cx("prevbspan")}
               onClick={this.onPrevScrollClick}
             />
             <span className={cx("nextspan")} onClick={this.onNextScrollClick} />
-            <div className={cx("cocktailcontainer")}>
+            <div id="images" className={cx("cocktailcontainer")}>
               {this.recommend_cocktail({ data: this.props.recommend.result })}
             </div>
           </div>

@@ -264,6 +264,7 @@ body {
           display: inline-block;
           position: relative;
           width: 360px;
+          min-width: 360px;
           margin-right: 26px;
           &:hover {
             img {

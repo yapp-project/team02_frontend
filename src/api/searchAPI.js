@@ -5,9 +5,9 @@ export async function searchCocktails(word, type) {
   let url, body;
   if (type === 0) {
     url = "recipe/tag/view";
-    body = JSON.stringify({
+    body = {
       tag: word
-    });
+    };
   } else {
     url = "recipe/ingredient/view";
   }
@@ -17,7 +17,7 @@ export async function searchCocktails(word, type) {
 }
 
 export async function getRecommendTags() {
-  const url = "recipe/recipe/ingredientn";
+  const url = "recipe/random";
   const res = await webRequestUtil.get({ url });
   return res.data;
 }
