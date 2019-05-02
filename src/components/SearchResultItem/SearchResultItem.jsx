@@ -9,9 +9,8 @@ const cx = classNames.bind(styles);
  * @description 한개의 칵테일 검색결과를 보여준다
  * @param props object형태의 칵테일 정보 {no, Image, name}
  */
-const SearchResultItem = ({ className, props }) => {
-  const { no, Image, name, like } = props;
-
+const SearchResultItem = props => {
+  const { className, no, Image, name, like } = props;
   return (
     <div className={cx(className, { image_container: !className })}>
       <img className={cx("item_img")} src={Image} alt="사진" />

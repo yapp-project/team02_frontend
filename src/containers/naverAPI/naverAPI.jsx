@@ -5,6 +5,7 @@ import styles from "./naverAPI.scss";
 import { connect } from "react-redux";
 
 import { GridLayout } from "@egjs/react-infinitegrid";
+import SearchResultItem from "../../components/SearchResultItem/SearchResultItem";
 
 const cx = classNames.bind(styles);
 
@@ -15,17 +16,15 @@ const mapStateToProps = state => {
 const mapDispatchToProps = {};
 
 const Item = ({ num }) => (
-  <div className={cx("item")}>
-    <div className={cx("thumbnail")}>
-      <img
-        src={`https://naver.github.io/egjs-infinitegrid/assets/image/${(num %
-          59) +
-          1}.jpg`}
-        alt="egjs"
-      />
-    </div>
-    <div className={cx("info")}>{`egjs ${num}`}</div>
-  </div>
+  <SearchResultItem
+    className={cx("item")}
+    Image={`https://naver.github.io/egjs-infinitegrid/assets/image/${(num %
+      59) +
+      1}.jpg`}
+    key={num}
+    name={num}
+    like={num}
+  />
 );
 
 class naverAPI extends Component {
