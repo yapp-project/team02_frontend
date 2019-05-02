@@ -1,24 +1,23 @@
-.searchresultform {
-  background: #0f1835;
-  padding: 0;
-  height: 645px;
-  overflow-y: auto;
-  display: grid;
-  grid-gap: 10px;
-  grid-template-columns: repeat(3, 1fr);
-  padding-left: 220px;
-  padding-right: 201px;
-}
+.result_form {
+  background-color: #0f1835;
+  .item {
+    max-width: 360px;
+    opacity: 1;
+    height: auto;
 
-.resultitem {
-  width: 100%;
-  height: 100%;
-
-  .image_container {
-    position: relative;
-    width: inherit;
-    height: 300px;
-    //margin: 10px 10px 10px 10px;
+    img {
+      width: 100%;
+    }
+    .info {
+      margin-top: 10px;
+      font-weight: bold;
+      color: #777;
+    }
+    .animate {
+      transition: opacity ease 1s;
+      transition-delay: 0.2s;
+      opacity: 1;
+    }
 
     &:hover {
       img {
@@ -29,5 +28,13 @@
         visibility: visible;
       }
     }
+  }
+  .loading {
+    position: absolute;
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    font-weight: bold;
   }
 }
