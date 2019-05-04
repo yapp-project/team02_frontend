@@ -2,6 +2,10 @@ import { actions } from "../action/recipeAction";
 const initialState = {
   state: "fail"
 };
+//여기 같은 경우에 레시피 관련 모든 api 를 묶어놔서
+//어떤 결과냐에 따라 결과 리턴값이 달라서 공통인 state 에 대해서만 일단 만들어뒀어용
+//예를들어, ID 를 통해 1개만 검색, 레시피 모두 검색 -> 이 두가지의 경우 배열로 받거나 1개만 받거나 등의 차이가 발생하니까요
+//enrolmentReducer도 같구요!
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
