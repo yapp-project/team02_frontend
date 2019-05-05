@@ -2,7 +2,6 @@ import * as webRequestUtil from "./rootAPI";
 
 export async function enrolmentRecipe({ data }) {
   const url = "recipe";
-  
   const body = {
     data
   };
