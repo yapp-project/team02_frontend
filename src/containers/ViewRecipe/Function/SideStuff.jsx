@@ -12,7 +12,8 @@ const RecipeStuff = (props) => {
         {
             props.stuffs.map((input, index) => {
                 return <StuffItem
-                    idx={index}
+                    key={`stuffItem${index}`}
+                    color={input.color}
                     name={input.name}
                     volume={input.volume}
                     ratio={input.ratio}

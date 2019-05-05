@@ -8,6 +8,7 @@ export async function setJoin({ userid, password }) {
     password
   };
   const res = await webRequestUtil.post({ url, body });
+  console.log(res);
   return res.data;
 }
 export async function setLogin({ userid, password }) {
