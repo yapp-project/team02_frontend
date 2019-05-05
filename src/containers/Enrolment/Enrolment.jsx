@@ -39,7 +39,8 @@ class Enrolment extends Component {
         "totalVolume": 0
       },
       "stuffID": 0,
-      "color_idx": ""
+      "color_idx": "",
+      "images": []
     };
     
     this.onChangeStepStatus = this.onChangeStepStatus.bind(this);
@@ -141,7 +142,11 @@ class Enrolment extends Component {
           contents={this.contents[2]}
         />});
         this.setState({ middle: ""});
-        this.setState({ step: <Step3/> });
+        this.setState({ 
+          step: <Step3
+            saveImage={this.onSaveImages}
+          /> 
+        });
         break;
       default:
         break;
@@ -327,9 +332,12 @@ class Enrolment extends Component {
       enrolmentData.stuff[colorNumber].color = "#" + ((1 << 24) + (parseInt(rgb[0]) << 16) + (parseInt(rgb[1]) << 8) + parseInt(rgb[2])).toString(16).slice(1);
       
       this.setState(enrolmentData);
-      console.log(this.state);
     }
   };
+
+  onSaveImages = images => {
+    this.setState({images: images});
+  }
 
   onSaveRecipe = () => {
     let doneView = document.querySelector("#done-container");
