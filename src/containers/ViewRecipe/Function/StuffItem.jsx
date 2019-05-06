@@ -6,9 +6,13 @@ const cx = classNames.bind(styles);
 
 
 const EnrolmentStuffItem = (props) => {
+  let style = {
+    backgroundColor: props.color
+  };
+
   return (
-    <div key={`stuff${props.idx}`} className={cx("detail-content-main-side-stuff-item")}>
-        <span className={cx("stuff-color")}></span>
+    <div className={cx("detail-content-main-side-stuff-item")}>
+        <span style={style} className={cx("stuff-color")}></span>
         <span className={cx("stuff-name")}>{props.name}</span>
         <span className={cx("stuff-volume")}>{props.volume}</span>
         <span className={cx("stuff-ratio")}>{props.ratio}</span>

@@ -11,11 +11,10 @@ const basicRequest = (type, { url, headers, body }) => {
       ...headers
     }
   };
-  if (type === "GET") {
-    config.params = body;
-  } else {
-    config.data = body;
-  }
+
+  if (type === "GET") config.params = body;
+  else config.data = body;
+
   return axios(config)
     .then(res => {
       return res;
