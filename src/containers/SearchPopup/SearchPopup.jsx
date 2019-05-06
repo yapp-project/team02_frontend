@@ -96,7 +96,7 @@ class SearchPopup extends Component {
       const filter = this.state.selectedFilter.value;
       const type = this.state.selectedType.value;
       this.setState({ bSaerch: !this.state.bSaerch });
-      this.props.searchRequest({ data: { word, filter, type } });
+      this.props.searchRequest({ word, filter, type });
     }
   };
 
@@ -216,7 +216,7 @@ class SearchPopup extends Component {
         key="div_recommend"
       />,
       bSaerch && this.props.searchresult.cocktails.length > 0 ? (
-        <SearchResult data={this.props.searchresult} />
+        <SearchResult data={this.props.searchresult.cocktails} />
       ) : null
     ];
   };
