@@ -7,19 +7,22 @@ import { Button } from "../../components";
 //layout
 import SearchPopup from "../SearchPopup/SearchPopup";
 import LoginPopup from "../LoginPopup/LoginPopup";
+import SearchResult from "../SearchResult/SearchResult";
 
 import { loginRequest, logout } from "../../action/userAction";
+import { searchRequest } from "../../action/searchAction";
 
 const cx = classNames.bind(styles);
 
 const mapStateToProps = state => {
   return {
     bLoginResult: state.userReducer.bLoginResult,
-    set_auth: state.userReducer.set_auth
+    set_auth: state.userReducer.set_auth,
+    searchresult: state.searchReducer.searchresult
   };
 };
 
-const mapDispatchToProps = { loginRequest, logout };
+const mapDispatchToProps = { loginRequest, logout, searchRequest };
 const loginPopupID = "login";
 const searchPopupID = "search";
 
@@ -64,8 +67,14 @@ class Header extends Component {
     const { bShowSearch, bShowLogin } = this.state;
 
     return (
-      <div className={cx("header-container")}>
-        <div className={cx("header-container-top")}>
+      <div
+        className={cx(
+          "container",
+          this.state.bShowSearch ? "_over" : "",
+          this.props.searchresult.cocktails.length ? "_result" : ""
+        )}
+      >
+        <div className={cx("toprect")}>
           <div className={cx("icon")} />
           <Button
             className={cx("login")}
@@ -77,17 +86,15 @@ class Header extends Component {
             onClick={this.onChangeSearchStatus}
           />
         </div>
+        {this.state.bShowSearch && <SearchPopup className={cx("searchrect")} />}
+        {this.state.bShowSearch &&
+        this.props.searchresult.cocktails.length > 0 ? (
+          <SearchResult
+            className={cx("searchresultrect")}
+            data={this.props.searchresult.cocktails}
+          />
+        ) : null}
 
-        <div
-          className={cx("header-container-bottom", {
-            show: bShowSearch,
-            close: !bShowSearch
-          })}
-        >
-          <div className={cx("header-search-container")}>
-            <SearchPopup />
-          </div>
-        </div>
         {bShowLogin ? <LoginPopup onClick={this.onShowLogin} /> : null}
       </div>
     );

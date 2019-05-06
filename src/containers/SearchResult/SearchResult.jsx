@@ -55,9 +55,9 @@ class SearchResult extends Component {
 
   render() {
     return (
-      <div className={cx("result_form")}>
+      <div className={this.props.className}>
         <GridLayout
-          margin={10}
+          margin={27}
           align="center"
           onAppend={this.onAppend}
           isOverflowScroll={true}
