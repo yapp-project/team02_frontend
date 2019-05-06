@@ -10,11 +10,11 @@ const cx = classNames.bind(styles);
  * @param props object형태의 칵테일 정보 {no, Image, name}
  */
 const SearchResultItem = ({ className, props }) => {
-  const { _id, name, Image, owner, scrap } = props;
+  const { _id, name, image, owner, scrap } = props;
 
   return (
     <div className={cx(className, { image_container: !className })}>
-      <img className={cx("item_img")} src={Image} alt="사진" />
+      <img id={_id} className={cx("item_img")} src={image} alt="사진" />
       <div className={cx("information_rect")}>
         <div className={cx("inner")}>
           <div className={cx("cocktailName")}>{name}</div>
