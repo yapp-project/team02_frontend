@@ -63,6 +63,7 @@ class SearchResult extends Component {
           margin={10}
           align="center"
           onAppend={this.onAppend}
+          isOverflowScroll={true}
           onLayoutComplete={this.onLayoutComplete}
           transitionDuration={0.2}
           isConstantSize={true}
