@@ -25,6 +25,7 @@
 
     .detail-content-header-info-count {
       display: block;
+      height: 51px;
 
       span::before {
         content: '';
@@ -88,27 +89,19 @@
     margin-top: 0;
   }
 
-  .side-info-alcohol {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-
-    li {
-      display: block;
-      float: left;
-      width: 92px;
-      height: 92px;
-      margin-top: 20px;
-      border: 1px solid #ffffff;
-      box-sizing: border-box;
-      border-radius: 10px;
-    }
-    
-  }
-
   .content {
     font-weight: normal;
     margin-top: 21px;
+  }
+
+  .alcohol {
+    display: block;
+    width: 92px;
+    height: 92px;
+    margin-top: 20px;
+    border: 1px solid #ffffff;
+    box-sizing: border-box;
+    border-radius: 10px;
   }
 
   .tags {
@@ -128,6 +121,10 @@
   width: 100%;
   height: calc(100% - 60px);
   
+  div {
+    height: auto;
+  }
+
   .detail-content-main-side-stuff-container {
     position: absolute;
     width: 100%;
@@ -157,9 +154,6 @@
       .stuff-color {
         display: inline-block;
         width: 8%;
-        border: 1px solid #707070;
-        border-radius: 5px;
-        box-sizing: border-box;
         margin-left: 5%;
       }
 
@@ -210,6 +204,10 @@
 
 .detail-content-main-side-comment {
   height: calc(100% - 60px);
+
+  div {
+    height: auto;
+  }
 
   .detail-content-main-side-comment-container {
     height: calc(100% - 74px);

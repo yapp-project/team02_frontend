@@ -5,69 +5,73 @@ import styles from "./MainView.scss";
 import { connect } from "react-redux";
 import { Button } from "../../components";
 import { SearchResultItem } from "../../components";
+import { recommendRequest, searchRequest } from "../../action/searchAction";
 
 import Header from "../Header/Header";
-//image
-import cocktail1 from "../../static/images/a1.jpeg";
-import cocktail2 from "../../static/images/a2.jpg";
 
 const cx = classNames.bind(styles);
 
 const mapStateToProps = state => {
-  return state;
+  return { recommend: state.searchReducer.recommend };
 };
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = { recommendRequest, searchRequest };
 
-const dummy_data = [
-  { no: 0, Image: cocktail1, name: "칵테일1", like: 10 },
-  { no: 1, Image: cocktail2, name: "칵테일2", like: 20 },
-  { no: 2, Image: cocktail1, name: "칵테일3", like: 30 },
-  { no: 3, Image: cocktail2, name: "칵테일4", like: 40 },
-  { no: 4, Image: cocktail1, name: "칵테일5", like: 50 },
-  { no: 5, Image: cocktail2, name: "칵테일6", like: 60 }
-];
 class MainView extends Component {
   state = {
     showPopup: false,
-    showSearch: false
+    showSearch: false,
+    selectTag: "" //현재 사용자가 선택한 추천 태그
   };
 
-  // onShowLogin = event => {
-  //   const _bShowPopup = this.state.showPopup;
+  /**
+   * 최초 로딩 시 서버 통신
+   * @description 1. 추천 해쉬태그 받아 오기
+   * 2. 해쉬태그 가장 첫 번째 검색 결과 가져오기
+   */
+  componentDidMount() {
+    //1. 추천 해쉬태그 서버 통신
+    const _recommend = this.props.recommend;
+    if (!_recommend.tags.length) {
+      this.props.recommendRequest();
+    }
+  }
 
-  //   if (_bShowPopup) {
-  //     if (event.target.id === loginPopupID) {
-  //       this.setState({ showPopup: false });
-  //     }
-  //   } else {
-  //     this.setState({ showPopup: !_bShowPopup });
-  //   }
-  // };
+  componentDidUpdate(prevProps, prevState) {
+    //최초 통신한 경우 첫번째 태그에 대한 검색 결과 가져와야 함
+    if (
+      !prevProps.recommend.tags.length &&
+      this.props.recommend.tags.length > 0
+    ) {
+      const word = this.props.recommend.tags[0].tag;
+      this.setState({ selectTag: word });
+      this.props.searchRequest({ word, type: 0, recommend: true });
+    }
+  }
+
+  /**
+   * hashTag onClick Event Handler
+   * @description 해쉬태그를 누를 때 마다 서버 통신해서 결과를 가져온다.
+   */
+  onButtonClick = event => {
+    const comp = event.target;
+    const word = comp.id;
+    //style 변경을 위한 state change
+    this.setState({ selectTag: word });
+    //server 통신
+    this.props.searchRequest({ word, type: 0, recommend: true });
+  };
 
   onCloseLogin = () => {
     this.setState({ showPopup: false });
   };
 
-  // onShowSearch = event => {
-  //   const _bShowSearch = this.state.showSearch;
-
-  //   if (_bShowSearch) {
-  //     if (event.target.id === searchPopupID) {
-  //       this.setState({ showSearch: false });
-  //     }
-  //   } else {
-  //     this.setState({ showSearch: !_bShowSearch });
-  //   }
-  // };
-
-  //보여주기용 임시 추후 인자 넘기는걸로 수정
   recommend_cocktail = ({ data }) => {
     return data.map(item => {
       return (
         <SearchResultItem
           className={cx("cocktail")}
-          key={item.no}
+          key={item._id}
           props={item}
         />
       );
@@ -86,7 +90,29 @@ class MainView extends Component {
     target.scrollTo(_scrollLeft - 360, 0);
   };
 
+  /**
+   * @author AnGwangHo
+   * @description 랜덤 태그 반환
+   * @param tags 랜덤으로 추천된 Tag[a,b,c...]
+   */
+  showRecommendTags = ({ tags }) => {
+    return tags.map(tag => {
+      return (
+        <Button
+          id={tag.tag}
+          key={tag._id}
+          value={"#" + tag.tag}
+          className={cx("hashtag", {
+            selected: tag.tag === this.state.selectTag
+          })}
+          onClick={this.onButtonClick}
+        />
+      );
+    });
+  };
+
   render() {
+    const { tags } = this.props.recommend;
     return (
       <div className={cx("mainview")}>
         <div className={cx("header")}>
@@ -110,32 +136,19 @@ class MainView extends Component {
         <div className={cx("hashtag_rect")}>
           <div className={cx("hashtag_container")}>
             <div className={cx("hastag_inner")}>
-              <button className={cx("hashtag")}>#Citrus</button>
-              <button className={cx("hashtag")}>#Vodka</button>
-              <button className={cx("hashtag")} key="0">
-                #Bombay
-              </button>
-              <button className={cx("hashtag")} key="1">
-                #Bombay
-              </button>
-              <button className={cx("hashtag")} key="2">
-                #Bombay
-              </button>
-              <button className={cx("hashtag")} key="3">
-                #Bombay
-              </button>
+              {this.showRecommendTags({ tags })}
             </div>
           </div>
         </div>
-        <div id="images" className={cx("images")}>
+        <div className={cx("images")}>
           <div className={cx("innercontainer")}>
             <span
               className={cx("prevbspan")}
               onClick={this.onPrevScrollClick}
             />
             <span className={cx("nextspan")} onClick={this.onNextScrollClick} />
-            <div className={cx("cocktailcontainer")}>
-              {this.recommend_cocktail({ data: dummy_data })}
+            <div id="images" className={cx("cocktailcontainer")}>
+              {this.recommend_cocktail({ data: this.props.recommend.result })}
             </div>
           </div>
         </div>

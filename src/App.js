@@ -5,10 +5,8 @@ import {
   MainView,
   Header,
   LoginPopup,
-  HTML_TEST,
   Enrolment,
-  ViewRecipe,
-  naverAPI
+  ViewRecipe
 } from "./containers";
 
 const mapStateToProps = state => {
@@ -26,9 +24,6 @@ class App extends Component {
           <Route exact path="/popup" component={LoginPopup} />
           <Route exact path="/enrolment" component={Enrolment} />
           <Route exact path="/viewRecipe" component={ViewRecipe} />
-          <Route exact path="/naver" component={naverAPI} />
-
-          <Route exact path="/test" component={HTML_TEST} />
         </Switch>
       </div>
     );

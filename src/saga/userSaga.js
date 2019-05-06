@@ -10,6 +10,7 @@ import {
 import { setJoin, checkID, setLogin } from "../api/userAPI";
 
 function* requestLogin(action) {
+  console.log('test');
   try {
     const { userid, password } = action.payload;
     const result = yield call(setLogin, { userid, password });

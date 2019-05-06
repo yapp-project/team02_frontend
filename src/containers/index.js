@@ -5,8 +5,6 @@ import Enrolment from "./Enrolment/Enrolment";
 import SearchPopup from "./SearchPopup/SearchPopup";
 import SearchResult from "./SearchResult/SearchResult";
 import ViewRecipe from "./ViewRecipe/ViewRecipe";
-import naverAPI from "./naverAPI/naverAPI";
-import HTML_TEST from "./HTML_TEST/HTML_TEST";
 
 export {
   MainView,
@@ -14,8 +12,6 @@ export {
   LoginPopup,
   SearchPopup,
   SearchResult,
-  HTML_TEST,
   Enrolment,
-  ViewRecipe,
-  naverAPI
+  ViewRecipe
 };
