@@ -1,140 +1,90 @@
-$icon-color: red;
-
-.show {
-  display: block;
-}
-
-.close {
-  display: none;
-}
-
-.header-container-top {
-  position: fixed;
-  left: 0;
-  width: 100%;
+.container {
   height: 80px;
-  border: 1px solid #707070;
-  box-sizing: border-box;
-}
 
-.header-container-top::after {
-  display: block;
-  content: "";
-  clear: both;
-}
+  &._over {
+    position: absolute;
+    width: 100%;
+    height: inherit;
+    display: grid;
+    grid-template-columns: 201.5px auto 201px;
+    grid-template-rows: 80px 265px auto;
+    overflow: hidden;
 
-.icon {
-  float: left;
-  width: 154px;
-  height: 51px;
-  background-image: url("../../static/images/logo/header_log_h.png");
-  background-repeat: no-repeat;
-  background-size: contain;
-  margin-top: 15px;
-  margin-left: 30px;
-  margin-bottom: 14px;
-}
+    &._result {
+      height: 100%;
+      z-index: 10000;
+    }
+  }
+  background-color: #080f24;
 
-.header-container-top button {
-  float: right;
-}
+  .toprect {
+    left: 0;
+    width: 100%;
+    height: 80px;
+    grid-column: 1 / span 3;
+    grid-row: 1 / span 1;
 
-.header-container-top .search {
-  width: 60px;
-  height: 60px;
-  border-radius: 30px;
-  border-color: transparent;
-  margin: 10px 15px 0 0;
-  background-image: url("../../static/images/Search.svg");
-  background-color: transparent;
-  background-repeat: no-repeat;
-  background-size: inherit;
-  background-position: center;
-  outline: none;
-  cursor: pointer;
-}
+    .icon {
+      float: left;
+      width: 154px;
+      height: 51px;
+      background-image: url("../../static/images/logo/header_log_h.png");
+      background-repeat: no-repeat;
+      background-size: contain;
+      margin-top: 15px;
+      margin-left: 30px;
+      margin-bottom: 14px;
+    }
 
-.header-container-top .login {
-  width: 177px;
-  height: 60px;
-  border-radius: 15px;
-  margin: 10px 29px 0 0;
-  outline: none;
-}
+    button {
+      float: right;
+    }
 
-.header-container-bottom {
-  position: fixed;
-  width: 100%;
-  margin-top: 30px;
-  padding: 0 29px 0 36px;
-  top: 80px;
-  left: 0;
-  box-sizing: border-box;
-}
+    .search {
+      width: 60px;
+      height: 60px;
+      border-radius: 30px;
+      border-color: transparent;
+      margin: 10px 15px 0 0;
+      background-image: url("../../static/images/Search.svg");
+      background-color: transparent;
+      background-repeat: no-repeat;
+      background-size: inherit;
+      background-position: center;
+      outline: none;
+      cursor: pointer;
+    }
 
-.header-container-bottom::after {
-  display: block;
-  position: fixed;
-  left: 0;
-  content: "";
-  height: 100vh;
-  width: 100%;
-  background-color: #000;
-  opacity: 0.2;
-}
+    .login {
+      width: 177px;
+      height: 60px;
+      border-radius: 15px;
+      margin: 10px 29px 0 0;
+      outline: none;
+    }
+  }
 
-.header-search-container {
-  height: 100%;
-  width: 100%;
-}
+  .searchrect {
+    background-color: #080f24;
+    width: inherit;
+    height: auto;
+    grid-column: 2 / span 1;
+    grid-row: 2 / span 1;
+    position: absolute;
+  }
 
-.header-search-container-main {
-  height: 100%;
-}
+  .searchresultrect {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    grid-column: 2 / span 1;
+    grid-row: 3 / span 1;
 
-.header-search-input {
-  position: relative;
-  width: 100%;
-  padding: 10px 0;
-  border: 1px solid #707070;
-  border-left: 0;
-  border-right: 0;
-  box-sizing: border-box;
-}
-
-#search-input {
-  width: 100%;
-  height: 40px;
-  font-size: 24px;
-  line-height: 24px;
-  border: none;
-  box-sizing: border-box;
-}
-
-.header-recommendation {
-  height: 100%;
-}
-
-.header-recommendation-list ul {
-  padding: 16px 40px;
-  margin: 0;
-  overflow-x: scroll;
-  overflow-y: hidden;
-  white-space: nowrap;
-}
-
-.header-recommendation-list li {
-  display: inline-block;
-  height: 32px;
-  border: 1px solid #707070;
-  border-radius: 30px;
-  line-height: 32px;
-  text-align: center;
-  padding: 0 10px;
-  margin-left: 10px;
-  cursor: pointer;
-}
-
-.header-recommendation-list li:first-child {
-  margin-left: 0;
+    // div {
+    //   -ms-overflow-style: none; // IE에서 스크롤바 감춤
+    //   &::-webkit-scrollbar {
+    //     display: none !important; // 윈도우 크롬 등
+    //   }
+    // }
+  }
 }

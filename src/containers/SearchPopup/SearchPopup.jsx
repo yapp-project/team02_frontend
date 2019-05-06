@@ -3,7 +3,7 @@ import classNames from "classnames/bind";
 import styles from "./SearchPopup.scss";
 import { connect } from "react-redux";
 import { Button, Div, Edit, Popup, Combo } from "../../components";
-import SearchResult from "../SearchResult/SearchResult";
+// import SearchResult from "../SearchResult/SearchResult";
 import { searchRequest } from "../../action/searchAction";
 
 const cx = classNames.bind(styles);
@@ -36,22 +36,6 @@ const dummy_data = [
   "Bombay",
   "Bombay"
 ];
-
-const styleStrategies = [
-  {
-    mediaQuery: "(max-width: 719.9px)",
-    style: { numberOfColumns: 1, gutterHeight: 5, gutterWidth: 0 }
-  },
-  {
-    mediaQuery: "(min-width: 720px) and (max-width: 1023.9px)",
-    style: { numberOfColumns: 2, gutterHeight: 15, gutterWidth: 15 }
-  },
-  {
-    mediaQuery: "(min-width: 1024px)",
-    style: { numberOfColumns: 3, gutterHeight: 30, gutterWidth: 30 }
-  }
-];
-const transition = "top 100ms ease-in-out, left 100ms ease-in-out";
 
 /**
  * @author AnGwangHo
@@ -92,7 +76,7 @@ class SearchPopup extends Component {
         alert("단어를 입력하세요!");
         return false;
       }
-      const word = value.split(" ");
+      const word = value.split(" ").toString();
       const filter = this.state.selectedFilter.value;
       const type = this.state.selectedType.value;
       this.setState({ bSaerch: !this.state.bSaerch });
@@ -127,13 +111,16 @@ class SearchPopup extends Component {
         margin: 0,
         border: 0,
         backgroundColor: "#080f24",
-        color: "#ffffff"
+        color: "#ffffff",
+        paddingTop: 5
       }),
       menu: base => ({
         ...base,
         margin: 0,
         color: "#ffffff",
         backgroundColor: "#080f24",
+        position: "absolute",
+        height: "auto",
         "font-size": 20
       }),
       indicatorSeparator: base => ({
@@ -199,30 +186,27 @@ class SearchPopup extends Component {
         id="recommend"
         className={cx("recommend")}
         content={[
-          dummy_data.map(item => {
+          dummy_data.map((item, index) => {
             return (
-              <div id={item} key={item} tabIndex="-1" className={cx("text")}>
+              <div id={item} key={index} tabIndex="-1" className={cx("text")}>
                 #{item}
               </div>
             );
           }),
-          <div className={cx("prev")}>
+          <div key="prev" className={cx("prev")}>
             <span className={cx("arrow")} onClick={this.onPrevScrollClick} />
           </div>,
-          <div className={cx("next")}>
+          <div key="next" className={cx("next")}>
             <span className={cx("arrow")} onClick={this.onNextScrollClick} />
           </div>
         ]}
         key="div_recommend"
-      />,
-      bSaerch && this.props.searchresult.cocktails.length > 0 ? (
-        <SearchResult data={this.props.searchresult.cocktails} />
-      ) : null
+      />
     ];
   };
 
   render() {
-    return <div>{this.search_form()}</div>;
+    return <div className={this.props.className}>{this.search_form()}</div>;
   }
 }
 

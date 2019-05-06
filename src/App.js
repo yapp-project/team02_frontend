@@ -1,7 +1,13 @@
 import React, { Component } from "react";
 import { Route, Switch, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import { MainView, Header, LoginPopup, Enrolment, ViewRecipe } from "./containers";
+import {
+  MainView,
+  Header,
+  LoginPopup,
+  Enrolment,
+  ViewRecipe
+} from "./containers";
 
 const mapStateToProps = state => {
   return {};
