@@ -14,18 +14,6 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = {};
 
-const Item = ({ num }) => (
-  <SearchResultItem
-    className={cx("item")}
-    Image={`https://naver.github.io/egjs-infinitegrid/assets/image/${(num %
-      59) +
-      1}.jpg`}
-    key={num}
-    name={num}
-    like={num}
-  />
-);
-
 /**
  * @author AnGwangHo
  * @description 검색 결과를 표현하는 컨테이너
@@ -35,28 +23,37 @@ class SearchResult extends Component {
   loadItems(groupKey, num) {
     const items = [];
     const start = this.start || 0;
+    const cocktails = this.props.data;
 
     for (let i = 0; i < num; ++i) {
       items.push(
-        <Item groupKey={groupKey} num={1 + start + i} key={start + i} />
+        <SearchResultItem
+          groupKey={groupKey}
+          className={cx("item")}
+          key={1 + start + i}
+          props={cocktails[i]}
+        />
       );
     }
     this.start = start + num;
     return items;
   }
-  onAppend = ({ groupKey, startLoading }) => {
-    startLoading();
+  onAppend = ({ groupKey, startLoading, endLoading }) => {
     const list = this.state.list;
-    const items = this.loadItems(parseFloat(groupKey) + 1, 5);
-
-    this.setState({ list: list.concat(items) });
+    const len = this.props.data.length;
+    if (len > 0) {
+      startLoading();
+      const items = this.loadItems(parseFloat(groupKey) + 1, len);
+      this.setState({ list: list.concat(items) });
+    } else {
+      endLoading();
+    }
   };
   onLayoutComplete = ({ isLayout, endLoading }) => {
     !isLayout && endLoading();
   };
 
   render() {
-    const { data } = this.props;
     return (
       <div className={cx("result_form")}>
         <GridLayout

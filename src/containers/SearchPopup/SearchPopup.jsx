@@ -92,7 +92,7 @@ class SearchPopup extends Component {
         alert("단어를 입력하세요!");
         return false;
       }
-      const word = value.split(" ");
+      const word = value.split(" ").toString();
       const filter = this.state.selectedFilter.value;
       const type = this.state.selectedType.value;
       this.setState({ bSaerch: !this.state.bSaerch });
