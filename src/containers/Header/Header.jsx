@@ -40,9 +40,13 @@ class Header extends Component {
   }
 
   componentDidUpdate() {
-    const { bShowLogin } = this.state;
+    const { bShowLogin, bShowSearch } = this.state;
     if (this.props.bLoginResult && bShowLogin) {
       this.setState({ bShowLogin: false });
+    }
+
+    if (!bShowSearch && this.props.searchresult.cocktails.length) {
+      this.props.searchresult.cocktails = [];
     }
   }
 
@@ -70,7 +74,7 @@ class Header extends Component {
       <div
         className={cx(
           "container",
-          this.state.bShowSearch ? "_over" : "",
+          bShowSearch ? "_over" : "",
           this.props.searchresult.cocktails.length ? "_result" : ""
         )}
       >
@@ -86,9 +90,8 @@ class Header extends Component {
             onClick={this.onChangeSearchStatus}
           />
         </div>
-        {this.state.bShowSearch && <SearchPopup className={cx("searchrect")} />}
-        {this.state.bShowSearch &&
-        this.props.searchresult.cocktails.length > 0 ? (
+        {bShowSearch && <SearchPopup className={cx("searchrect")} />}
+        {bShowSearch && this.props.searchresult.cocktails.length > 0 ? (
           <SearchResult
             className={cx("searchresultrect")}
             data={this.props.searchresult.cocktails}
