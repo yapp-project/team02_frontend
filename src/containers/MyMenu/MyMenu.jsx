@@ -6,43 +6,66 @@ import { connect } from "react-redux";
 //Layout
 import SearchResult from "../SearchResult/SearchResult";
 
-import { searchRequest } from "../../action/searchAction";
+import { dataRequest } from "../../action/userAction";
 
 const cx = classNames.bind(styles);
 
 const mapStateToProps = state => {
-  return { searchresult: state.searchReducer.searchresult };
+  return { mymenu: state.userReducer.mymenu };
 };
 
-const mapDispatchToProps = { searchRequest };
+const mapDispatchToProps = { dataRequest };
 
 class MyMenu extends Component {
   state = {
-    tabIndex: 0 // 0-스크랩, 1-등록한 레시피
+    userid: "",
+    tabIndex: 0, // 0-스크랩, 1-등록한 레시피,
+    scrapArray: [],
+    recipesArray: []
   };
 
   componentDidMount() {
-    //스크랩 불러와야함.
-    this.props.searchRequest({ word: "gangnam", filter: 0, type: 0 });
+    const auth = JSON.parse(localStorage.getItem("myData")); //localstorage에서 가져옴
+    // if (auth) {
+    //   this.props.dataRequest(this.state.tabIndex, auth.userid);
+    // this.setState({ userid: auth.userid });
+    // }
+    this.setState({ userid: "drinkme001" });
+    this.props.dataRequest(this.state.tabIndex, "drinkme001");
+    this.props.dataRequest(!this.state.tabIndex, "drinkme001");
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.tabIndex === 0) {
+      if (prevProps.mymenu.scrap !== this.props.mymenu.scrap) {
+        this.setState({ scrapArray: this.props.mymenu.scrap });
+      }
+    } else if (this.state.tabIndex === 1) {
+      if (prevProps.mymenu.recipes !== this.props.mymenu.recipes) {
+        this.setState({ recipesArray: this.props.mymenu.recipes });
+      }
+    }
   }
 
   onTabButtonClick = event => {
     const target = event.target;
     if (target.id === "scrap") {
       this.setState({ tabIndex: 0 });
+      this.props.dataRequest(this.state.tabIndex, "drinkme001");
     } else if (target.id === "recipes") {
       this.setState({ tabIndex: 1 });
+      this.props.dataRequest(this.state.tabIndex, "drinkme001");
     }
   };
 
   render() {
-    const { tabIndex } = this.state;
-    console.log(tabIndex);
+    const { userid, tabIndex, scrapArray, recipesArray } = this.state;
+    const tabArray = tabIndex ? recipesArray : scrapArray;
     return (
       <div className={cx("mymenu_container")}>
         <div className={cx("top_rect")}>
           <div className={cx("top_container")}>
-            <div className={cx("userid")}>Park Sae Ha</div>
+            <div className={cx("userid")}>{userid}</div>
             <div className={cx("tab_container")}>
               <div
                 id="scrap"
@@ -55,7 +78,7 @@ class MyMenu extends Component {
                   스크랩
                 </div>
                 <div id="scrap" className={cx("number")}>
-                  24
+                  {scrapArray.length}
                 </div>
               </div>
               <div
@@ -69,7 +92,7 @@ class MyMenu extends Component {
                   등록한 레시피
                 </div>
                 <div id="recipes" className={cx("number")}>
-                  11
+                  {recipesArray.length}
                 </div>
               </div>
               <div className={cx("register_rect")}>
@@ -79,10 +102,7 @@ class MyMenu extends Component {
             </div>
           </div>
         </div>
-        <SearchResult
-          className={cx("bottom_rect")}
-          data={this.props.searchresult.cocktails}
-        />
+        <SearchResult className={cx("bottom_rect")} data={tabArray} />
       </div>
     );
   }

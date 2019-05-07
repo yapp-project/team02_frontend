@@ -20,6 +20,15 @@ const mapDispatchToProps = {};
  */
 class SearchResult extends Component {
   state = { list: [] };
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.data.length && !this.props.data.length) {
+      if (this.state.list.length > 0) {
+        this.setState({ list: [] });
+      }
+    }
+  }
+
   loadItems(groupKey, num) {
     const items = [];
     const start = this.start || 0;
@@ -41,6 +50,7 @@ class SearchResult extends Component {
   onAppend = ({ groupKey, startLoading }) => {
     const list = this.state.list;
     const len = this.props.data ? this.props.data.length : 0;
+
     if (len > 0) {
       startLoading();
       const items = this.loadItems(parseFloat(groupKey) + 1, len);
