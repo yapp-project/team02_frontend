@@ -38,15 +38,13 @@ class SearchResult extends Component {
     this.start = start + num;
     return items;
   }
-  onAppend = ({ groupKey, startLoading, endLoading }) => {
+  onAppend = ({ groupKey, startLoading }) => {
     const list = this.state.list;
-    const len = this.props.data.length;
+    const len = this.props.data ? this.props.data.length : 0;
     if (len > 0) {
       startLoading();
       const items = this.loadItems(parseFloat(groupKey) + 1, len);
       this.setState({ list: list.concat(items) });
-    } else {
-      endLoading();
     }
   };
   onLayoutComplete = ({ isLayout, endLoading }) => {
