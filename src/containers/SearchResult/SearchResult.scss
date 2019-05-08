@@ -27,3 +27,26 @@
     }
   }
 }
+
+.modify_popup {
+  position: absolute;
+  height: 135px;
+  width: 134px;
+  background-color: #18184e;
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.7);
+  z-index: 1;
+  color: #ffffff;
+  font-size: 15px;
+  text-align: center;
+  .container {
+    width: auto;
+    height: auto;
+    margin-top: 30px;
+
+    .text {
+      display: inline-block;
+      width: auto;
+      cursor: pointer;
+    }
+  }
+}

@@ -102,7 +102,11 @@ class MyMenu extends Component {
             </div>
           </div>
         </div>
-        <SearchResult className={cx("bottom_rect")} data={tabArray} />
+        <SearchResult
+          className={cx("bottom_rect")}
+          data={tabArray}
+          modify={true}
+        />
       </div>
     );
   }
