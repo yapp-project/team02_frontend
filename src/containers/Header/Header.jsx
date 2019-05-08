@@ -80,15 +80,20 @@ class Header extends Component {
       >
         <div className={cx("toprect")}>
           <div className={cx("icon")} />
-          <Button
-            className={cx("login")}
-            value={this.props.bLoginResult ? "LogOut" : "Login"}
-            onClick={this.onShowLogin}
-          />
-          <Button
-            className={cx("search")}
-            onClick={this.onChangeSearchStatus}
-          />
+          <div className={cx("right_container")}>
+            <Button
+              className={cx("search")}
+              onClick={this.onChangeSearchStatus}
+            />
+            <Button
+              className={cx("login", this.props.bLoginResult ? "_out" : "")}
+              value={this.props.bLoginResult ? "" : "로그인"}
+              onClick={this.onShowLogin}
+            />
+            {this.props.bLoginResult && (
+              <Button className={cx("create_recipes")} />
+            )}
+          </div>
         </div>
         {bShowSearch && <SearchPopup className={cx("searchrect")} />}
         {bShowSearch && this.props.searchresult.cocktails.length > 0 ? (

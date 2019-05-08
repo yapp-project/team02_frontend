@@ -36,31 +36,64 @@
       margin-bottom: 14px;
     }
 
-    button {
+    .right_container {
       float: right;
-    }
+      display: flex;
 
-    .search {
-      width: 60px;
-      height: 60px;
-      border-radius: 30px;
-      border-color: transparent;
-      margin: 10px 15px 0 0;
-      background-image: url("../../static/images/Search.svg");
-      background-color: transparent;
-      background-repeat: no-repeat;
-      background-size: inherit;
-      background-position: center;
-      outline: none;
-      cursor: pointer;
-    }
+      .search {
+        width: 26px;
+        height: 26px;
+        border-width: 0;
+        padding: 0;
+        border-radius: 30px;
+        border-color: transparent;
+        margin: 26px 0 0 0;
+        background-image: url("../../static/images/Search.svg");
+        background-color: transparent;
+        background-repeat: no-repeat;
+        background-size: inherit;
+        background-position: center;
+        outline: none;
+        cursor: pointer;
+      }
 
-    .login {
-      width: 177px;
-      height: 60px;
-      border-radius: 15px;
-      margin: 10px 29px 0 0;
-      outline: none;
+      .login {
+        width: 83px;
+        height: 40px;
+        background: transparent;
+        border: solid 2px #ff365d;
+        border-radius: 20px;
+        margin: 20.1px 30px 0 30px;
+        outline: none;
+        color: #ff365d;
+        font-size: 20px;
+        font-weight: 500;
+        cursor: pointer;
+
+        &._out {
+          width: 39.7px;
+          height: 39.7px;
+          border-color: transparent;
+          margin-left: 20px;
+          margin-top: 20.1px;
+          margin-right: 20.3px;
+          background-color: #ffffff;
+        }
+      }
+
+      .create_recipes {
+        width: 40px;
+        height: 40px;
+        border-color: transparent;
+        margin: 20.1px 31px 0 0;
+        background-image: url("../../static/images/white_button.svg");
+        background-color: transparent;
+        background-repeat: no-repeat;
+        background-size: inherit;
+        background-position: center;
+        outline: none;
+        cursor: pointer;
+      }
     }
   }
 
