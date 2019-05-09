@@ -26,6 +26,25 @@
       height: auto;
     }
 
+    .close_button_rect {
+      width: 30px;
+      height: 30px;
+      right: 0;
+      top: -50%;
+      position: absolute;
+
+      .close {
+        width: auto;
+        height: 100%;
+        display: inline-block;
+        text-align: center;
+        font-size: 30px;
+        line-height: 25px;
+        color: white;
+        cursor: pointer;
+        outline: none;
+      }
+    }
     .title {
       width: 100%;
       height: 64px;
@@ -126,6 +145,27 @@
     div {
       height: auto;
     }
+
+    .close_button_rect {
+      width: 30px;
+      height: 30px;
+      right: 0;
+      top: -50%;
+      position: absolute;
+
+      .close {
+        width: auto;
+        height: 100%;
+        display: inline-block;
+        text-align: center;
+        font-size: 30px;
+        line-height: 25px;
+        color: white;
+        cursor: pointer;
+        outline: none;
+      }
+    }
+
     .title {
       width: 100%;
       height: 64px;
@@ -164,7 +204,31 @@
         border: solid 2px #ff365d;
       }
     }
+    .idcheck_button {
+      width: 357px;
+      height: 40px;
+      border-radius: 18px;
+      border-color: transparent;
+      background-color: #7a7a7a;
+      font-size: 20px;
+      color: #080f24;
+      text-align: center;
+      margin-bottom: 29.7px;
+      cursor: pointer;
+    }
     .register {
+      width: 357px;
+      height: 40px;
+      border-radius: 18px;
+      border-color: transparent;
+      background-color: #7a7a7a;
+      font-size: 20px;
+      color: #080f24;
+      text-align: center;
+      margin-bottom: 29.7px;
+      cursor: pointer;
+    }
+    .cancel {
       width: 357px;
       height: 40px;
       border-radius: 18px;

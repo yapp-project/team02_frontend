@@ -7,6 +7,10 @@ const initialState = {
   mymenu: {
     scrap: [],
     recipes: []
+  },
+  user: {
+    state: "none",
+    checkID: false
   }
 };
 
@@ -20,18 +24,35 @@ const reducer = (state = initialState, action) => {
         bLoginResult: result
       };
     }
+    case actions.IDCHECK.REQUEST: {
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          state: action.type
+        }
+      };
+    }
     case actions.IDCHECK.SUCCESS: {
       const { result } = action.payload;
       return {
         ...state,
-        bIDCheckResult: result
+        bIDCheckResult: result,
+        user: {
+          state: action.type,
+          checkID: result
+        }
       };
     }
     case actions.IDCHECK.FAILED: {
       const { result } = action.payload;
       return {
         ...state,
-        bIDCheckResult: result
+        bIDCheckResult: result,
+        user: {
+          ...state.user,
+          state: action.type
+        }
       };
     }
     case actions.REGISTER.SUCCESS: {

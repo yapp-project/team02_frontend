@@ -320,6 +320,19 @@ function* requestRegister(action) {
   }
 }
 
+function* requsetIdChek(action) {
+  try {
+    const { userid } = action.payload;
+    console.log("사가 : " + userid);
+    const result = yield call(checkID, userid);
+    console.log("결과 : " + result);
+    yield put(checkIDSuccess(result));
+  } catch (error) {
+    yield put(checkIDFailed(false));
+  }
+}
+
+//MyMenu에서 스크랩, 등록한 레시피 정보 얻어오는 API
 function* getUserData(action) {
   const { type, id } = action.payload;
   try {
@@ -345,6 +358,7 @@ export default function* saga() {
   yield all([
     takeLatest(actions.LOGIN.REQUEST, requestLogin),
     takeLatest(actions.REGISTER.REQUEST, requestRegister),
+    takeLatest(actions.IDCHECK.REQUEST, requsetIdChek),
     takeLatest(actions.LOGIN.LOGOUT, logout),
     takeLatest(actions.COMMUNICATION.REQUEST, getUserData)
   ]);
