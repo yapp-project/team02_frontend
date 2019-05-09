@@ -3,7 +3,11 @@ const initialState = {
   set_auth: false,
   bRegisterResult: false,
   bIDCheckResult: false,
-  bLoginResult: false
+  bLoginResult: false,
+  mymenu: {
+    scrap: [],
+    recipes: []
+  }
 };
 
 const reducer = (state = initialState, action) => {
@@ -35,6 +39,29 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         bRegisterResult: result
+      };
+    }
+    case actions.COMMUNICATION.END: {
+      const { type, result } = action.payload;
+      if (type === 0) {
+        return {
+          ...state,
+          mymenu: {
+            ...state.mymenu,
+            scrap: result
+          }
+        };
+      } else if (type === 1) {
+        return {
+          ...state,
+          mymenu: {
+            ...state.mymenu,
+            recipes: result
+          }
+        };
+      }
+      return {
+        ...state
       };
     }
     case actions.LOGIN.LOGOUT: {

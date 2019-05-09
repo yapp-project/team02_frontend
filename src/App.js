@@ -6,7 +6,8 @@ import {
   Header,
   LoginPopup,
   Enrolment,
-  ViewRecipe
+  ViewRecipe,
+  MyMenu
 } from "./containers";
 
 const mapStateToProps = state => {
@@ -24,6 +25,7 @@ class App extends Component {
           <Route exact path="/popup" component={LoginPopup} />
           <Route exact path="/enrolment" component={Enrolment} />
           <Route exact path="/viewRecipe" component={ViewRecipe} />
+          <Route exact path="/mymenu" component={MyMenu} />
         </Switch>
       </div>
     );

@@ -94,6 +94,33 @@ export function checkIDFailed(result) {
   };
 }
 
+export function dataRequest(type, id) {
+  return {
+    type: actions.COMMUNICATION.REQUEST,
+    payload: {
+      type,
+      id
+    }
+  };
+}
+export function dataError(result) {
+  return {
+    type: actions.COMMUNICATION.ERROR,
+    payload: {
+      result
+    }
+  };
+}
+export function dataEnd(type, result) {
+  return {
+    type: actions.COMMUNICATION.END,
+    payload: {
+      type,
+      result
+    }
+  };
+}
+
 export function logout() {
   return {
     type: actions.LOGIN.LOGOUT

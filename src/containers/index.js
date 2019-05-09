@@ -5,6 +5,7 @@ import Enrolment from "./Enrolment/Enrolment";
 import SearchPopup from "./SearchPopup/SearchPopup";
 import SearchResult from "./SearchResult/SearchResult";
 import ViewRecipe from "./ViewRecipe/ViewRecipe";
+import MyMenu from "./MyMenu/MyMenu";
 
 export {
   MainView,
@@ -13,5 +14,6 @@ export {
   SearchPopup,
   SearchResult,
   Enrolment,
-  ViewRecipe
+  ViewRecipe,
+  MyMenu
 };

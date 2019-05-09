@@ -29,7 +29,8 @@ const searchPopupID = "search";
 class Header extends Component {
   state = {
     bShowSearch: false,
-    bShowLogin: false
+    bShowLogin: false,
+    bShowUser: false
   };
 
   componentDidMount() {
@@ -54,21 +55,46 @@ class Header extends Component {
     this.setState({ bShowSearch: !this.state.bShowSearch });
   };
 
+  showUserPopup = () => {
+    return (
+      <div id="userPopup" className={cx("user_popup")}>
+        <div className={cx("container")}>
+          <div className={cx("text")}>마이메뉴</div>
+        </div>
+        <div className={cx("container")}>
+          <div className={cx("text")}>개인정보 설정</div>
+        </div>
+        <div className={cx("container")}>
+          <div className={cx("text")} onClick={this.onLogoutClick}>
+            로그아웃
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  onLogoutClick = event => {
+    if (this.props.bLoginResult && this.state.bShowUser) {
+      this.setState({ bShowUser: false });
+      this.props.logout();
+    }
+  };
+
   onShowLogin = event => {
-    const _bShowSearch = this.state.bShowLogin;
-    if (_bShowSearch) {
+    const _bShowLogin = this.state.bShowLogin;
+    if (_bShowLogin) {
       if (event.target.id === loginPopupID) {
         this.setState({ bShowLogin: false });
       }
     } else {
       if (this.props.bLoginResult) {
-        this.props.logout();
-      } else this.setState({ bShowLogin: !_bShowSearch });
+        this.setState({ bShowUser: !this.state.bShowUser });
+      } else this.setState({ bShowLogin: !_bShowLogin });
     }
   };
 
   render() {
-    const { bShowSearch, bShowLogin } = this.state;
+    const { bShowSearch, bShowLogin, bShowUser } = this.state;
 
     return (
       <div
@@ -80,15 +106,21 @@ class Header extends Component {
       >
         <div className={cx("toprect")}>
           <div className={cx("icon")} />
-          <Button
-            className={cx("login")}
-            value={this.props.bLoginResult ? "LogOut" : "Login"}
-            onClick={this.onShowLogin}
-          />
-          <Button
-            className={cx("search")}
-            onClick={this.onChangeSearchStatus}
-          />
+          <div className={cx("right_container")}>
+            <Button
+              className={cx("search")}
+              onClick={this.onChangeSearchStatus}
+            />
+            <Button
+              className={cx("login", this.props.bLoginResult ? "_out" : "")}
+              value={this.props.bLoginResult ? "" : "로그인"}
+              onClick={this.onShowLogin}
+            />
+            {this.props.bLoginResult && (
+              <Button className={cx("create_recipes")} />
+            )}
+            {bShowUser && this.showUserPopup()}
+          </div>
         </div>
         {bShowSearch && <SearchPopup className={cx("searchrect")} />}
         {bShowSearch && this.props.searchresult.cocktails.length > 0 ? (

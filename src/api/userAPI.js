@@ -30,3 +30,21 @@ export async function checkID(userid) {
   const res = await webRequestUtil.post({ url, body });
   return res.data;
 }
+
+export async function getMyScrap(userid) {
+  const url = ""; //서버 작업후 추가
+  const body = {
+    userid
+  };
+  const res = await webRequestUtil.post({ url, body });
+  return res.data;
+}
+
+export async function getMyRecipes(userid) {
+  const url = ""; //서버 작업후 추가
+  const body = {
+    userid
+  };
+  const res = await webRequestUtil.post({ url, body });
+  return res.data;
+}
