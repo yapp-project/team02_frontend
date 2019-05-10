@@ -9,6 +9,7 @@ import {
   registerRequest,
   actions
 } from "../../action/userAction";
+import { CircleSpinner } from "react-spinners-kit";
 
 const cx = classNames.bind(styles);
 
@@ -40,7 +41,8 @@ class LoginPopup extends Component {
     ID: null,
     passwd: null,
     recheck: false,
-    checkID: false
+    checkID: false,
+    loading: false
   };
 
   componentDidUpdate(prevProps, prevSate) {
@@ -50,12 +52,13 @@ class LoginPopup extends Component {
       this.props.bRegisterResult
     ) {
       document.getElementById("pwd").value = "";
-      this.setState({ bShowLogin: true, bShowRegister: false });
+      this.setState({ bShowLogin: true, bShowRegister: false, loading: false });
       document.getElementById("pwd").focus();
     }
 
     const { user } = this.props;
     if (prevProps.user.state === actions.IDCHECK.REQUEST) {
+      this.setState({ loading: false });
       switch (user.state) {
         case actions.IDCHECK.SUCCESS:
           if (user.checkID) {
@@ -82,6 +85,8 @@ class LoginPopup extends Component {
    * 로그인, 회원가입
    */
   onShowRegister = event => {
+    document.getElementById("id").value = "";
+    document.getElementById("pwd").value = "";
     this.setState({ bShowLogin: false, bShowRegister: true });
   };
 
@@ -97,7 +102,7 @@ class LoginPopup extends Component {
       alert("passwd를 입력해주세요");
       document.getElementById("pwd").focus();
     }
-
+    this.setState({ loading: true });
     this.props.loginRequest(this.state.ID, this.state.passwd);
   };
 
@@ -115,6 +120,7 @@ class LoginPopup extends Component {
       alert("ID 중복 확인해주세요!");
       document.getElementById("idcheck").focus();
     } else {
+      this.setState({ loading: true });
       this.props.registerRequest(this.state.ID, this.state.passwd);
     }
   };
@@ -139,6 +145,7 @@ class LoginPopup extends Component {
 
     if (!userid) return alert("아이디를 입력하세요");
     else {
+      this.setState({ loading: true });
       this.props.checkIDRequest(userid);
     }
   };
@@ -167,6 +174,13 @@ class LoginPopup extends Component {
   login_form = () => {
     return [
       <div className={cx("logininner")}>
+        <div className={cx("loading_rect", !this.state.loading && "_hide")}>
+          <CircleSpinner
+            size={100}
+            color="white"
+            loading={this.state.loading}
+          />
+        </div>
         <div className={cx("close_button_rect")}>
           <div id="login" className={cx("close")} onClick={this.props.onClick}>
             x
@@ -215,6 +229,13 @@ class LoginPopup extends Component {
   register_form = () => {
     return [
       <div className={cx("registerinner")}>
+        <div className={cx("loading_rect", !this.state.loading && "_hide")}>
+          <CircleSpinner
+            size={100}
+            color="white"
+            loading={this.state.loading}
+          />
+        </div>
         <div className={cx("close_button_rect")}>
           <div id="login" className={cx("close")} onClick={this.props.onClick}>
             x

@@ -225,6 +225,18 @@ body {
       max-width: 1518px;
       max-height: 590px;
 
+      .loading_rect {
+        position: absolute;
+        z-index: 10000;
+        width: auto;
+        height: auto;
+        left: 50%;
+
+        &._hide {
+          display: none;
+        }
+      }
+
       .prevbspan {
         position: absolute;
         background-image: url("../../static/images/mainrightarrow.svg");

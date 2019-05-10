@@ -26,6 +26,21 @@
       height: auto;
     }
 
+    .loading_rect {
+      div {
+        position: absolute;
+        display: inline-block;
+        width: 100px;
+        height: 100px;
+        margin-left: -60px;
+        vertical-align: middle;
+      }
+
+      &._hide {
+        display: none;
+      }
+    }
+
     .close_button_rect {
       width: 30px;
       height: 30px;
@@ -144,6 +159,21 @@
 
     div {
       height: auto;
+    }
+
+    .loading_rect {
+      div {
+        position: absolute;
+        display: inline-block;
+        width: 100px;
+        height: 100px;
+        margin-left: -60px;
+        vertical-align: middle;
+      }
+
+      &._hide {
+        display: none;
+      }
     }
 
     .close_button_rect {

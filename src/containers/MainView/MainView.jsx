@@ -9,6 +9,8 @@ import { recommendRequest, searchRequest } from "../../action/searchAction";
 
 import Header from "../Header/Header";
 
+import { CircleSpinner } from "react-spinners-kit";
+
 const cx = classNames.bind(styles);
 
 const mapStateToProps = state => {
@@ -21,7 +23,8 @@ class MainView extends Component {
   state = {
     showPopup: false,
     showSearch: false,
-    selectTag: "" //현재 사용자가 선택한 추천 태그
+    selectTag: "", //현재 사용자가 선택한 추천 태그
+    loading: true
   };
 
   /**
@@ -47,6 +50,10 @@ class MainView extends Component {
       this.setState({ selectTag: word });
       this.props.searchRequest({ word, type: 0, recommend: true });
     }
+
+    if (this.props.recommend.result.length && prevState.loading) {
+      this.setState({ loading: false });
+    }
   }
 
   /**
@@ -57,7 +64,7 @@ class MainView extends Component {
     const comp = event.target;
     const word = comp.id;
     //style 변경을 위한 state change
-    this.setState({ selectTag: word });
+    this.setState({ selectTag: word, loading: true });
     //server 통신
     this.props.searchRequest({ word, type: 0, recommend: true });
   };
@@ -142,6 +149,13 @@ class MainView extends Component {
         </div>
         <div className={cx("images")}>
           <div className={cx("innercontainer")}>
+            <div className={cx("loading_rect", !this.state.loading && "_hide")}>
+              <CircleSpinner
+                size={300}
+                color="white"
+                loading={this.state.loading}
+              />
+            </div>
             <span
               className={cx("prevbspan")}
               onClick={this.onPrevScrollClick}
