@@ -11,7 +11,7 @@ import SearchResult from "../SearchResult/SearchResult";
 
 import { loginRequest, logout } from "../../action/userAction";
 import { searchRequest } from "../../action/searchAction";
-
+import { withRouter } from "react-router-dom";
 const cx = classNames.bind(styles);
 
 const mapStateToProps = state => {
@@ -93,6 +93,11 @@ class Header extends Component {
     }
   };
 
+  onLogoClick = event => {
+    const { history } = this.props;
+    history.push("/");
+  };
+
   render() {
     const { bShowSearch, bShowLogin, bShowUser } = this.state;
 
@@ -105,7 +110,7 @@ class Header extends Component {
         )}
       >
         <div className={cx("toprect")}>
-          <div className={cx("icon")} />
+          <div className={cx("icon")} onClick={this.onLogoClick} />
           <div className={cx("right_container")}>
             <Button
               className={cx("search")}
@@ -136,7 +141,9 @@ class Header extends Component {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Header);
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(Header)
+);
