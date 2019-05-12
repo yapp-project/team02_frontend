@@ -23,7 +23,7 @@ const dumy_data = [
     scrap: 0,
     tag: ["seoul", "gangnam", "johnmat"],
     image: [],
-    _id: "5c9f8336ee0dbe0d1e35418a",
+    _id: "5c9f8336ee0dbe0d1e35418a11",
     name: "jasoaaaan",
     glass: 4,
     percent: 50,
@@ -50,7 +50,7 @@ const dumy_data = [
     scrap: 0,
     tag: ["seoul", "gangnam", "johnmat", "good"],
     image: [],
-    _id: "5c9f602507a46908481d23ba",
+    _id: "5c9f602507a46908481d23ba22",
     name: "jason",
     glass: 4,
     percent: 50,
@@ -77,8 +77,8 @@ const dumy_data = [
     scrap: 0,
     tag: ["seoul", "gangnam", "johnmat", "good"],
     image: [],
-    _id: "5c9f5b8a9cd3ae0828663875",
-    name: "jason",
+    _id: "5c9f5b8a9cd3ae082866387533",
+    name: "jason333",
     glass: 4,
     percent: 50,
     description: "This is so delicious",
@@ -96,7 +96,7 @@ const dumy_data = [
         ml: 10
       }
     ],
-    owner: "maga40",
+    owner: "maga40333",
     created_date: "2019-03-30T12:05:30.337Z"
   },
   {
@@ -104,8 +104,8 @@ const dumy_data = [
     scrap: 0,
     tag: ["seoul", "gangnam", "johnmat"],
     image: [],
-    _id: "5c9f5a5c9cd3ae082866386f",
-    name: "jason",
+    _id: "5c9f5a5c9cd3ae082866386f44",
+    name: "jason4444",
     glass: 4,
     percent: 50,
     description: "This is so delicious",
@@ -123,7 +123,7 @@ const dumy_data = [
         ml: 10
       }
     ],
-    owner: "maga40",
+    owner: "maga40444",
     created_date: "2019-03-30T12:00:28.549Z"
   },
   {
@@ -131,7 +131,7 @@ const dumy_data = [
     scrap: 0,
     tag: ["seoul", "gangnam", "johnmat"],
     image: [],
-    _id: "5c9f5a599cd3ae0828663869",
+    _id: "5c9f5a599cd3ae082866386955",
     name: "jason",
     glass: 4,
     percent: 50,
@@ -158,7 +158,7 @@ const dumy_data = [
     scrap: 0,
     tag: ["seoul", "gangnam", "johnmat"],
     image: [],
-    _id: "5c9f59db01eefe08013ffa2a",
+    _id: "5c9f59db01eefe08013ffa2a66",
     name: "jason",
     glass: 4,
     percent: 50,
@@ -185,7 +185,7 @@ const dumy_data = [
     scrap: 0,
     tag: ["seoul", "gangnam", "johnmat"],
     image: [],
-    _id: "5c9f59d401eefe08013ffa24",
+    _id: "5c9f59d401eefe08013ffa2477",
     name: "jason",
     glass: 4,
     percent: 50,
@@ -212,7 +212,7 @@ const dumy_data = [
     scrap: 0,
     tag: ["seoul", "gangnam", "johnmat"],
     image: [],
-    _id: "5c9cee751cf26064e57b5a79",
+    _id: "5c9cee751cf26064e57b5a7988",
     name: "jason",
     glass: 4,
     percent: 50,
@@ -239,7 +239,7 @@ const dumy_data = [
     scrap: 0,
     tag: ["seoul", "gangnam", "johnmat"],
     image: [],
-    _id: "5c9ceddba2e76464d70a9df7",
+    _id: "5c9ceddba2e76464d70a9df799",
     name: "jason",
     glass: 4,
     percent: 50,
@@ -266,7 +266,7 @@ const dumy_data = [
     scrap: 0,
     tag: ["seoul", "gangnam", "johnmat"],
     image: [],
-    _id: "5c9cedc3a2ae5764cbb6dcd0",
+    _id: "5c9cedc3a2ae5764cbb6dcd01000",
     name: "jason",
     glass: 4,
     percent: 50,
@@ -333,6 +333,7 @@ function* requsetIdChek(action) {
 //MyMenu에서 스크랩, 등록한 레시피 정보 얻어오는 API
 function* getUserData(action) {
   const { type, id } = action.payload;
+  console.log("type : " + type);
   try {
     var result = [];
     if (type === 0) {
@@ -340,7 +341,7 @@ function* getUserData(action) {
       result = dumy_data;
     } else if (type === 1) {
       // result = yield call(getMyRecipes, id);
-      result = [];
+      result = [dumy_data[0], dumy_data[1]];
     }
     yield put(dataEnd(type, result));
   } catch (error) {

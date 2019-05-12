@@ -21,14 +21,31 @@ const mapDispatchToProps = {};
 class SearchResult extends Component {
   state = { list: [], showModify: false, modifyXY: { x: 0, y: 0 } };
 
+  componentDidMount() {
+    this.setState({ showModify: this.props.modify });
+  }
+
   componentDidUpdate(prevProps, prevState) {
+    //이전에 있다가 현재 없으면 초기화
     if (prevProps.data.length && !this.props.data.length) {
       if (this.state.list.length > 0) {
         this.setState({ list: [] });
       }
     }
 
-    if (this.state.showModify) {
+    //리스트 초기화
+    if (prevProps.data !== this.props.data) {
+      if (this.state.list.length) {
+        this.setState({ list: [] });
+      }
+    }
+
+    // 수정/삭제 팝업 떠있는 경우 Tab 변경 시 닫도록 state변경
+    if (!this.props.modify && this.state.showModify) {
+      this.setState({ showModify: false });
+    }
+
+    if (this.props.modify && this.state.showModify) {
       const x = this.state.modifyXY.x;
       const y = this.state.modifyXY.y;
       setTimeout(function() {
@@ -36,7 +53,6 @@ class SearchResult extends Component {
         document.getElementById("modifyPopup").style["top"] = y + "px";
       });
     }
-    console.log("DidUpdate");
   }
 
   showModifyPopup = () => {
@@ -54,7 +70,6 @@ class SearchResult extends Component {
 
   onModifyClick = event => {
     const comp = document.getElementById(event.target.id);
-    console.log(parseInt(comp.style.left.split("px"), 10) + 10);
     this.setState({
       showModify: !this.state.showModify,
       modifyXY: {
