@@ -95,9 +95,14 @@
       }
 
       &:-webkit-autofill {
-        -webkit-box-shadow: 0 0 0 1000px #080f24 inset;
-        -webkit-text-fill-color: #ff365d;
+        transition: background-color 5000s ease-in-out 0s;
+        -webkit-box-shadow: 0 0 0px 1000px #080f24 inset !important;
+        -webkit-text-fill-color: #ff365d !important;
         caret-color: #ff365d;
+
+        &:focus {
+          border: solid 2px #ff365d;
+        }
       }
     }
     .login {
@@ -252,9 +257,9 @@
           }
 
           &:-webkit-autofill {
-            border: 0px none;
-            -webkit-box-shadow: 0 0 0 1000px #080f24 inset;
-            -webkit-text-fill-color: #ff365d;
+            transition: background-color 5000s ease-in-out 0s;
+            -webkit-box-shadow: 0 0 0px 1000px #080f24 inset !important;
+            -webkit-text-fill-color: #ff365d !important;
             caret-color: #ff365d;
           }
         }
