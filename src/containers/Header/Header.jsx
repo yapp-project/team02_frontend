@@ -59,7 +59,9 @@ class Header extends Component {
     return (
       <div id="userPopup" className={cx("user_popup")}>
         <div className={cx("container")}>
-          <div className={cx("text")}>마이메뉴</div>
+          <div className={cx("text")} onClick={this.onMyMenuClick}>
+            마이메뉴
+          </div>
         </div>
         <div className={cx("container")}>
           <div className={cx("text")}>개인정보 설정</div>
@@ -71,6 +73,10 @@ class Header extends Component {
         </div>
       </div>
     );
+  };
+
+  onMyMenuClick = event => {
+    this.props.history.push("/mymenu");
   };
 
   onLogoutClick = event => {
