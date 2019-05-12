@@ -13,9 +13,6 @@
   max-width: 660px;
 
   .logininner {
-    // height: 100%;
-    // display: inline-block;
-
     position: absolute;
     width: 100%;
     height: 50%;
@@ -95,6 +92,12 @@
       &:focus {
         font-size: 20px;
         border: solid 2px #ff365d;
+      }
+
+      &:-webkit-autofill {
+        -webkit-box-shadow: 0 0 0 1000px #080f24 inset;
+        -webkit-text-fill-color: #ff365d;
+        caret-color: #ff365d;
       }
     }
     .login {
@@ -211,7 +214,73 @@
       margin-bottom: 31.1px;
       cursor: default;
     }
-    .id,
+    .id_rect {
+      width: auto;
+      height: auto;
+      display: flex;
+      justify-content: center;
+      .id_container {
+        background-color: #080f24;
+        border: 2px solid;
+        border-radius: 18px;
+        border-color: transparent;
+        padding: 1px;
+        width: 357px;
+        height: 40px;
+        display: flex;
+        margin-bottom: 30px;
+        align-items: center;
+
+        .id {
+          width: 317px;
+          height: 40px;
+          background-color: #080f24;
+          border: 0px none;
+          border-radius: 18px;
+          border-color: transparent;
+          font-size: 12px;
+          outline: none;
+          color: #ff365d;
+          text-indent: 17px;
+
+          &:focus {
+            font-size: 20px;
+          }
+
+          &::placeholder {
+            color: #ff365d;
+          }
+
+          &:-webkit-autofill {
+            border: 0px none;
+            -webkit-box-shadow: 0 0 0 1000px #080f24 inset;
+            -webkit-text-fill-color: #ff365d;
+            caret-color: #ff365d;
+          }
+        }
+
+        .show_idcheck {
+          display: inline-block;
+          width: 30px;
+          height: 30px;
+          border-radius: 18px;
+          border: 0px none;
+          border-color: transparent;
+          background-color: white;
+          background-image: url("../../static/images/round_clear.svg");
+          background-repeat: no-repeat;
+          background-size: contain;
+
+          &.ok {
+            background-image: url("../../static/images/round_done.svg");
+          }
+        }
+        &:focus-within {
+          border: solid 2px #ff365d;
+        }
+      }
+    }
+
     .pwd,
     .pwdrecheck {
       background-color: #080f24;
@@ -234,18 +303,7 @@
         border: solid 2px #ff365d;
       }
     }
-    .idcheck_button {
-      width: 357px;
-      height: 40px;
-      border-radius: 18px;
-      border-color: transparent;
-      background-color: #7a7a7a;
-      font-size: 20px;
-      color: #080f24;
-      text-align: center;
-      margin-bottom: 29.7px;
-      cursor: pointer;
-    }
+
     .register {
       width: 357px;
       height: 40px;

@@ -323,9 +323,7 @@ function* requestRegister(action) {
 function* requsetIdChek(action) {
   try {
     const { userid } = action.payload;
-    console.log("사가 : " + userid);
     const result = yield call(checkID, userid);
-    console.log("결과 : " + result);
     yield put(checkIDSuccess(result));
   } catch (error) {
     yield put(checkIDFailed(false));

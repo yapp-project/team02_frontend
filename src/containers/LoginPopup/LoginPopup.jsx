@@ -10,6 +10,7 @@ import {
   actions
 } from "../../action/userAction";
 import { CircleSpinner } from "react-spinners-kit";
+import { debounce } from "lodash";
 
 const cx = classNames.bind(styles);
 
@@ -58,23 +59,16 @@ class LoginPopup extends Component {
 
     const { user } = this.props;
     if (prevProps.user.state === actions.IDCHECK.REQUEST) {
-      this.setState({ loading: false });
       switch (user.state) {
         case actions.IDCHECK.SUCCESS:
           if (user.checkID) {
-            alert("사용가능한 ID 입니다.");
             this.setState({ checkID: true });
-            document.getElementById("pwd").focus();
           } else {
-            alert("이미 등록된 ID가 존재합니다.");
-            document.getElementById("id").focus();
+            this.setState({ checkID: false });
           }
           break;
-        case actions.IDCHECK.FAILED:
-          alert("이미 등록된 ID가 존재합니다.");
-          document.getElementById("id").focus();
-          break;
         default:
+          this.setState({ checkID: false });
           break;
       }
     }
@@ -139,29 +133,27 @@ class LoginPopup extends Component {
     });
   };
 
-  onIDCheckClick = event => {
-    const userid = this.state.ID;
-    console.log("아이디체크 버튼 누름" + userid);
-
-    if (!userid) return alert("아이디를 입력하세요");
-    else {
-      this.setState({ loading: true });
-      this.props.checkIDRequest(userid);
-    }
-  };
-
   onChangeIDInput = event => {
     const _id = event.target.value;
-    this.setState({ ID: _id });
+    this.debouncedHandleChange(_id);
   };
+
+  debouncedHandleChange = debounce(value => {
+    if (value.length > 1) {
+      if (this.state.ID !== value) {
+        this.setState({ ID: value });
+        this.props.checkIDRequest(value);
+      }
+    } else {
+      this.setState({ ID: "", checkID: false });
+    }
+  }, 300);
+
   onChangePwdInput = event => {
-    console.log("비밀번호 바뀜 ");
     const _pwd = event.target.value;
     this.setState({ passwd: _pwd });
   };
   onChangeReCheckInput = event => {
-    console.log("recheck : " + event.target.value);
-    const _pwd = this.state.passwd;
     const _value = event.target.value;
     this.setState({ recheck: _value });
   };
@@ -226,6 +218,11 @@ class LoginPopup extends Component {
     ];
   };
 
+  /**
+   * @author AnGwangHo
+   * @description 회원가입 Layout
+   * @return 회원가입 Layout을 반환한다.
+   */
   register_form = () => {
     return [
       <div className={cx("registerinner")}>
@@ -242,20 +239,28 @@ class LoginPopup extends Component {
           </div>
         </div>
         <div className={cx("title")}>Sign up</div>
-        <div>
-          <Edit
-            id="id"
-            className={cx("id")}
-            placeholder="아이디를 입력해주세요"
-            key="edit_id"
-            onKeyUp={this.onChangeIDInput}
-          />
-          <Button
-            id="idcheck"
-            className={cx("idcheck_button")}
-            value="아이디 중복체크"
-            key="btn_idcheck"
-            onClick={this.onIDCheckClick}
+        <div className={cx("id_rect")}>
+          <Div
+            id="id_container"
+            key="id_container"
+            className={cx("id_container")}
+            content={[
+              <Edit
+                id="id"
+                className={cx("id")}
+                placeholder="아이디를 입력해주세요"
+                key="edit_id"
+                onKeyUp={this.onChangeIDInput}
+              />,
+              <Div
+                id="idcheck"
+                className={cx("show_idcheck", this.state.checkID && "ok")}
+                key="div_idcheck"
+              />
+            ]}
+            onClick={function() {
+              document.getElementById("id").focus();
+            }}
           />
         </div>
         <div>

@@ -11,7 +11,9 @@ function* searchCocktail(action) {
   try {
     const result = yield call(searchCocktails, data.word, data.type);
 
-    data.cocktailArray = result;
+    data.cocktailArray = result.contents;
+    data.pages = result.pagination;
+    data.page = result.page;
     yield put(searchSuccess(data));
   } catch (error) {}
 }
