@@ -135,7 +135,11 @@ class LoginPopup extends Component {
 
   onChangeIDInput = event => {
     const _id = event.target.value;
-    this.debouncedHandleChange(_id);
+    if (this.state.bShowRegister) {
+      this.debouncedHandleChange(_id);
+    } else {
+      this.setState({ ID: _id });
+    }
   };
 
   debouncedHandleChange = debounce(value => {
