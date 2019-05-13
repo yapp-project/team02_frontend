@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { SearchResultItem } from "../../components";
 
 import { GridLayout } from "@egjs/react-infinitegrid";
+import { withRouter } from "react-router-dom";
 
 const cx = classNames.bind(styles);
 
@@ -19,7 +20,7 @@ const mapDispatchToProps = {};
  * @description 검색 결과를 표현하는 컨테이너
  */
 class SearchResult extends Component {
-  state = { list: [], showModify: false, modifyXY: { x: 0, y: 0 } };
+  state = { list: [], showModify: false, modifyXY: { x: 0, y: 0 }, index: "" };
 
   componentDidMount() {
     this.setState({ showModify: this.props.modify });
@@ -55,11 +56,21 @@ class SearchResult extends Component {
     }
   }
 
+  onPopupModifyClick = event => {
+    this.props.history.push(`/enrolment/${this.state.index}`);
+  };
+
+  onCocktailClick = event => {
+    this.props.history.push(`/viewRecipe`);
+  };
+
   showModifyPopup = () => {
     return (
       <div id="modifyPopup" className={cx("modify_popup")}>
         <div className={cx("container")}>
-          <div className={cx("text")}>수정하기</div>
+          <div className={cx("text")} onClick={this.onPopupModifyClick}>
+            수정하기
+          </div>
         </div>
         <div className={cx("container")}>
           <div className={cx("text")}>삭제하기</div>
@@ -75,7 +86,8 @@ class SearchResult extends Component {
       modifyXY: {
         x: parseInt(comp.style.left.split("px"), 10) + 205,
         y: parseInt(comp.style.top.split("px"), 10) + 60
-      }
+      },
+      index: event.target.id
     });
   };
 
@@ -94,6 +106,7 @@ class SearchResult extends Component {
           props={cocktails[i]}
           modify={modify}
           modifyClick={this.onModifyClick}
+          informationClick={this.onCocktailClick}
         />
       );
     }
@@ -134,7 +147,9 @@ class SearchResult extends Component {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(SearchResult);
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(SearchResult)
+);

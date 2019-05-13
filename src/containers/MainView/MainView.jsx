@@ -73,6 +73,15 @@ class MainView extends Component {
     this.setState({ showPopup: false });
   };
 
+  onCocktailClick = event => {
+    this.props.history.push(`/viewRecipe`);
+  };
+
+  onLikeClick = event => {
+    event.preventDefault();
+    event.stopPropagation();
+  };
+
   recommend_cocktail = ({ data }) => {
     return data.map(item => {
       return (
@@ -80,6 +89,8 @@ class MainView extends Component {
           className={cx("cocktail")}
           key={item._id}
           props={item}
+          informationClick={this.onCocktailClick}
+          likeClick={this.onLikeClick}
         />
       );
     });
