@@ -104,6 +104,11 @@ class Header extends Component {
     history.push("/");
   };
 
+  onCreateRecipesClick = event => {
+    const { history } = this.props;
+    history.push("/enrolment");
+  };
+
   render() {
     const { bShowSearch, bShowLogin, bShowUser } = this.state;
 
@@ -128,7 +133,10 @@ class Header extends Component {
               onClick={this.onShowLogin}
             />
             {this.props.bLoginResult && (
-              <Button className={cx("create_recipes")} />
+              <Button
+                className={cx("create_recipes")}
+                onClick={this.onCreateRecipesClick}
+              />
             )}
             {bShowUser && this.showUserPopup()}
           </div>

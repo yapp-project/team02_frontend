@@ -64,6 +64,11 @@ class MyMenu extends Component {
     }
   };
 
+  onCreateRecipesClick = event => {
+    const { history } = this.props;
+    history.push("/enrolment");
+  };
+
   render() {
     const { userid, tabIndex, scrapArray, recipesArray } = this.state;
     const tabArray = tabIndex ? recipesArray : scrapArray;
@@ -105,8 +110,16 @@ class MyMenu extends Component {
                   </div>
                 </div>
                 <div className={cx("register_rect")}>
-                  <div className={cx("button")} />
-                  <div className={cx("button_text")}>레시피 등록하기</div>
+                  <div
+                    className={cx("button")}
+                    onClick={this.onCreateRecipesClick}
+                  />
+                  <div
+                    className={cx("button_text")}
+                    onClick={this.onCreateRecipesClick}
+                  >
+                    레시피 등록하기
+                  </div>
                 </div>
               </div>
             </div>

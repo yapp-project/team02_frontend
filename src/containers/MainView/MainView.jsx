@@ -31,7 +31,7 @@ class MainView extends Component {
    * 최초 로딩 시 서버 통신
    * @description 1. 추천 해쉬태그 받아 오기
    * 2. 해쉬태그 가장 첫 번째 검색 결과 가져오기
-   */
+   **/
   componentDidMount() {
     //1. 추천 해쉬태그 서버 통신
     const _recommend = this.props.recommend;
@@ -97,6 +97,11 @@ class MainView extends Component {
     target.scrollTo(_scrollLeft - 360, 0);
   };
 
+  onCreateRecipesClick = event => {
+    const { history } = this.props;
+    history.push("/enrolment");
+  };
+
   /**
    * @author AnGwangHo
    * @description 랜덤 태그 반환
@@ -136,8 +141,13 @@ class MainView extends Component {
             </div>
           </div>
           <div className={cx("register_rect")}>
-            <div className={cx("button")} />
-            <div className={cx("button_text")}>레시피 등록하기</div>
+            <div className={cx("button")} onClick={this.onCreateRecipesClick} />
+            <div
+              className={cx("button_text")}
+              onClick={this.onCreateRecipesClick}
+            >
+              레시피 등록하기
+            </div>
           </div>
         </div>
         <div className={cx("hashtag_rect")}>
