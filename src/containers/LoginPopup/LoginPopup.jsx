@@ -107,7 +107,7 @@ class LoginPopup extends Component {
     } else if (!this.state.passwd || this.state.passwd.length < 8) {
       alert("passwd를 8자 이상 입력해주세요");
       document.getElementById("pwd").focus();
-    } else if (this.state.passwd !== this.state.recheck) {
+    } else if (!this.state.recheck) {
       alert("passwd 재확인을 입력해주세요");
       document.getElementById("pwdrecheck").focus();
     } else if (!this.state.checkID) {
@@ -159,7 +159,14 @@ class LoginPopup extends Component {
   };
   onChangeReCheckInput = event => {
     const _value = event.target.value;
-    this.setState({ recheck: _value });
+    const _pwd = this.state.passwd;
+    if (_pwd.length >= 8 && _value.length >= 8 && _pwd === _value) {
+      this.setState({ recheck: true });
+    } else {
+      if (this.state.recheck) {
+        this.setState({ recheck: false });
+      }
+    }
   };
 
   /**
@@ -277,20 +284,35 @@ class LoginPopup extends Component {
             onKeyUp={this.onChangePwdInput}
           />
         </div>
-        <div>
-          <Edit
-            id="pwdrecheck"
-            className={cx("pwdrecheck")}
-            type="password"
-            placeholder="비밀번호 재확인"
-            key="edit_pwdrecheck"
-            onKeyUp={this.onChangeReCheckInput}
+        <div className={cx("recheck_rect")}>
+          <Div
+            id="recheck_container"
+            key="recheck_container"
+            className={cx("recheck_container")}
+            content={[
+              <Edit
+                id="pwdrecheck"
+                className={cx("pwdrecheck")}
+                type="password"
+                placeholder="비밀번호 재확인"
+                key="edit_pwdrecheck"
+                onKeyUp={this.onChangeReCheckInput}
+              />,
+              <Div
+                id="pwdrecheck"
+                className={cx("show_pwdrecheck", this.state.recheck && "ok")}
+                key="div_pwdrecheck"
+              />
+            ]}
+            onClick={function() {
+              document.getElementById("pwdrecheck").focus();
+            }}
           />
         </div>
         <div>
           <Button
             className={cx("register")}
-            value="회원가입"
+            value="가입완료"
             key="btn_register"
             onClick={this.onRegisterClick}
           />
