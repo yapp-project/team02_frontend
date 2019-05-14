@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import classNames from "classnames/bind";
 import styles from "./Header.scss";
 import { connect } from "react-redux";
-import { Button } from "../../components";
+import { Button, Combo } from "../../components";
 
 //layout
 import SearchPopup from "../SearchPopup/SearchPopup";
@@ -24,13 +24,67 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = { loginRequest, logout, searchRequest };
 const loginPopupID = "login";
-const searchPopupID = "search";
+
+const customStyles = {
+  control: base => ({
+    ...base,
+    height: 47,
+    minHeight: 47,
+    margin: 0,
+    border: 0,
+    backgroundColor: "#0f1835",
+    color: "#ffffff",
+    paddingTop: 5
+  }),
+  menu: base => ({
+    ...base,
+    margin: 0,
+    color: "#ffffff",
+    backgroundColor: "#0f1835",
+    position: "absolute",
+    height: "auto",
+    "font-size": 20
+  }),
+  indicatorSeparator: base => ({
+    ...base,
+    backgroundColor: "transparent"
+  }),
+  dropdownIndicator: base => ({
+    ...base,
+    color: "#ffffff",
+    "&:hover": {
+      color: "#ffffff"
+    }
+  }),
+  singleValue: base => ({
+    ...base,
+    color: "#fff"
+  }),
+  valueContainer: base => ({
+    ...base,
+    color: "#ffffff",
+    "font-size": 20
+  }),
+  input: base => ({
+    ...base,
+    color: "#ffffff",
+    "font-size": 20
+  })
+};
+
+const SEARCH_FITER_TIME = 0;
+const SEARCH_FITER_SCRAP = 1;
+const filter = [
+  { value: SEARCH_FITER_TIME, label: "최신순" },
+  { value: SEARCH_FITER_SCRAP, label: "스크랩순" }
+];
 
 class Header extends Component {
   state = {
     bShowSearch: false,
     bShowLogin: false,
-    bShowUser: false
+    bShowUser: false,
+    selectedOption: filter[0]
   };
 
   componentDidMount() {
@@ -110,7 +164,7 @@ class Header extends Component {
   };
 
   render() {
-    const { bShowSearch, bShowLogin, bShowUser } = this.state;
+    const { bShowSearch, bShowLogin, bShowUser, selectedOption } = this.state;
 
     return (
       <div
@@ -143,10 +197,24 @@ class Header extends Component {
         </div>
         {bShowSearch && <SearchPopup className={cx("searchrect")} />}
         {bShowSearch && this.props.searchresult.cocktails.length > 0 ? (
-          <SearchResult
-            className={cx("searchresultrect")}
-            data={this.props.searchresult.cocktails}
-          />
+          <div className={cx("searchresult_rect")}>
+            <div className={cx("filter_rect")}>
+              <Combo
+                className={cx("filter")}
+                value={selectedOption}
+                options={filter}
+                handleChange={this.handleChangeType}
+                isSearchable={false}
+                defaultValue={filter[0]}
+                key="filter"
+                styles={customStyles}
+              />
+            </div>
+            <SearchResult
+              className={cx("searchresultrect")}
+              data={this.props.searchresult.cocktails}
+            />
+          </div>
         ) : null}
 
         {bShowLogin ? <LoginPopup onClick={this.onShowLogin} /> : null}
