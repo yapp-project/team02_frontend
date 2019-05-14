@@ -211,10 +211,10 @@ body {
     }
   }
   //cocktail 결과 Layout style
-  .images {
+  .image_rect {
     grid-column: 1 / span 5;
-    padding-left: 20.5%;
-    max-width: 1518px;
+    // padding-left: 20.5%;
+    // max-width: 1518px;
     width: auto;
     height: 100%;
     background-color: $main-color;
@@ -229,7 +229,7 @@ body {
       overflow: hidden;
       width: 100%;
       height: auto;
-      max-width: 1518px;
+      // max-width: 1518px;
       max-height: 590px;
 
       .loading_rect {
@@ -278,12 +278,13 @@ body {
         &::-webkit-scrollbar {
           display: none !important; // 윈도우 크롬 등
         }
+        padding-left: 20.5%;
 
         .cocktail {
           display: inline-block;
           position: relative;
           width: 360px;
-          min-width: 360px;
+          max-height: 590px;
           margin-right: 26px;
           &:hover {
             img {
@@ -299,9 +300,15 @@ body {
       &:hover {
         .prevbspan {
           display: block;
+          &._hide {
+            display: none;
+          }
         }
         .nextspan {
           display: block;
+          &._hide {
+            display: none;
+          }
         }
       }
     }
