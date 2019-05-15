@@ -73,7 +73,6 @@ class MainView extends Component {
           this.setState({ scroll: { start: true, end: true } });
       }
     }
-    console.log("업데이트");
   }
 
   /**

@@ -18,7 +18,7 @@ const mapStateToProps = state => {
   return {
     bLoginResult: state.userReducer.bLoginResult,
     set_auth: state.userReducer.set_auth,
-    searchresult: state.searchReducer.searchresult
+    searchReducer: state.searchReducer
   };
 };
 
@@ -94,19 +94,32 @@ class Header extends Component {
     }
   }
 
-  componentDidUpdate() {
-    const { bShowLogin, bShowSearch } = this.state;
+  componentDidUpdate(prevProps, prevState) {
+    const { bShowLogin, bShowSearch, selectedOption } = this.state;
+    const { searchReducer } = this.props;
     if (this.props.bLoginResult && bShowLogin) {
       this.setState({ bShowLogin: false });
     }
 
-    if (!bShowSearch && this.props.searchresult.cocktails.length) {
-      this.props.searchresult.cocktails = [];
+    if (!bShowSearch && searchReducer.searchresult.cocktails.length) {
+      searchReducer.searchresult.cocktails = [];
+    }
+
+    //filter 변경에 의한 searchAPI 호출
+    if (prevState.selectedOption.value !== selectedOption.value) {
+      const word = searchReducer.searchword;
+      const filter = selectedOption.value;
+      const type = searchReducer.type;
+      this.props.searchRequest({ word, filter, type });
     }
   }
 
   onChangeSearchStatus = event => {
     this.setState({ bShowSearch: !this.state.bShowSearch });
+  };
+
+  handleChangeFilter = selectedOption => {
+    this.setState({ selectedOption });
   };
 
   showUserPopup = () => {
@@ -165,13 +178,14 @@ class Header extends Component {
 
   render() {
     const { bShowSearch, bShowLogin, bShowUser, selectedOption } = this.state;
+    const { searchresult } = this.props.searchReducer;
 
     return (
       <div
         className={cx(
           "container",
           bShowSearch ? "_over" : "",
-          this.props.searchresult.cocktails.length ? "_result" : ""
+          searchresult.cocktails.length ? "_result" : ""
         )}
       >
         <div className={cx("toprect")}>
@@ -196,14 +210,14 @@ class Header extends Component {
           </div>
         </div>
         {bShowSearch && <SearchPopup className={cx("searchrect")} />}
-        {bShowSearch && this.props.searchresult.cocktails.length > 0 ? (
+        {bShowSearch && searchresult.cocktails.length > 0 ? (
           <div className={cx("searchresult_rect")}>
             <div className={cx("filter_rect")}>
               <Combo
                 className={cx("filter")}
                 value={selectedOption}
                 options={filter}
-                handleChange={this.handleChangeType}
+                handleChange={this.handleChangeFilter}
                 isSearchable={false}
                 defaultValue={filter[0]}
                 key="filter"
@@ -212,7 +226,7 @@ class Header extends Component {
             </div>
             <SearchResult
               className={cx("searchresultrect")}
-              data={this.props.searchresult.cocktails}
+              data={searchresult}
             />
           </div>
         ) : null}

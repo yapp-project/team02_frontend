@@ -42,25 +42,30 @@ class SearchPopup extends Component {
     material_min: 0,
     material_max: 0,
     recommend: {},
-    selectedType: type[0],
     selectedOption: type[0],
     bSaerch: false
   };
 
   componentDidUpdate() {
-    console.log("업데이트 됨 ㅣ " + this.state.selectedOption.value);
-    console.log(this.state.selectedOption);
+    // console.log("업데이트 됨 ㅣ " + this.state.selectedOption.value);
+    // console.log(this.state.selectedOption);
   }
 
   /**
    * Event
    * handleChange : Combo item change
    */
-  handleChangeFilter = selectedOption => {
-    this.setState({ selectedOption });
-  };
+
   handleChangeType = selectedOption => {
     this.setState({ selectedOption });
+  };
+  handleChangeNumber = event => {
+    const target = event.target;
+    if (target.id === "start") {
+      this.setState({ material_min: target.value });
+    } else {
+      this.setState({ material_max: target.value });
+    }
   };
 
   onSearh = event => {
@@ -71,10 +76,36 @@ class SearchPopup extends Component {
         alert("단어를 입력하세요!");
         return false;
       }
-      const word = value.split(" ").toString();
-      const type = this.state.selectedType.value;
+      //해쉬태그 분리
+      const regexp = /\#[^#\s,;]+/g;
+      let word = value.match(regexp);
+      if (word) {
+        word = word.map(item => item.replace("#", "")).toString();
+      } else {
+        alert("#을 적어서 입력해 주세요");
+        return false;
+      }
+
+      //검색 type
+      const type = this.state.selectedOption.value;
+
+      //검색 유/무 상태 변경
       this.setState({ bSaerch: !this.state.bSaerch });
-      this.props.searchRequest({ word, filter: 0, type });
+
+      //검색 API 호출
+      if (type === SEARCH_BASE_TAG)
+        this.props.searchRequest({ word, filter: 0, type });
+      else if (type === SEARCH_BASE_MATERIAL) {
+        this.props.searchRequest({
+          word,
+          filter: 0,
+          type,
+          number: {
+            start: this.state.material_min,
+            end: this.state.material_max
+          }
+        });
+      }
     }
   };
 
@@ -173,23 +204,25 @@ class SearchPopup extends Component {
                   <div className={cx("text")}>재료갯수</div>
                   <div className={cx("number_rect")}>
                     <Edit
+                      id="start"
                       className={cx("start")}
                       type="number"
                       key="edit_start"
                       min="0"
                       max="99"
                       defaultValue="0"
-                      // onKeyUp={this.onSearh}
+                      onKeyUp={this.handleChangeNumber}
                     />
                     <div className={cx("number_text")}>~</div>
                     <Edit
+                      id="end"
                       className={cx("end")}
                       type="number"
                       key="edit_end"
                       min="0"
                       max="99"
                       defaultValue="0"
-                      // onKeyUp={this.onSearh}
+                      onKeyUp={this.handleChangeNumber}
                     />
                   </div>
                 </div>
