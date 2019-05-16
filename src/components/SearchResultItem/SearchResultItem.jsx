@@ -10,7 +10,14 @@ const cx = classNames.bind(styles);
  * @description 한개의 칵테일 검색결과를 보여준다
  * @param props object형태의 칵테일 정보 {_id, owner, image, name, scrap}
  */
-const SearchResultItem = ({ className, props, modify, modifyClick }) => {
+const SearchResultItem = ({
+  className,
+  props,
+  modify,
+  modifyClick,
+  informationClick,
+  likeClick
+}) => {
   const { _id, owner, image, name, scrap } = props;
   return (
     <div id={_id} className={cx(className, { image_container: !className })}>
@@ -34,13 +41,13 @@ const SearchResultItem = ({ className, props, modify, modifyClick }) => {
           </div>
         </div>
       )}
-      <div className={cx("information_rect")}>
+      <div className={cx("information_rect")} onClick={informationClick}>
         <div className={cx("inner")}>
           <div className={cx("cocktailName")}>{name}</div>
           <div className={cx("bottom")}>
             <div className={cx("userName")}>{owner}</div>
             <div className={cx("right")}>
-              <div className={cx("like")} />
+              <div className={cx("like")} onClick={likeClick} />
               <div className={cx("number")}>{scrap}</div>
             </div>
           </div>

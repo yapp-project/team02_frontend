@@ -9,9 +9,18 @@ import { searchCocktails, getRecommendTags } from "../api/searchAPI";
 function* searchCocktail(action) {
   const { data } = action.payload;
   try {
-    const result = yield call(searchCocktails, data.word, data.type);
+    const result = yield call(
+      searchCocktails,
+      data.word,
+      data.type,
+      data.filter,
+      data.index,
+      data.number
+    );
 
-    data.cocktailArray = result;
+    data.cocktailArray = result.contents;
+    data.pages = result.pagination;
+    data.page = parseInt(result.page, 10);
     yield put(searchSuccess(data));
   } catch (error) {}
 }

@@ -13,7 +13,9 @@ const Edit = ({
   placeholder,
   onKeyUp,
   onChange,
-  defaultValue
+  defaultValue,
+  min,
+  max
 }) => {
   return (
     <input
@@ -26,6 +28,8 @@ const Edit = ({
       onKeyUp={onKeyUp}
       onChange={onChange}
       defaultValue={defaultValue}
+      min={min}
+      max={max}
     />
   );
 };

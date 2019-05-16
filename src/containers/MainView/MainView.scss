@@ -27,13 +27,15 @@ body {
   background-color: $main-color;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: 80px 215px 115px auto;
+  // grid-template-rows: 80px 215px 115px auto;
+  grid-template-rows: 215px 115px auto;
 
-  //헤더 Style
-  .header {
-    height: auto;
-    grid-column: 1 / span 5;
-  }
+  // //헤더 Style
+  // .header {
+  //   height: auto;
+  //   grid-column: 1 / span 5;
+  // }
+
   //중간 text Style
   .explanation_rect {
     grid-column: 1 / span 5;
@@ -51,7 +53,7 @@ body {
         height: 117px;
         margin-top: 6px;
         margin-right: 20px;
-        background-image: url("../../static/images/logo/main_left_logo_h.png");
+        background-image: url("../../static/images/main_logo.svg");
         background-repeat: no-repeat;
         background-size: contain;
       }
@@ -59,21 +61,28 @@ body {
     .title {
       grid-column: 2 / span 2;
       grid-row: 2 / span 1;
-      color: $title-color;
-      font-size: $title-size;
-      font-family: MyriadPro-It;
+      font-family: AvenirLT;
+      font-size: 55px;
+      font-weight: 900;
+      font-style: oblique;
+      font-stretch: normal;
+      line-height: 1.18;
+      letter-spacing: normal;
+      text-align: left;
+      color: #ffffff;
     }
 
     .contents {
       grid-column: 2 / span 1;
       grid-row: 3 / span 1;
-      color: $contents-color;
-      font-size: $contents-size;
-      font-family: $contents-family;
       display: flex;
       align-items: center;
       .text {
         height: auto;
+        font-family: NotoSansCJKkr;
+        font-size: 45px;
+        font-weight: 300;
+        color: #ffffff;
       }
     }
     .register_rect {
@@ -98,7 +107,7 @@ body {
         height: 20px;
         color: #83d1e6;
         font-size: 20px;
-        font-family: Arita-dotum-Medium_TTF;
+        font-family: NotoSansCJKkr;
         text-overflow: ellipsis;
         white-space: nowrap;
         cursor: pointer;
@@ -172,7 +181,7 @@ body {
           background-color: transparent;
           font-size: 35px;
           color: #7a7a7a;
-          font-family: NotoSansCJKkr;
+          font-family: AvenirLT;
           height: 52px;
           margin-left: 126px;
           cursor: pointer;
@@ -204,10 +213,10 @@ body {
     }
   }
   //cocktail 결과 Layout style
-  .images {
+  .image_rect {
     grid-column: 1 / span 5;
-    padding-left: 20.5%;
-    max-width: 1518px;
+    // padding-left: 20.5%;
+    // max-width: 1518px;
     width: auto;
     height: 100%;
     background-color: $main-color;
@@ -222,8 +231,20 @@ body {
       overflow: hidden;
       width: 100%;
       height: auto;
-      max-width: 1518px;
+      // max-width: 1518px;
       max-height: 590px;
+
+      .loading_rect {
+        position: absolute;
+        z-index: 10000;
+        width: auto;
+        height: auto;
+        left: 50%;
+
+        &._hide {
+          display: none;
+        }
+      }
 
       .prevbspan {
         position: absolute;
@@ -259,12 +280,13 @@ body {
         &::-webkit-scrollbar {
           display: none !important; // 윈도우 크롬 등
         }
+        padding-left: 20.5%;
 
         .cocktail {
           display: inline-block;
           position: relative;
           width: 360px;
-          min-width: 360px;
+          max-height: 590px;
           margin-right: 26px;
           &:hover {
             img {
@@ -280,9 +302,15 @@ body {
       &:hover {
         .prevbspan {
           display: block;
+          &._hide {
+            display: none;
+          }
         }
         .nextspan {
           display: block;
+          &._hide {
+            display: none;
+          }
         }
       }
     }

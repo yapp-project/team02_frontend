@@ -9,6 +9,8 @@ import {
   registerRequest,
   actions
 } from "../../action/userAction";
+import { CircleSpinner } from "react-spinners-kit";
+import { debounce } from "lodash";
 
 const cx = classNames.bind(styles);
 
@@ -40,7 +42,8 @@ class LoginPopup extends Component {
     ID: null,
     passwd: null,
     recheck: false,
-    checkID: false
+    checkID: false,
+    loading: false
   };
 
   componentDidUpdate(prevProps, prevSate) {
@@ -50,7 +53,7 @@ class LoginPopup extends Component {
       this.props.bRegisterResult
     ) {
       document.getElementById("pwd").value = "";
-      this.setState({ bShowLogin: true, bShowRegister: false });
+      this.setState({ bShowLogin: true, bShowRegister: false, loading: false });
       document.getElementById("pwd").focus();
     }
 
@@ -59,19 +62,13 @@ class LoginPopup extends Component {
       switch (user.state) {
         case actions.IDCHECK.SUCCESS:
           if (user.checkID) {
-            alert("사용가능한 ID 입니다.");
             this.setState({ checkID: true });
-            document.getElementById("pwd").focus();
           } else {
-            alert("이미 등록된 ID가 존재합니다.");
-            document.getElementById("id").focus();
+            this.setState({ checkID: false });
           }
           break;
-        case actions.IDCHECK.FAILED:
-          alert("이미 등록된 ID가 존재합니다.");
-          document.getElementById("id").focus();
-          break;
         default:
+          this.setState({ checkID: false });
           break;
       }
     }
@@ -82,6 +79,8 @@ class LoginPopup extends Component {
    * 로그인, 회원가입
    */
   onShowRegister = event => {
+    document.getElementById("id").value = "";
+    document.getElementById("pwd").value = "";
     this.setState({ bShowLogin: false, bShowRegister: true });
   };
 
@@ -97,7 +96,7 @@ class LoginPopup extends Component {
       alert("passwd를 입력해주세요");
       document.getElementById("pwd").focus();
     }
-
+    this.setState({ loading: true });
     this.props.loginRequest(this.state.ID, this.state.passwd);
   };
 
@@ -108,13 +107,14 @@ class LoginPopup extends Component {
     } else if (!this.state.passwd || this.state.passwd.length < 8) {
       alert("passwd를 8자 이상 입력해주세요");
       document.getElementById("pwd").focus();
-    } else if (this.state.passwd !== this.state.recheck) {
+    } else if (!this.state.recheck) {
       alert("passwd 재확인을 입력해주세요");
       document.getElementById("pwdrecheck").focus();
     } else if (!this.state.checkID) {
       alert("ID 중복 확인해주세요!");
       document.getElementById("idcheck").focus();
     } else {
+      this.setState({ loading: true });
       this.props.registerRequest(this.state.ID, this.state.passwd);
     }
   };
@@ -133,30 +133,40 @@ class LoginPopup extends Component {
     });
   };
 
-  onIDCheckClick = event => {
-    const userid = this.state.ID;
-    console.log("아이디체크 버튼 누름" + userid);
-
-    if (!userid) return alert("아이디를 입력하세요");
-    else {
-      this.props.checkIDRequest(userid);
+  onChangeIDInput = event => {
+    const _id = event.target.value;
+    if (this.state.bShowRegister) {
+      this.debouncedHandleChange(_id);
+    } else {
+      this.setState({ ID: _id });
     }
   };
 
-  onChangeIDInput = event => {
-    const _id = event.target.value;
-    this.setState({ ID: _id });
-  };
+  debouncedHandleChange = debounce(value => {
+    if (value.length > 1) {
+      if (this.state.ID !== value) {
+        this.setState({ ID: value });
+        this.props.checkIDRequest(value);
+      }
+    } else {
+      this.setState({ ID: "", checkID: false });
+    }
+  }, 300);
+
   onChangePwdInput = event => {
-    console.log("비밀번호 바뀜 ");
     const _pwd = event.target.value;
     this.setState({ passwd: _pwd });
   };
   onChangeReCheckInput = event => {
-    console.log("recheck : " + event.target.value);
-    const _pwd = this.state.passwd;
     const _value = event.target.value;
-    this.setState({ recheck: _value });
+    const _pwd = this.state.passwd;
+    if (_pwd.length >= 8 && _value.length >= 8 && _pwd === _value) {
+      this.setState({ recheck: true });
+    } else {
+      if (this.state.recheck) {
+        this.setState({ recheck: false });
+      }
+    }
   };
 
   /**
@@ -167,6 +177,13 @@ class LoginPopup extends Component {
   login_form = () => {
     return [
       <div className={cx("logininner")}>
+        <div className={cx("loading_rect", !this.state.loading && "_hide")}>
+          <CircleSpinner
+            size={100}
+            color="white"
+            loading={this.state.loading}
+          />
+        </div>
         <div className={cx("close_button_rect")}>
           <div id="login" className={cx("close")} onClick={this.props.onClick}>
             x
@@ -212,29 +229,49 @@ class LoginPopup extends Component {
     ];
   };
 
+  /**
+   * @author AnGwangHo
+   * @description 회원가입 Layout
+   * @return 회원가입 Layout을 반환한다.
+   */
   register_form = () => {
     return [
       <div className={cx("registerinner")}>
+        <div className={cx("loading_rect", !this.state.loading && "_hide")}>
+          <CircleSpinner
+            size={100}
+            color="white"
+            loading={this.state.loading}
+          />
+        </div>
         <div className={cx("close_button_rect")}>
           <div id="login" className={cx("close")} onClick={this.props.onClick}>
             x
           </div>
         </div>
         <div className={cx("title")}>Sign up</div>
-        <div>
-          <Edit
-            id="id"
-            className={cx("id")}
-            placeholder="아이디를 입력해주세요"
-            key="edit_id"
-            onKeyUp={this.onChangeIDInput}
-          />
-          <Button
-            id="idcheck"
-            className={cx("idcheck_button")}
-            value="아이디 중복체크"
-            key="btn_idcheck"
-            onClick={this.onIDCheckClick}
+        <div className={cx("id_rect")}>
+          <Div
+            id="id_container"
+            key="id_container"
+            className={cx("id_container")}
+            content={[
+              <Edit
+                id="id"
+                className={cx("id")}
+                placeholder="아이디를 입력해주세요"
+                key="edit_id"
+                onKeyUp={this.onChangeIDInput}
+              />,
+              <Div
+                id="idcheck"
+                className={cx("show_idcheck", this.state.checkID && "ok")}
+                key="div_idcheck"
+              />
+            ]}
+            onClick={function() {
+              document.getElementById("id").focus();
+            }}
           />
         </div>
         <div>
@@ -247,20 +284,35 @@ class LoginPopup extends Component {
             onKeyUp={this.onChangePwdInput}
           />
         </div>
-        <div>
-          <Edit
-            id="pwdrecheck"
-            className={cx("pwdrecheck")}
-            type="password"
-            placeholder="비밀번호 재확인"
-            key="edit_pwdrecheck"
-            onKeyUp={this.onChangeReCheckInput}
+        <div className={cx("recheck_rect")}>
+          <Div
+            id="recheck_container"
+            key="recheck_container"
+            className={cx("recheck_container")}
+            content={[
+              <Edit
+                id="pwdrecheck"
+                className={cx("pwdrecheck")}
+                type="password"
+                placeholder="비밀번호 재확인"
+                key="edit_pwdrecheck"
+                onKeyUp={this.onChangeReCheckInput}
+              />,
+              <Div
+                id="pwdrecheck"
+                className={cx("show_pwdrecheck", this.state.recheck && "ok")}
+                key="div_pwdrecheck"
+              />
+            ]}
+            onClick={function() {
+              document.getElementById("pwdrecheck").focus();
+            }}
           />
         </div>
         <div>
           <Button
             className={cx("register")}
-            value="회원가입"
+            value="가입완료"
             key="btn_register"
             onClick={this.onRegisterClick}
           />

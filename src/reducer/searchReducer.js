@@ -36,7 +36,9 @@ const reducer = (state = initialState, action) => {
           filter: data.filter,
           searchresult: {
             ...state.searchresult,
-            cocktails: data.cocktailArray
+            cocktails: data.cocktailArray,
+            page: data.page,
+            pages: data.pages
           }
         };
       }

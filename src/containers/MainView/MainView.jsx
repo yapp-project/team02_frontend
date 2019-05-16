@@ -7,7 +7,9 @@ import { Button } from "../../components";
 import { SearchResultItem } from "../../components";
 import { recommendRequest, searchRequest } from "../../action/searchAction";
 
-import Header from "../Header/Header";
+// import Header from "../Header/Header";
+
+import { CircleSpinner } from "react-spinners-kit";
 
 const cx = classNames.bind(styles);
 
@@ -21,14 +23,19 @@ class MainView extends Component {
   state = {
     showPopup: false,
     showSearch: false,
-    selectTag: "" //현재 사용자가 선택한 추천 태그
+    selectTag: "", //현재 사용자가 선택한 추천 태그
+    loading: true,
+    scroll: {
+      start: true,
+      end: true
+    }
   };
 
   /**
    * 최초 로딩 시 서버 통신
    * @description 1. 추천 해쉬태그 받아 오기
    * 2. 해쉬태그 가장 첫 번째 검색 결과 가져오기
-   */
+   **/
   componentDidMount() {
     //1. 추천 해쉬태그 서버 통신
     const _recommend = this.props.recommend;
@@ -47,6 +54,25 @@ class MainView extends Component {
       this.setState({ selectTag: word });
       this.props.searchRequest({ word, type: 0, recommend: true });
     }
+
+    if (prevProps.recommend.result !== this.props.recommend.result) {
+      const _width = document
+        .getElementById("imageContainer")
+        .getBoundingClientRect().width;
+      const _scrollWidth = this.props.recommend.result.length * 386;
+
+      if (this.state.loading) {
+        this.setState({ loading: false });
+      }
+      if (_scrollWidth >= _width) {
+        if (this.state.scroll.end) {
+          this.setState({ scroll: { start: true, end: false } });
+        }
+      } else {
+        if (!this.state.scroll.start || !this.state.scroll.end)
+          this.setState({ scroll: { start: true, end: true } });
+      }
+    }
   }
 
   /**
@@ -57,13 +83,18 @@ class MainView extends Component {
     const comp = event.target;
     const word = comp.id;
     //style 변경을 위한 state change
-    this.setState({ selectTag: word });
+    this.setState({ selectTag: word, loading: true });
     //server 통신
     this.props.searchRequest({ word, type: 0, recommend: true });
   };
 
-  onCloseLogin = () => {
-    this.setState({ showPopup: false });
+  onCocktailClick = event => {
+    this.props.history.push(`/viewRecipe`);
+  };
+
+  onLikeClick = event => {
+    event.preventDefault();
+    event.stopPropagation();
   };
 
   recommend_cocktail = ({ data }) => {
@@ -73,21 +104,49 @@ class MainView extends Component {
           className={cx("cocktail")}
           key={item._id}
           props={item}
+          informationClick={this.onCocktailClick}
+          likeClick={this.onLikeClick}
         />
       );
     });
   };
 
   onNextScrollClick = event => {
-    const target = document.getElementById("images");
+    const target = document.getElementById("cocktailcontainer");
     const _scrollLeft = target.scrollLeft;
-    target.scrollTo(_scrollLeft + 360, 0);
+
+    if (_scrollLeft === 0) {
+      target.scrollTo(_scrollLeft + 360, 0);
+    } else {
+      target.scrollTo(_scrollLeft + 386, 0);
+    }
   };
 
   onPrevScrollClick = event => {
-    const target = document.getElementById("images");
+    const target = document.getElementById("cocktailcontainer");
     const _scrollLeft = target.scrollLeft;
-    target.scrollTo(_scrollLeft - 360, 0);
+
+    target.scrollTo(_scrollLeft - 386, 0);
+  };
+
+  onCreateRecipesClick = event => {
+    const { history } = this.props;
+    history.push("/enrolment");
+  };
+
+  onScroll = event => {
+    const target = event.target;
+    const _maxScrollWidth = target.scrollWidth - target.clientWidth;
+    if (target.scrollLeft === 0) {
+      this.setState({ scroll: { start: true, end: false } });
+    } else if (target.scrollLeft === _maxScrollWidth) {
+      this.setState({ scroll: { start: false, end: true } });
+    } else {
+      const { scroll } = this.state;
+      if (scroll.start || scroll.end) {
+        this.setState({ scroll: { start: false, end: false } });
+      }
+    }
   };
 
   /**
@@ -115,9 +174,9 @@ class MainView extends Component {
     const { tags } = this.props.recommend;
     return (
       <div className={cx("mainview")}>
-        <div className={cx("header")}>
-          <Header />
-        </div>
+        {/* <div className={cx("header")}>
+            <Header />
+          </div> */}
         <div className={cx("explanation_rect")}>
           <div className={cx("left")}>
             <div className={cx("logo")} />
@@ -129,8 +188,13 @@ class MainView extends Component {
             </div>
           </div>
           <div className={cx("register_rect")}>
-            <div className={cx("button")} />
-            <div className={cx("button_text")}>레시피 등록하기</div>
+            <div className={cx("button")} onClick={this.onCreateRecipesClick} />
+            <div
+              className={cx("button_text")}
+              onClick={this.onCreateRecipesClick}
+            >
+              레시피 등록하기
+            </div>
           </div>
         </div>
         <div className={cx("hashtag_rect")}>
@@ -140,14 +204,28 @@ class MainView extends Component {
             </div>
           </div>
         </div>
-        <div className={cx("images")}>
-          <div className={cx("innercontainer")}>
+        <div className={cx("image_rect")}>
+          <div id="imageContainer" className={cx("innercontainer")}>
+            <div className={cx("loading_rect", !this.state.loading && "_hide")}>
+              <CircleSpinner
+                size={300}
+                color="white"
+                loading={this.state.loading}
+              />
+            </div>
             <span
-              className={cx("prevbspan")}
+              className={cx("prevbspan", this.state.scroll.start && "_hide")}
               onClick={this.onPrevScrollClick}
             />
-            <span className={cx("nextspan")} onClick={this.onNextScrollClick} />
-            <div id="images" className={cx("cocktailcontainer")}>
+            <span
+              className={cx("nextspan", this.state.scroll.end && "_hide")}
+              onClick={this.onNextScrollClick}
+            />
+            <div
+              id="cocktailcontainer"
+              className={cx("cocktailcontainer")}
+              onScroll={this.onScroll}
+            >
               {this.recommend_cocktail({ data: this.props.recommend.result })}
             </div>
           </div>

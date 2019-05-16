@@ -3,7 +3,6 @@ import classNames from "classnames/bind";
 import styles from "./SearchPopup.scss";
 import { connect } from "react-redux";
 import { Button, Div, Edit, Popup, Combo } from "../../components";
-// import SearchResult from "../SearchResult/SearchResult";
 import { searchRequest } from "../../action/searchAction";
 
 const cx = classNames.bind(styles);
@@ -14,14 +13,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = { searchRequest };
 
-const SEARCH_FITER_TIME = 0; //태그기반 검색 선택
-const SEARCH_FITER_SCRAP = 1; //재료기반 검색 선택
 const SEARCH_BASE_TAG = 0; //태그기반 검색 선택
 const SEARCH_BASE_MATERIAL = 1; //재료기반 검색 선택
-const filter = [
-  { value: SEARCH_FITER_TIME, label: "최신순" },
-  { value: SEARCH_FITER_SCRAP, label: "스크랩순" }
-];
+
 const type = [
   { value: SEARCH_BASE_TAG, label: "태그 기반" },
   { value: SEARCH_BASE_MATERIAL, label: "재료 기반" }
@@ -48,24 +42,30 @@ class SearchPopup extends Component {
     material_min: 0,
     material_max: 0,
     recommend: {},
-    selectedFilter: filter[0],
-    selectedType: type[0],
+    selectedOption: type[0],
     bSaerch: false
   };
 
   componentDidUpdate() {
-    // console.log("업데이트 됨 ㅣ " + this.state.selectedOption);
+    // console.log("업데이트 됨 ㅣ " + this.state.selectedOption.value);
+    // console.log(this.state.selectedOption);
   }
 
   /**
    * Event
    * handleChange : Combo item change
    */
-  handleChangeFilter = selectedOption => {
-    this.setState({ selectedOption });
-  };
+
   handleChangeType = selectedOption => {
     this.setState({ selectedOption });
+  };
+  handleChangeNumber = event => {
+    const target = event.target;
+    if (target.id === "start") {
+      this.setState({ material_min: target.value });
+    } else {
+      this.setState({ material_max: target.value });
+    }
   };
 
   onSearh = event => {
@@ -76,11 +76,36 @@ class SearchPopup extends Component {
         alert("단어를 입력하세요!");
         return false;
       }
-      const word = value.split(" ").toString();
-      const filter = this.state.selectedFilter.value;
-      const type = this.state.selectedType.value;
+      //해쉬태그 분리
+      const regexp = /\#[^#\s,;]+/g;
+      let word = value.match(regexp);
+      if (word) {
+        word = word.map(item => item.replace("#", "")).toString();
+      } else {
+        alert("#을 적어서 입력해 주세요");
+        return false;
+      }
+
+      //검색 type
+      const type = this.state.selectedOption.value;
+
+      //검색 유/무 상태 변경
       this.setState({ bSaerch: !this.state.bSaerch });
-      this.props.searchRequest({ word, filter, type });
+
+      //검색 API 호출
+      if (type === SEARCH_BASE_TAG)
+        this.props.searchRequest({ word, filter: 0, type });
+      else if (type === SEARCH_BASE_MATERIAL) {
+        this.props.searchRequest({
+          word,
+          filter: 0,
+          type,
+          number: {
+            start: this.state.material_min,
+            end: this.state.material_max
+          }
+        });
+      }
     }
   };
 
@@ -102,7 +127,7 @@ class SearchPopup extends Component {
    * key : List 사용 시 유니크한 값 설정 필요
    */
   search_form = () => {
-    const { selectedOption, bSaerch } = this.state;
+    const { selectedOption } = this.state;
     const customStyles = {
       control: base => ({
         ...base,
@@ -154,22 +179,6 @@ class SearchPopup extends Component {
         className={cx("topcotainer")}
         key="top_div"
         content={[
-          <Edit
-            className={cx("search")}
-            placeholder="검색어를 입력해주세요"
-            key="edit_search"
-            onKeyUp={this.onSearh}
-          />,
-          <Combo
-            className={cx("filter")}
-            value={selectedOption}
-            options={filter}
-            handleChange={this.handleChangeFilter}
-            isSearchable={false}
-            defaultValue={filter[0]}
-            key="filter"
-            styles={customStyles}
-          />,
           <Combo
             className={cx("type")}
             value={selectedOption}
@@ -179,7 +188,47 @@ class SearchPopup extends Component {
             defaultValue={type[0]}
             key="type"
             styles={customStyles}
-          />
+          />,
+          <Edit
+            className={cx("search")}
+            placeholder="검색어를 입력해주세요"
+            key="edit_search"
+            onKeyUp={this.onSearh}
+          />,
+          this.state.selectedOption.value && (
+            <Div
+              className={cx("material_rect")}
+              key="div_material_rect"
+              content={
+                <div className={cx("material_container")}>
+                  <div className={cx("text")}>재료갯수</div>
+                  <div className={cx("number_rect")}>
+                    <Edit
+                      id="start"
+                      className={cx("start")}
+                      type="number"
+                      key="edit_start"
+                      min="0"
+                      max="99"
+                      defaultValue="0"
+                      onKeyUp={this.handleChangeNumber}
+                    />
+                    <div className={cx("number_text")}>~</div>
+                    <Edit
+                      id="end"
+                      className={cx("end")}
+                      type="number"
+                      key="edit_end"
+                      min="0"
+                      max="99"
+                      defaultValue="0"
+                      onKeyUp={this.handleChangeNumber}
+                    />
+                  </div>
+                </div>
+              }
+            />
+          )
         ]}
       />,
       <Div
