@@ -7,15 +7,13 @@ import { SearchResultItem } from "../../components";
 import { GridLayout } from "@egjs/react-infinitegrid";
 import { withRouter } from "react-router-dom";
 
-import { searchRequest } from "../../action/searchAction";
-
 const cx = classNames.bind(styles);
 
 const mapStateToProps = state => {
-  return { searchReducer: state.searchReducer };
+  return state;
 };
 
-const mapDispatchToProps = { searchRequest };
+const mapDispatchToProps = {};
 
 /**
  * @author AnGwangHo
@@ -28,7 +26,9 @@ class SearchResult extends Component {
     modifyXY: { x: 0, y: 0 },
     index: "",
     page: 0,
-    pages: 0
+    pages: 0,
+    searchList: [], //[{page:number,list:[]}, ...]
+    _index: { page: 0, index: 0 }
   };
 
   componentDidMount() {
@@ -42,22 +42,17 @@ class SearchResult extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     const { searchresult } = this.props.searchReducer;
-    //이전에 있다가 현재 없으면 초기화
+    const nowProps = this.props;
 
-    // if (prevProps.data.cocktails.length && !this.props.data.cocktails.length) {
-    //   if (this.state.list.length > 0) {
-    //     this.setState({ list: [] });
-    //     return;
-    //   }
-    // }
-
-    //word 달라지면 list 초기화
     if (
-      prevProps.searchReducer.searchword !== this.props.searchReducer.searchword
+      prevProps.modify !== this.props.modify &&
+      prevProps.searchList !== nowProps.searchList
     ) {
-      this.setState({ list: [], page: 0, pages: 0 });
-      return;
+      if (this.state.searchList.length) {
+        this.setState({ searchList: [] });
+      }
     }
+
     if (!this.props.modify && this.state.showModify) {
       // 수정/삭제 팝업 떠있는 경우 Tab 변경 시 닫도록 state변경
       this.setState({ showModify: false });
@@ -74,12 +69,13 @@ class SearchResult extends Component {
       });
     }
 
-    //filter변경에 의한 list 초기화
-    if (prevProps.searchReducer.filter !== this.props.searchReducer.filter) {
-      this.setState({
-        page: 0,
-        list: []
-      });
+    //filter, word, type변경에 의한 list 초기화
+    if (
+      prevProps.filter !== nowProps.filter ||
+      prevProps.word !== nowProps.word ||
+      prevProps.type !== nowProps.type
+    ) {
+      this.setState({ searchList: [], page: 0, pages: 0 });
       return;
     }
 
@@ -130,27 +126,27 @@ class SearchResult extends Component {
     });
   };
 
-  loadItems(groupKey, num) {
+  loadItems(groupKey, list) {
     const items = [];
     const start = this.start || 0;
-    const { searchresult } = this.props.searchReducer;
-    const cocktails = searchresult.cocktails;
+    const cocktailArray = list;
+    const len = list.length;
     const modify = this.props.modify;
 
-    for (let i = 0; i < num; ++i) {
+    for (let i = 0; i < len; ++i) {
       items.push(
         <SearchResultItem
           groupKey={groupKey}
           className={cx("item")}
           key={1 + start + i}
-          props={cocktails[i]}
+          props={cocktailArray[i]}
           modify={modify}
           modifyClick={this.onModifyClick}
           informationClick={this.onCocktailClick}
         />
       );
     }
-    this.start = start + num;
+    this.start = start + len;
     return items;
   }
 
@@ -160,33 +156,70 @@ class SearchResult extends Component {
    */
   onAppend = ({ groupKey, startLoading, endLoading }) => {
     const list = this.state.list;
-    const len = this.props.data.cocktails
-      ? this.props.data.cocktails.length
-      : 0;
+    const { page, pages, searchList } = this.props;
+    const _searchList = this.state.searchList;
 
-    const { searchresult } = this.props.searchReducer;
-
-    //전체 페이지 보다 작은 경우 실행
-    if (searchresult.pages > this.state.page) {
-      if (this.state.page === 0 && searchresult.page === 1) {
-        //최초 로딩되는 시점에만 수행
+    if (pages === 1) {
+      if (searchList.length && !_searchList.length) {
         startLoading();
-        const items = this.loadItems(parseFloat(groupKey) + 1, len);
-        this.setState({ page: searchresult.page, list: list.concat(items) });
-        endLoading();
-      } else if (this.state.page === searchresult.page) {
-        //scroll 됬을 때 한 번만 로딩 되도록 조건문 설정
-        const word = this.props.searchReducer.searchword;
-        const filter = this.props.searchReducer.filter;
-        const type = this.props.searchReducer.type;
-
-        this.props.searchRequest({
-          word,
-          filter,
-          type,
-          index: searchresult.page + 1
+        const items = this.loadItems(parseFloat(groupKey) + 1, searchList);
+        this.setState({
+          page,
+          searchList: _searchList.concat({ page, list: items }),
+          list: list.concat(items)
         });
-        this.groupKey = groupKey;
+        endLoading();
+      }
+    } else {
+      //전체 페이지 보다 작은 경우 실행
+      if (pages >= page) {
+        if (searchList.length) {
+          //최초 실행
+          if (page === 1) {
+            if (!_searchList.length) {
+              // console.log("pages 1개 이상인 경우 최초실행");
+              startLoading();
+              const items = this.loadItems(
+                parseFloat(groupKey) + 1,
+                searchList
+              );
+              this.setState({
+                page,
+                searchList: _searchList.concat({ page, list: items }),
+                list: list.concat(items)
+              });
+              endLoading();
+            } else {
+              // console.log("pages 1개 이상인 경우 추가 아이템 호출필요");
+              this.props.handleNotifyScroll({ next: page + 1 });
+            }
+          } else {
+            //page 2 이상인 경우
+            if (
+              !_searchList.some(item => {
+                return item.page === page;
+              })
+            ) {
+              // console.log("배열에 없음");
+              const items = this.loadItems(
+                parseFloat(groupKey) + 1,
+                searchList
+              );
+              this.setState({
+                page,
+                searchList: _searchList.concat({ page, list: items }),
+                list: list.concat(items)
+              });
+            } else {
+              // console.log("다음 페이지 호출 해야함", this.props);
+              if (pages > page) {
+                this.props.handleNotifyScroll({ next: page + 1 });
+              }
+            }
+          }
+        } else {
+          // console.log("검색 결과 없음");
+        }
       }
     }
   };
@@ -195,6 +228,8 @@ class SearchResult extends Component {
   };
 
   render() {
+    const list = this.state.searchList;
+    const len = list.length;
     return (
       <div className={this.props.className}>
         <GridLayout
@@ -206,7 +241,10 @@ class SearchResult extends Component {
           transitionDuration={0.2}
           isConstantSize={true}
         >
-          {this.state.list}
+          {len > 0 &&
+            list.map(item => {
+              return item.list;
+            })}
           {this.state.showModify && this.showModifyPopup()}
         </GridLayout>
       </div>

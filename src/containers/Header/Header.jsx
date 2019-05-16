@@ -84,7 +84,8 @@ class Header extends Component {
     bShowSearch: false,
     bShowLogin: false,
     bShowUser: false,
-    selectedOption: filter[0]
+    selectedOption: filter[0],
+    bsearchRequest: false
   };
 
   componentDidMount() {
@@ -96,7 +97,12 @@ class Header extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { bShowLogin, bShowSearch, selectedOption } = this.state;
+    const {
+      bShowLogin,
+      bShowSearch,
+      selectedOption,
+      bsearchRequest
+    } = this.state;
     const { searchReducer } = this.props;
     if (this.props.bLoginResult && bShowLogin) {
       this.setState({ bShowLogin: false });
@@ -113,6 +119,23 @@ class Header extends Component {
       const type = searchReducer.type;
       this.props.searchRequest({ word, filter, type });
     }
+
+    // 결과창 떠있는 상태에서 검색 종류 or 단어 변경하여 검색 시 필터콤보 초기값으로 변경
+    if (
+      prevProps.searchReducer.searchword !== searchReducer.searchword ||
+      prevProps.searchReducer.type !== searchReducer.type
+    ) {
+      this.setState({ selectedOption: filter[0] });
+      return;
+    }
+
+    if (
+      bsearchRequest &&
+      prevProps.searchReducer.searchresult.cocktails !==
+        searchReducer.searchresult.cocktails
+    ) {
+      this.setState({ bsearchRequest: false });
+    }
   }
 
   onChangeSearchStatus = event => {
@@ -121,6 +144,26 @@ class Header extends Component {
 
   handleChangeFilter = selectedOption => {
     this.setState({ selectedOption });
+  };
+
+  handleNotifyScroll = props => {
+    const nextPage = props.next;
+    const { searchReducer } = this.props;
+
+    if (
+      searchReducer.searchresult.page !== nextPage &&
+      nextPage > searchReducer.searchresult.page &&
+      !this.state.bsearchRequest
+    ) {
+      const { selectedOption } = this.state;
+
+      const word = searchReducer.searchword;
+      const filter = selectedOption.value;
+      const type = searchReducer.type;
+
+      this.setState({ bsearchRequest: true });
+      this.props.searchRequest({ word, filter, type, index: nextPage });
+    }
   };
 
   showUserPopup = () => {
@@ -218,19 +261,26 @@ class Header extends Component {
           <div className={cx("searchresult_rect")}>
             <div className={cx("filter_rect")}>
               <Combo
+                id="filter"
                 className={cx("filter")}
-                value={selectedOption}
                 options={filter}
                 handleChange={this.handleChangeFilter}
                 isSearchable={false}
-                defaultValue={filter[0]}
+                value={selectedOption}
+                defaultValue={selectedOption}
                 key="filter"
                 styles={customStyles}
               />
             </div>
             <SearchResult
               className={cx("searchresultrect")}
-              data={searchresult}
+              word={this.props.searchReducer.searchword}
+              type={this.props.searchReducer.type}
+              filter={this.props.searchReducer.filter}
+              page={searchresult.page}
+              pages={searchresult.pages}
+              searchList={searchresult.cocktails}
+              handleNotifyScroll={this.handleNotifyScroll}
             />
           </div>
         ) : null}

@@ -126,6 +126,9 @@ class MyMenu extends Component {
           className={cx("bottom_rect")}
           data={tabArray}
           modify={tabIndex ? true : false}
+          page={1}
+          pages={1}
+          searchList={tabArray}
         />
       </div>
     );
