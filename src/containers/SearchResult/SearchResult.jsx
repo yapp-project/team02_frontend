@@ -4,8 +4,7 @@ import styles from "./SearchResult.scss";
 import { connect } from "react-redux";
 import { SearchResultItem } from "../../components";
 
-import cocktail1 from "../../static/images/a1.jpeg";
-import cocktail2 from "../../static/images/a2.jpg";
+import { GridLayout } from "@egjs/react-infinitegrid";
 
 const cx = classNames.bind(styles);
 
@@ -14,51 +13,107 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {};
-const dummy_data = [
-  { no: 0, Image: cocktail1, name: "칵테일1", like: 10 },
-  { no: 1, Image: cocktail2, name: "칵테일2", like: 20 },
-  { no: 2, Image: cocktail1, name: "칵테일3", like: 30 },
-  { no: 3, Image: cocktail2, name: "칵테일4", like: 40 },
-  { no: 4, Image: cocktail1, name: "칵테일5", like: 50 },
-  { no: 5, Image: cocktail2, name: "칵테일6", like: 60 },
-  { no: 6, Image: cocktail1, name: "칵테일7", like: 70 },
-  { no: 7, Image: cocktail2, name: "칵테일8", like: 80 },
-  { no: 8, Image: cocktail1, name: "칵테일9", like: 90 },
-  { no: 9, Image: cocktail2, name: "칵테일10", like: 100 }
-];
 
 /**
  * @author AnGwangHo
  * @description 검색 결과를 표현하는 컨테이너
  */
 class SearchResult extends Component {
-  /**
-   * @author AnGwangHo
-   * @description 칵테일 검색결과 레이아웃
-   * @param data 검색결과 data[{no, Image, name},{}...]
-   */
-  result_form = ({ data }) => {
-    return data.map(item => {
-      return (
-        <ui className={cx("resultitem")} key={item.name}>
-          <SearchResultItem
-            className={cx("image_container")}
-            key={item.no}
-            props={item}
-            like={item.like}
-          />
-        </ui>
-      );
+  state = { list: [], showModify: false, modifyXY: { x: 0, y: 0 } };
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.data.length && !this.props.data.length) {
+      if (this.state.list.length > 0) {
+        this.setState({ list: [] });
+      }
+    }
+
+    if (this.state.showModify) {
+      const x = this.state.modifyXY.x;
+      const y = this.state.modifyXY.y;
+      setTimeout(function() {
+        document.getElementById("modifyPopup").style["left"] = x + "px";
+        document.getElementById("modifyPopup").style["top"] = y + "px";
+      });
+    }
+    console.log("DidUpdate");
+  }
+
+  showModifyPopup = () => {
+    return (
+      <div id="modifyPopup" className={cx("modify_popup")}>
+        <div className={cx("container")}>
+          <div className={cx("text")}>수정하기</div>
+        </div>
+        <div className={cx("container")}>
+          <div className={cx("text")}>삭제하기</div>
+        </div>
+      </div>
+    );
+  };
+
+  onModifyClick = event => {
+    const comp = document.getElementById(event.target.id);
+    console.log(parseInt(comp.style.left.split("px"), 10) + 10);
+    this.setState({
+      showModify: !this.state.showModify,
+      modifyXY: {
+        x: parseInt(comp.style.left.split("px"), 10) + 205,
+        y: parseInt(comp.style.top.split("px"), 10) + 60
+      }
     });
   };
 
+  loadItems(groupKey, num) {
+    const items = [];
+    const start = this.start || 0;
+    const cocktails = this.props.data;
+    const modify = this.props.modify;
+
+    for (let i = 0; i < num; ++i) {
+      items.push(
+        <SearchResultItem
+          groupKey={groupKey}
+          className={cx("item")}
+          key={1 + start + i}
+          props={cocktails[i]}
+          modify={modify}
+          modifyClick={this.onModifyClick}
+        />
+      );
+    }
+    this.start = start + num;
+    return items;
+  }
+  onAppend = ({ groupKey, startLoading }) => {
+    const list = this.state.list;
+    const len = this.props.data ? this.props.data.length : 0;
+
+    if (len > 0) {
+      startLoading();
+      const items = this.loadItems(parseFloat(groupKey) + 1, len);
+      this.setState({ list: list.concat(items) });
+    }
+  };
+  onLayoutComplete = ({ isLayout, endLoading }) => {
+    !isLayout && endLoading();
+  };
+
   render() {
-    const { data } = this.props;
     return (
-      <div>
-        <ul className={cx("searchresultform")}>
-          {this.result_form({ data: data })}
-        </ul>
+      <div className={this.props.className}>
+        <GridLayout
+          margin={27}
+          align="center"
+          onAppend={this.onAppend}
+          isOverflowScroll={true}
+          onLayoutComplete={this.onLayoutComplete}
+          transitionDuration={0.2}
+          isConstantSize={true}
+        >
+          {this.state.list}
+          {this.state.showModify && this.showModifyPopup()}
+        </GridLayout>
       </div>
     );
   }

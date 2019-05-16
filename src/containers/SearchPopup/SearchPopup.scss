@@ -12,7 +12,6 @@
     min-width: 300px;
     height: auto;
     background-color: $main-color;
-    margin-left: 201.5px;
     font-family: MyriadPro;
     font-size: 35px;
     color: #ffffff;
@@ -24,13 +23,14 @@
     width: 123px;
     min-width: 123px;
     height: auto;
+    line-height: 1.8;
   }
   .type {
     margin-left: 70px;
     width: 123px;
     min-width: 123px;
-    margin-right: 201px;
     height: auto;
+    line-height: 1.8;
   }
 }
 
@@ -41,23 +41,18 @@
   font-size: 35px;
   display: flex;
   width: auto;
-  margin-right: 200px;
-  margin-left: 201.5px;
   overflow: hidden;
   overflow-x: auto;
   -ms-overflow-style: none; // IE에서 스크롤바 감춤
   &::-webkit-scrollbar {
     display: none !important; // 윈도우 크롬 등
   }
-  margin-bottom: 29.4px;
 
   .text {
     width: auto;
-    height: 35px;
+    height: auto;
     margin-left: 25px;
     padding: 10.5px 26px 10.5px 26px;
-    // border-radius: 34px;
-    // border: solid 2px #83d1e6;
     line-height: 43px;
     font-family: MyriadPro-It;
     cursor: pointer;
@@ -68,9 +63,6 @@
     &:focus {
       color: #83d1e6;
       outline: none;
-      // border-radius: 34px;
-      // padding: 8px 26px 10px 26px;
-      // border: solid 2px #83d1e6;
     }
   }
   .prev {
@@ -96,7 +88,6 @@
     position: absolute;
     width: 24px;
     height: 60px;
-    margin-right: 200px;
     right: 0;
     color: $white;
 
@@ -107,8 +98,6 @@
       width: 100%;
       background-image: url("../../static/images/rightarrow.svg");
       background-repeat: no-repeat;
-      // -webkit-transform: rotate(180deg);
-      // transform: rotate(180deg);
       cursor: pointer;
     }
   }

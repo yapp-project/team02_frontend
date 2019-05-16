@@ -1,7 +1,14 @@
 import React, { Component } from "react";
 import { Route, Switch, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import { MainView, Header, LoginPopup, Enrolment, ViewRecipe } from "./containers";
+import {
+  MainView,
+  Header,
+  LoginPopup,
+  Enrolment,
+  ViewRecipe,
+  MyMenu
+} from "./containers";
 
 const mapStateToProps = state => {
   return {};
@@ -18,6 +25,7 @@ class App extends Component {
           <Route exact path="/popup" component={LoginPopup} />
           <Route exact path="/enrolment" component={Enrolment} />
           <Route exact path="/viewRecipe" component={ViewRecipe} />
+          <Route exact path="/mymenu" component={MyMenu} />
         </Switch>
       </div>
     );

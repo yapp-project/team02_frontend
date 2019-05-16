@@ -155,7 +155,6 @@ class Enrolment extends Component {
   
   onChangeCup = event => {
     let cupText = event.target.innerText.trim();
-
     this.changeCup(cupText);
   };
 
@@ -347,6 +346,7 @@ class Enrolment extends Component {
     else if (cup === '허리케인') cup = 2;
     else if (cup === '마가렛') cup = 3;
     else cup = 4;
+    console.log(this.state.images);
 
     // let tag = this.state.enrolmentData.info.tags;
     
