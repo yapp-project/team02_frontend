@@ -7,7 +7,7 @@ import { Button } from "../../components";
 import { SearchResultItem } from "../../components";
 import { recommendRequest, searchRequest } from "../../action/searchAction";
 
-import Header from "../Header/Header";
+// import Header from "../Header/Header";
 
 import { CircleSpinner } from "react-spinners-kit";
 
@@ -86,10 +86,6 @@ class MainView extends Component {
     this.setState({ selectTag: word, loading: true });
     //server 통신
     this.props.searchRequest({ word, type: 0, recommend: true });
-  };
-
-  onCloseLogin = () => {
-    this.setState({ showPopup: false });
   };
 
   onCocktailClick = event => {
@@ -178,9 +174,9 @@ class MainView extends Component {
     const { tags } = this.props.recommend;
     return (
       <div className={cx("mainview")}>
-        <div className={cx("header")}>
-          <Header />
-        </div>
+        {/* <div className={cx("header")}>
+            <Header />
+          </div> */}
         <div className={cx("explanation_rect")}>
           <div className={cx("left")}>
             <div className={cx("logo")} />

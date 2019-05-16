@@ -74,62 +74,59 @@ class MyMenu extends Component {
     const tabArray = tabIndex ? recipesArray : scrapArray;
 
     return (
-      <div>
-        <Header />
-        <div className={cx("mymenu_container")}>
-          <div className={cx("top_rect")}>
-            <div className={cx("top_container")}>
-              <div className={cx("userid")}>{userid}</div>
-              <div className={cx("tab_container")}>
-                <div
-                  id="scrap"
-                  className={cx("tab_button", {
-                    selected: !tabIndex
-                  })}
-                  onClick={this.onTabButtonClick}
-                >
-                  <div id="scrap" className={cx("text")}>
-                    스크랩
-                  </div>
-                  <div id="scrap" className={cx("number")}>
-                    {scrapArray.length}
-                  </div>
+      <div className={cx("mymenu_container")}>
+        <div className={cx("top_rect")}>
+          <div className={cx("top_container")}>
+            <div className={cx("userid")}>{userid}</div>
+            <div className={cx("tab_container")}>
+              <div
+                id="scrap"
+                className={cx("tab_button", {
+                  selected: !tabIndex
+                })}
+                onClick={this.onTabButtonClick}
+              >
+                <div id="scrap" className={cx("text")}>
+                  스크랩
                 </div>
-                <div
-                  id="recipes"
-                  className={cx("tab_button", {
-                    selected: tabIndex
-                  })}
-                  onClick={this.onTabButtonClick}
-                >
-                  <div id="recipes" className={cx("text")}>
-                    등록한 레시피
-                  </div>
-                  <div id="recipes" className={cx("number")}>
-                    {recipesArray.length}
-                  </div>
+                <div id="scrap" className={cx("number")}>
+                  {scrapArray.length}
                 </div>
-                <div className={cx("register_rect")}>
-                  <div
-                    className={cx("button")}
-                    onClick={this.onCreateRecipesClick}
-                  />
-                  <div
-                    className={cx("button_text")}
-                    onClick={this.onCreateRecipesClick}
-                  >
-                    레시피 등록하기
-                  </div>
+              </div>
+              <div
+                id="recipes"
+                className={cx("tab_button", {
+                  selected: tabIndex
+                })}
+                onClick={this.onTabButtonClick}
+              >
+                <div id="recipes" className={cx("text")}>
+                  등록한 레시피
+                </div>
+                <div id="recipes" className={cx("number")}>
+                  {recipesArray.length}
+                </div>
+              </div>
+              <div className={cx("register_rect")}>
+                <div
+                  className={cx("button")}
+                  onClick={this.onCreateRecipesClick}
+                />
+                <div
+                  className={cx("button_text")}
+                  onClick={this.onCreateRecipesClick}
+                >
+                  레시피 등록하기
                 </div>
               </div>
             </div>
           </div>
-          <SearchResult
-            className={cx("bottom_rect")}
-            data={tabArray}
-            modify={tabIndex ? true : false}
-          />
         </div>
+        <SearchResult
+          className={cx("bottom_rect")}
+          data={tabArray}
+          modify={tabIndex ? true : false}
+        />
       </div>
     );
   }

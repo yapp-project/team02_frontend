@@ -88,7 +88,8 @@ class Header extends Component {
   };
 
   componentDidMount() {
-    const auth = JSON.parse(localStorage.getItem("myData")); //localstorage에서 가져옴
+    const auth = JSON.parse(localStorage.getItem("myData")); //localstorage에서 가져옴\
+    //자동 로그인 기능
     if (auth) {
       this.props.loginRequest(auth.userid, auth.password);
     }
@@ -144,6 +145,7 @@ class Header extends Component {
 
   onMyMenuClick = event => {
     this.props.history.push("/mymenu");
+    this.setState({ bShowUser: false });
   };
 
   onLogoutClick = event => {
@@ -162,7 +164,9 @@ class Header extends Component {
     } else {
       if (this.props.bLoginResult) {
         this.setState({ bShowUser: !this.state.bShowUser });
-      } else this.setState({ bShowLogin: !_bShowLogin });
+      } else {
+        this.setState({ bShowLogin: !_bShowLogin });
+      }
     }
   };
 
