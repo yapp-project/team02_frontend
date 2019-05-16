@@ -223,6 +223,7 @@ class SearchResult extends Component {
       }
     }
   };
+
   onLayoutComplete = ({ isLayout, isAppend, endLoading }) => {
     !isLayout && endLoading();
   };
@@ -236,6 +237,7 @@ class SearchResult extends Component {
           margin={27}
           align="center"
           onAppend={this.onAppend}
+          onChange={this.props.onChange}
           isOverflowScroll={true}
           onLayoutComplete={this.onLayoutComplete}
           transitionDuration={0.2}

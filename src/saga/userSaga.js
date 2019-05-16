@@ -333,7 +333,7 @@ function* requsetIdChek(action) {
 //MyMenu에서 스크랩, 등록한 레시피 정보 얻어오는 API
 function* getUserData(action) {
   const { type, id } = action.payload;
-  console.log("type : " + type);
+
   try {
     var result = [];
     if (type === 0) {

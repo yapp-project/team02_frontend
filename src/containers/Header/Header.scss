@@ -136,6 +136,9 @@
     grid-column: 2 / span 1;
     grid-row: 2 / span 1;
     position: absolute;
+    &._hide {
+      display: none;
+    }
   }
 
   .searchresult_rect {
@@ -170,6 +173,10 @@
       width: 100%;
       height: 100%;
       grid-row: 2 / span 1;
+    }
+
+    &._over {
+      grid-row: 2 / span 2;
     }
 
     // div {

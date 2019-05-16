@@ -85,7 +85,8 @@ class Header extends Component {
     bShowLogin: false,
     bShowUser: false,
     selectedOption: filter[0],
-    bsearchRequest: false
+    bsearchRequest: false,
+    bHideSearch: false
   };
 
   componentDidMount() {
@@ -187,8 +188,8 @@ class Header extends Component {
   };
 
   onMyMenuClick = event => {
+    this.setState({ bShowUser: false, bShowSearch: false });
     this.props.history.push("/mymenu");
-    this.setState({ bShowUser: false });
   };
 
   onLogoutClick = event => {
@@ -223,8 +224,23 @@ class Header extends Component {
     history.push("/enrolment");
   };
 
+  onHideSearchPopup = ({ isForward, scrollPos, orgScrollPos }) => {
+    if (isForward) console.log(scrollPos, orgScrollPos);
+    if (scrollPos === 0) {
+      this.setState({ bHideSearch: false });
+    } else if (isForward && !this.state.bHideSearch && scrollPos > 0) {
+      this.setState({ bHideSearch: true });
+    }
+  };
+
   render() {
-    const { bShowSearch, bShowLogin, bShowUser, selectedOption } = this.state;
+    const {
+      bShowSearch,
+      bShowLogin,
+      bShowUser,
+      selectedOption,
+      bHideSearch
+    } = this.state;
     const { searchresult } = this.props.searchReducer;
 
     return (
@@ -256,9 +272,13 @@ class Header extends Component {
             {bShowUser && this.showUserPopup()}
           </div>
         </div>
-        {bShowSearch && <SearchPopup className={cx("searchrect")} />}
+        {bShowSearch && (
+          <SearchPopup
+            className={cx("searchrect", bHideSearch ? "_hide" : "")}
+          />
+        )}
         {bShowSearch && searchresult.cocktails.length > 0 ? (
-          <div className={cx("searchresult_rect")}>
+          <div className={cx("searchresult_rect", bHideSearch ? "_over" : "")}>
             <div className={cx("filter_rect")}>
               <Combo
                 id="filter"
@@ -281,6 +301,7 @@ class Header extends Component {
               pages={searchresult.pages}
               searchList={searchresult.cocktails}
               handleNotifyScroll={this.handleNotifyScroll}
+              onChange={this.onHideSearchPopup}
             />
           </div>
         ) : null}

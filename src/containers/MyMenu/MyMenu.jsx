@@ -5,7 +5,6 @@ import { connect } from "react-redux";
 
 //Layout
 import SearchResult from "../SearchResult/SearchResult";
-import Header from "../Header/Header";
 
 import { dataRequest } from "../../action/userAction";
 
@@ -39,6 +38,8 @@ class MyMenu extends Component {
     const _prevMyMenu = prevProps.mymenu;
     if (this.state.tabIndex === 0) {
       if (_prevMyMenu.scrap !== _myMenu.scrap) {
+        this.setState({ scrapArray: _myMenu.scrap });
+      } else if (_myMenu.scrap.length && !this.state.scrapArray.length) {
         this.setState({ scrapArray: _myMenu.scrap });
       }
 
@@ -124,7 +125,6 @@ class MyMenu extends Component {
         </div>
         <SearchResult
           className={cx("bottom_rect")}
-          data={tabArray}
           modify={tabIndex ? true : false}
           page={1}
           pages={1}
