@@ -20,6 +20,16 @@ export const actions = {
     REQUEST: "REGISTER_REQUEST",
     SUCCESS: "REGISTER_SUCCESS",
     FAILED: "REGISTER_FAILED"
+  },
+  USEREDIT: {
+    REQUEST: "USEREDIT_REQUEST",
+    SUCCESS: "USEREDIT_SUCCESS",
+    FAILED: "USEREDIT_FAILED"
+  },
+  USERDELETE: {
+    REQUEST: "USERDELETE_REQUEST",
+    SUCCESS: "USERDELETE_SUCCESS",
+    FAILED: "USERDELETE_FAILED"
   }
 };
 
@@ -114,6 +124,61 @@ export function dataError(result) {
 export function dataEnd(type, result) {
   return {
     type: actions.COMMUNICATION.END,
+    payload: {
+      type,
+      result
+    }
+  };
+}
+
+export function usereditRequest(type, id) {
+  return {
+    type: actions.USEREDIT.REQUEST,
+    payload: {
+      type,
+      id
+    }
+  };
+}
+export function usereditSuccess(result) {
+  return {
+    type: actions.USEREDIT.SUCCESS,
+    payload: {
+      result
+    }
+  };
+}
+export function usereditFailed(type, result) {
+  return {
+    type: actions.USEREDIT.FAILED,
+    payload: {
+      type,
+      result
+    }
+  };
+}
+
+export function userDeleteRequest(type, id) {
+  return {
+    type: actions.USERDELETE.REQUEST,
+    payload: {
+      type,
+      id
+    }
+  };
+}
+
+export function userDeleteSuccess(result) {
+  return {
+    type: actions.USERDELETE.SUCCESS,
+    payload: {
+      result
+    }
+  };
+}
+export function userDeleteFailed(type, result) {
+  return {
+    type: actions.USERDELETE.FAILED,
     payload: {
       type,
       result

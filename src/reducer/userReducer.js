@@ -11,7 +11,9 @@ const initialState = {
   user: {
     state: "none",
     checkID: false
-  }
+  },
+  bModifyUser: false,
+  bUserDelete: false
 };
 
 const reducer = (state = initialState, action) => {
@@ -88,6 +90,26 @@ const reducer = (state = initialState, action) => {
     case actions.LOGIN.LOGOUT: {
       return {
         ...state,
+        set_auth: false,
+        bLoginResult: false
+      };
+    }
+    case actions.USEREDIT.SUCCESS: {
+      return {
+        ...state,
+        bModifyUser: true
+      };
+    }
+    case actions.USEREDIT.FAILED: {
+      return {
+        ...state,
+        bModifyUser: false
+      };
+    }
+    case actions.USERDELETE.SUCCESS: {
+      return {
+        ...state,
+        bUserDelete: true,
         set_auth: false,
         bLoginResult: false
       };

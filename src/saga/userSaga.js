@@ -7,14 +7,20 @@ import {
   registerFailed,
   checkIDFailed,
   dataEnd,
-  dataError
+  dataError,
+  usereditSuccess,
+  usereditFailed,
+  userDeleteSuccess,
+  userDeleteFailed
 } from "../action/userAction";
 import {
   setJoin,
   checkID,
   setLogin,
   getMyScrap,
-  getMyRecipes
+  getMyRecipes,
+  setUserEdit,
+  setUserDelete
 } from "../api/userAPI";
 
 const dumy_data = [
@@ -330,6 +336,29 @@ function* requsetIdChek(action) {
   }
 }
 
+//회원정보 수정 API
+function* requsetUserEdit(action) {
+  try {
+    const { id, password, newpasswd } = action.payload;
+    const result = yield call(setUserEdit, id, password, newpasswd);
+    yield put(usereditSuccess(result));
+  } catch (error) {
+    yield put(usereditFailed(false));
+  }
+}
+
+//회원탈퇴
+function* requseUserDelete(action) {
+  try {
+    const { id, password } = action.payload;
+    const result = yield call(setUserDelete, id, password);
+    yield put(userDeleteSuccess(result));
+    logout();
+  } catch (error) {
+    yield put(userDeleteFailed(false));
+  }
+}
+
 //MyMenu에서 스크랩, 등록한 레시피 정보 얻어오는 API
 function* getUserData(action) {
   const { type, id } = action.payload;
@@ -359,6 +388,8 @@ export default function* saga() {
     takeLatest(actions.REGISTER.REQUEST, requestRegister),
     takeLatest(actions.IDCHECK.REQUEST, requsetIdChek),
     takeLatest(actions.LOGIN.LOGOUT, logout),
-    takeLatest(actions.COMMUNICATION.REQUEST, getUserData)
+    takeLatest(actions.COMMUNICATION.REQUEST, getUserData),
+    takeLatest(actions.USEREDIT.REQUEST, requsetUserEdit),
+    takeLatest(actions.USERDELETE.REQUEST, requseUserDelete)
   ]);
 }

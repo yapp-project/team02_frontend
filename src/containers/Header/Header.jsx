@@ -86,13 +86,17 @@ class Header extends Component {
     bShowUser: false,
     selectedOption: filter[0],
     bsearchRequest: false,
-    bHideSearch: false
+    bHideSearch: false,
+    popupID: "login",
+    userID: "",
+    password: ""
   };
 
   componentDidMount() {
     const auth = JSON.parse(localStorage.getItem("myData")); //localstorage에서 가져옴\
     //자동 로그인 기능
     if (auth) {
+      this.setState({ userID: auth.userid, password: auth.password });
       this.props.loginRequest(auth.userid, auth.password);
     }
   }
@@ -106,7 +110,15 @@ class Header extends Component {
     } = this.state;
     const { searchReducer } = this.props;
     if (this.props.bLoginResult && bShowLogin) {
-      this.setState({ bShowLogin: false });
+      if (this.state.popupID !== "usermodify") {
+        this.setState({ bShowLogin: false });
+      }
+    }
+
+    if (bShowLogin) {
+      if (this.props.bModifyUser) {
+        this.setState({ bShowLogin: false });
+      }
     }
 
     if (!bShowSearch && searchReducer.searchresult.cocktails.length) {
@@ -176,7 +188,9 @@ class Header extends Component {
           </div>
         </div>
         <div className={cx("container")}>
-          <div className={cx("text")}>개인정보 설정</div>
+          <div className={cx("text")} onClick={this.onUserModifyInfoClick}>
+            개인정보 설정
+          </div>
         </div>
         <div className={cx("container")}>
           <div className={cx("text")} onClick={this.onLogoutClick}>
@@ -187,6 +201,15 @@ class Header extends Component {
     );
   };
 
+  onUserModifyInfoClick = event => {
+    this.setState({
+      bShowUser: false,
+      bShowLogin: true,
+      bShowSearch: false,
+      popupID: "usermodify"
+    });
+  };
+
   onMyMenuClick = event => {
     this.setState({ bShowUser: false, bShowSearch: false });
     this.props.history.push("/mymenu");
@@ -194,7 +217,7 @@ class Header extends Component {
 
   onLogoutClick = event => {
     if (this.props.bLoginResult && this.state.bShowUser) {
-      this.setState({ bShowUser: false });
+      this.setState({ bShowUser: false, popupID: "login" });
       this.props.logout();
     }
   };
@@ -229,7 +252,7 @@ class Header extends Component {
     if (scrollPos === 0) {
       this.setState({ bHideSearch: false });
     } else if (isForward && !this.state.bHideSearch && scrollPos > 0) {
-      this.setState({ bHideSearch: true });
+      // this.setState({ bHideSearch: true });
     }
   };
 
@@ -306,7 +329,14 @@ class Header extends Component {
           </div>
         ) : null}
 
-        {bShowLogin ? <LoginPopup onClick={this.onShowLogin} /> : null}
+        {bShowLogin ? (
+          <LoginPopup
+            id={this.state.popupID}
+            onClick={this.onShowLogin}
+            userID={this.state.userID}
+            password={this.state.password}
+          />
+        ) : null}
       </div>
     );
   }
