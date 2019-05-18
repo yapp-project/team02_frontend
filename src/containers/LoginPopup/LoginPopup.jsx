@@ -49,7 +49,8 @@ class LoginPopup extends Component {
     passwd: null,
     recheck: false,
     checkID: false,
-    loading: false
+    loading: false,
+    notifyPopup: false
   };
 
   componentDidUpdate(prevProps, prevSate) {
@@ -348,6 +349,9 @@ class LoginPopup extends Component {
             x
           </div>
         </div>
+        {this.state.notifyPopup && (
+          <div className={cx("notifypopup_rect")}>{this.showNotifyPopup()}</div>
+        )}
         <div className={cx("title")}>Edit Profile</div>
         <div>
           <Edit
@@ -402,6 +406,30 @@ class LoginPopup extends Component {
     ];
   };
 
+  showNotifyPopup = () => {
+    return (
+      <div className={cx("showNotifyPopup")}>
+        <div className={cx("text")}>정말로 탈퇴 하겠습니까?</div>
+        <div className={cx("container")}>
+          <Button
+            className={cx("ok")}
+            value="확인"
+            onClick={this.userDeleteAPI}
+          />
+          <Button
+            className={cx("cancel")}
+            value="취소"
+            onClick={this.onNotifyCancelClick}
+          />
+        </div>
+      </div>
+    );
+  };
+
+  onNotifyCancelClick = evnet => {
+    this.setState({ notifyPopup: false });
+  };
+
   onModifyClick = event => {
     //수정 API
     const id = this.props.userID;
@@ -421,15 +449,20 @@ class LoginPopup extends Component {
       });
     }
   };
+
   //탈퇴 API
   onUserDeleteClick = event => {
-    console.log("탈퇴하기");
+    this.setState({ notifyPopup: true });
+  };
+  userDeleteAPI = event => {
     const id = this.props.userID;
     const password = this.props.password;
+
     this.props.usereditRequest({
       id,
       password
     });
+    this.setState({ notifyPopup: false });
   };
 
   render() {
