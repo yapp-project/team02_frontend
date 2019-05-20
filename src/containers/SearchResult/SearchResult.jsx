@@ -2,10 +2,12 @@ import React, { Component } from "react";
 import classNames from "classnames/bind";
 import styles from "./SearchResult.scss";
 import { connect } from "react-redux";
-import { SearchResultItem } from "../../components";
+import { SearchResultItem, Button } from "../../components";
 
 import { GridLayout } from "@egjs/react-infinitegrid";
 import { withRouter } from "react-router-dom";
+
+import { dataRequest } from "../../action/userAction.js";
 
 const cx = classNames.bind(styles);
 
@@ -13,7 +15,7 @@ const mapStateToProps = state => {
   return state;
 };
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = { dataRequest };
 
 /**
  * @author AnGwangHo
@@ -28,14 +30,13 @@ class SearchResult extends Component {
     page: 0,
     pages: 0,
     searchList: [], //[{page:number,list:[]}, ...]
-    _index: { page: 0, index: 0 }
+    bShowDelete: false
   };
 
   componentDidMount() {
-    const { searchresult } = this.props.searchReducer;
     this.setState({
-      page: searchresult.page,
-      pages: searchresult.pages,
+      page: this.props.page,
+      pages: this.props.pages,
       showModify: this.props.modify
     });
   }
@@ -91,6 +92,20 @@ class SearchResult extends Component {
       });
       return;
     }
+
+    if (nowProps.userReducer) {
+      if (
+        prevState.bShowDelete &&
+        !this.state.bShowDelete &&
+        !this.state.showModify
+      ) {
+        if (nowProps.userReducer.mymenu.bRecipeDelete) {
+          console.log("삭제 성공");
+        } else {
+          console.log("삭제 실패");
+        }
+      }
+    }
   }
 
   onPopupModifyClick = event => {
@@ -99,6 +114,20 @@ class SearchResult extends Component {
 
   onCocktailClick = event => {
     this.props.history.push(`/viewRecipe`);
+  };
+
+  onDeleteCocktailClick = event => {
+    this.setState({ bShowDelete: true });
+  };
+
+  onNotifyPopupCancelClick = event => {
+    this.setState({ bShowDelete: false });
+  };
+
+  cocktailDeleteAPI = event => {
+    //칵테일 삭제 API 호출
+    this.props.dataRequest(2, this.state.index);
+    this.setState({ showModify: false, bShowDelete: false });
   };
 
   showModifyPopup = () => {
@@ -110,7 +139,29 @@ class SearchResult extends Component {
           </div>
         </div>
         <div className={cx("container")}>
-          <div className={cx("text")}>삭제하기</div>
+          <div className={cx("text")} onClick={this.onDeleteCocktailClick}>
+            삭제하기
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  showNotifyPopup = () => {
+    return (
+      <div className={cx("showNotifyPopup")}>
+        <div className={cx("text")}>정말로 삭제 하겠습니까?</div>
+        <div className={cx("container")}>
+          <Button
+            className={cx("ok")}
+            value="확인"
+            onClick={this.cocktailDeleteAPI}
+          />
+          <Button
+            className={cx("cancel")}
+            value="취소"
+            onClick={this.onNotifyPopupCancelClick}
+          />
         </div>
       </div>
     );
@@ -255,6 +306,9 @@ class SearchResult extends Component {
 
     return (
       <div className={this.props.className}>
+        {this.state.bShowDelete && (
+          <div className={cx("notifypopup_rect")}>{this.showNotifyPopup()}</div>
+        )}
         <GridLayout
           margin={27}
           align="center"
