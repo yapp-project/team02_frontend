@@ -41,9 +41,7 @@ class SearchResult extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { searchresult } = this.props.searchReducer;
     const nowProps = this.props;
-
     if (
       prevProps.modify !== this.props.modify &&
       prevProps.searchList !== nowProps.searchList
@@ -80,12 +78,16 @@ class SearchResult extends Component {
     }
 
     //scroll 시 page 갱신 및 list update
-    if (prevProps.searchReducer.searchresult.page !== searchresult.page) {
-      const len = searchresult.cocktails ? searchresult.cocktails.length : 0;
-      const items = this.loadItems(parseFloat(this.groupKey) + 1, len);
+    if (prevProps.page !== this.props.page) {
+      const list = this.props.searchList;
+      const items = this.loadItems(parseFloat(this.groupKey) + 1, list);
+
       this.setState({
-        page: searchresult.page,
-        list: this.state.list.concat(items)
+        page: this.props.page,
+        searchList: this.state.searchList.concat({
+          page: this.props.page,
+          list: items
+        })
       });
       return;
     }
@@ -155,7 +157,6 @@ class SearchResult extends Component {
    * @description GridLayout에 우측or아래로 스크롤 시 & Item이 부족한 경우 호출 됨
    */
   onAppend = ({ groupKey, startLoading, endLoading }) => {
-    const list = this.state.list;
     const { page, pages, searchList } = this.props;
     const _searchList = this.state.searchList;
 
@@ -166,7 +167,7 @@ class SearchResult extends Component {
         this.setState({
           page,
           searchList: _searchList.concat({ page, list: items }),
-          list: list.concat(items)
+          list: _searchList.concat(items)
         });
         endLoading();
       }
@@ -186,7 +187,7 @@ class SearchResult extends Component {
               this.setState({
                 page,
                 searchList: _searchList.concat({ page, list: items }),
-                list: list.concat(items)
+                list: _searchList.concat(items)
               });
               endLoading();
             } else {
@@ -208,7 +209,7 @@ class SearchResult extends Component {
               this.setState({
                 page,
                 searchList: _searchList.concat({ page, list: items }),
-                list: list.concat(items)
+                list: _searchList.concat(items)
               });
             } else {
               // console.log("다음 페이지 호출 해야함", this.props);
@@ -228,16 +229,30 @@ class SearchResult extends Component {
     !isLayout && endLoading();
   };
 
+  onUserScroll = ({ isForward, scrollPos, orgScrollPos }) => {
+    if (this.props.onChange) {
+      this.props.onChange(isForward, scrollPos, orgScrollPos);
+      if (
+        window.event.target.scrollHeight <=
+        scrollPos + window.event.target.clientHeight
+      ) {
+        if (this.props.pages > this.props.page)
+          this.props.handleNotifyScroll({ next: this.props.page + 1 });
+      }
+    }
+  };
+
   render() {
     const list = this.state.searchList;
     const len = list.length;
+
     return (
       <div className={this.props.className}>
         <GridLayout
           margin={27}
           align="center"
           onAppend={this.onAppend}
-          onChange={this.props.onChange}
+          onChange={this.onUserScroll}
           isOverflowScroll={true}
           onLayoutComplete={this.onLayoutComplete}
           transitionDuration={0.2}

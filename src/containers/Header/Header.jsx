@@ -152,7 +152,7 @@ class Header extends Component {
   }
 
   onChangeSearchStatus = event => {
-    this.setState({ bShowSearch: !this.state.bShowSearch });
+    this.setState({ bShowSearch: !this.state.bShowSearch, bHideSearch: false });
   };
 
   handleChangeFilter = selectedOption => {
@@ -211,7 +211,7 @@ class Header extends Component {
   };
 
   onMyMenuClick = event => {
-    this.setState({ bShowUser: false, bShowSearch: false });
+    this.setState({ bShowUser: false, bShowSearch: false, bHideSearch: false });
     this.props.history.push("/mymenu");
   };
 
@@ -247,12 +247,11 @@ class Header extends Component {
     history.push("/enrolment");
   };
 
-  onHideSearchPopup = ({ isForward, scrollPos, orgScrollPos }) => {
-    if (isForward) console.log(scrollPos, orgScrollPos);
+  onHideSearchPopup = (isForward, scrollPos, orgScrollPos) => {
     if (scrollPos === 0) {
       this.setState({ bHideSearch: false });
     } else if (isForward && !this.state.bHideSearch && scrollPos > 0) {
-      // this.setState({ bHideSearch: true });
+      this.setState({ bHideSearch: true });
     }
   };
 
