@@ -48,3 +48,24 @@ export async function getMyRecipes(userid) {
   const res = await webRequestUtil.post({ url, body });
   return res.data;
 }
+
+export async function setUserEdit(userid, password, newpasswd) {
+  const url = "update/password";
+  const body = {
+    userid,
+    password,
+    newpassword: newpasswd
+  };
+  const res = await webRequestUtil.post({ url, body });
+  return res.data;
+}
+
+export async function setUserDelete(userid, password) {
+  const url = "delete/account";
+  const body = {
+    userid,
+    password
+  };
+  const res = await webRequestUtil.post({ url, body });
+  return res.data;
+}

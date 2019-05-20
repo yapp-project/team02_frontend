@@ -178,7 +178,13 @@ const EnrolmentStep3 = props => {
         <aside style={thumbsContainer}>
           <div style={thumb}>
             <div style={thumbInner}>
-              <span style={addImgae} />
+              <div
+                id="insertContainer"
+                style={addImgae}
+                {...getRootProps({ className: "dropzone" })}
+              >
+                <input {...getInputProps()} />
+              </div>
             </div>
           </div>
 
@@ -190,3 +196,5 @@ const EnrolmentStep3 = props => {
 };
 
 export default EnrolmentStep3;
+
+// <span style={addImgae} />

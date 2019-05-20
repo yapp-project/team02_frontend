@@ -18,7 +18,7 @@ const EnrolmentStuffItem = (props) => {
     }
     
   return (
-    <div key={`stuff${props.idx}`} className={cx("stuff-item")} stuff={props.idx}>
+    <div className={cx("stuff-item")} stuff={props.idx}>
         <div className={cx("stuff-item-container")}>
             <div className={cx("stuff-item-input")}>
                 <span id={`item-color_${props.idx}`} className={cx("stuff-item-color")} stuff={props.idx} onClick={props.onSelectColor} style={styles}></span>

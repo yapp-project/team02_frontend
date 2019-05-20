@@ -136,6 +136,9 @@
     grid-column: 2 / span 1;
     grid-row: 2 / span 1;
     position: absolute;
+    &._hide {
+      display: none;
+    }
   }
 
   .searchresult_rect {
@@ -172,11 +175,21 @@
       grid-row: 2 / span 1;
     }
 
+    &._over {
+      grid-row: 2 / span 2;
+    }
+
     // div {
     //   -ms-overflow-style: none; // IE에서 스크롤바 감춤
     //   &::-webkit-scrollbar {
     //     display: none !important; // 윈도우 크롬 등
     //   }
     // }
+
+    @media (max-width: 470px) {
+      & {
+        grid-column: 1 / span 3;
+      }
+    }
   }
 }

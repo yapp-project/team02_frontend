@@ -49,7 +49,7 @@ class ViewRecipe extends Component {
   };
 
   componentDidMount() {
-    this.props.recipeIDRequest("5c9b94e7e1723e5834f0eede");
+    this.props.recipeIDRequest("5c9c40dc715c715b93d27e5e");
   }
 
   componentDidUpdate(prevProps, prevState) {    

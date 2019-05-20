@@ -1,7 +1,15 @@
 .item {
   max-width: 360px;
   opacity: 1;
-  height: auto;
+  height: 420px;
+  &.big {
+    background-color: red;
+    height: 590px;
+  }
+  &.middle {
+    background-color: blue;
+    height: 500px;
+  }
 
   img {
     width: 100%;

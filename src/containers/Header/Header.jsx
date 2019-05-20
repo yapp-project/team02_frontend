@@ -23,7 +23,6 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = { loginRequest, logout, searchRequest };
-const loginPopupID = "login";
 
 const customStyles = {
   control: base => ({
@@ -85,13 +84,18 @@ class Header extends Component {
     bShowLogin: false,
     bShowUser: false,
     selectedOption: filter[0],
-    bsearchRequest: false
+    bsearchRequest: false,
+    bHideSearch: false,
+    popupID: "login",
+    userID: "",
+    password: ""
   };
 
   componentDidMount() {
     const auth = JSON.parse(localStorage.getItem("myData")); //localstorage에서 가져옴\
     //자동 로그인 기능
     if (auth) {
+      this.setState({ userID: auth.userid, password: auth.password });
       this.props.loginRequest(auth.userid, auth.password);
     }
   }
@@ -105,7 +109,15 @@ class Header extends Component {
     } = this.state;
     const { searchReducer } = this.props;
     if (this.props.bLoginResult && bShowLogin) {
-      this.setState({ bShowLogin: false });
+      if (this.state.popupID !== "usermodify") {
+        this.setState({ bShowLogin: false });
+      }
+    }
+
+    if (bShowLogin) {
+      if (this.props.bModifyUser) {
+        this.setState({ bShowLogin: false });
+      }
     }
 
     if (!bShowSearch && searchReducer.searchresult.cocktails.length) {
@@ -139,7 +151,7 @@ class Header extends Component {
   }
 
   onChangeSearchStatus = event => {
-    this.setState({ bShowSearch: !this.state.bShowSearch });
+    this.setState({ bShowSearch: !this.state.bShowSearch, bHideSearch: false });
   };
 
   handleChangeFilter = selectedOption => {
@@ -175,7 +187,9 @@ class Header extends Component {
           </div>
         </div>
         <div className={cx("container")}>
-          <div className={cx("text")}>개인정보 설정</div>
+          <div className={cx("text")} onClick={this.onUserModifyInfoClick}>
+            개인정보 설정
+          </div>
         </div>
         <div className={cx("container")}>
           <div className={cx("text")} onClick={this.onLogoutClick}>
@@ -186,14 +200,23 @@ class Header extends Component {
     );
   };
 
+  onUserModifyInfoClick = event => {
+    this.setState({
+      bShowUser: false,
+      bShowLogin: true,
+      bShowSearch: false,
+      popupID: "usermodify"
+    });
+  };
+
   onMyMenuClick = event => {
+    this.setState({ bShowUser: false, bShowSearch: false, bHideSearch: false });
     this.props.history.push("/mymenu");
-    this.setState({ bShowUser: false });
   };
 
   onLogoutClick = event => {
     if (this.props.bLoginResult && this.state.bShowUser) {
-      this.setState({ bShowUser: false });
+      this.setState({ bShowUser: false, popupID: "login" });
       this.props.logout();
     }
   };
@@ -201,7 +224,7 @@ class Header extends Component {
   onShowLogin = event => {
     const _bShowLogin = this.state.bShowLogin;
     if (_bShowLogin) {
-      if (event.target.id === loginPopupID) {
+      if (event.target.id === this.state.popupID) {
         this.setState({ bShowLogin: false });
       }
     } else {
@@ -223,8 +246,22 @@ class Header extends Component {
     history.push("/enrolment");
   };
 
+  onHideSearchPopup = (isForward, scrollPos, orgScrollPos) => {
+    if (scrollPos === 0) {
+      this.setState({ bHideSearch: false });
+    } else if (isForward && !this.state.bHideSearch && scrollPos > 0) {
+      this.setState({ bHideSearch: true });
+    }
+  };
+
   render() {
-    const { bShowSearch, bShowLogin, bShowUser, selectedOption } = this.state;
+    const {
+      bShowSearch,
+      bShowLogin,
+      bShowUser,
+      selectedOption,
+      bHideSearch
+    } = this.state;
     const { searchresult } = this.props.searchReducer;
 
     return (
@@ -256,9 +293,13 @@ class Header extends Component {
             {bShowUser && this.showUserPopup()}
           </div>
         </div>
-        {bShowSearch && <SearchPopup className={cx("searchrect")} />}
+        {bShowSearch && (
+          <SearchPopup
+            className={cx("searchrect", bHideSearch ? "_hide" : "")}
+          />
+        )}
         {bShowSearch && searchresult.cocktails.length > 0 ? (
-          <div className={cx("searchresult_rect")}>
+          <div className={cx("searchresult_rect", bHideSearch ? "_over" : "")}>
             <div className={cx("filter_rect")}>
               <Combo
                 id="filter"
@@ -281,11 +322,19 @@ class Header extends Component {
               pages={searchresult.pages}
               searchList={searchresult.cocktails}
               handleNotifyScroll={this.handleNotifyScroll}
+              onChange={this.onHideSearchPopup}
             />
           </div>
         ) : null}
 
-        {bShowLogin ? <LoginPopup onClick={this.onShowLogin} /> : null}
+        {bShowLogin ? (
+          <LoginPopup
+            id={this.state.popupID}
+            onClick={this.onShowLogin}
+            userID={this.state.userID}
+            password={this.state.password}
+          />
+        ) : null}
       </div>
     );
   }

@@ -16,24 +16,29 @@ const EnrolmentStep2 = (props) => {
                 // onClick={this.onSearh}
             />
 
-            <div className={cx("stuff-container")}>
+            <div className={cx("stuff-area")}>
                 <span id="add-button" className={cx("stuff-add")} onClick={props.onAddStuff}></span>
+                <div className={cx("stuff-container")}>
 
-                
-                {
-                    props.stuff.map((input, index) => {
-                        return <StuffItem
-                            idx={index}
-                            stuff={input}
-                            onDeleteStuff={props.onDeleteStuff}
-                            onSaveStuffName={props.onSaveStuffName}
-                            onSaveStuffVolume={props.onSaveStuffVolume}
-                            onSelectColor={props.onSelectColor}
-                            validateNumber={props.validateNumber}
-                        />
-                    })
-                }
-                
+                    <div className={cx("inner")}>
+                        <div className={cx("stuff-item-rect")}>
+                        {
+                            props.stuff.map((input, index) => {
+                                return <StuffItem
+                                    key={`stuff${index}`}
+                                    idx={index}
+                                    stuff={input}
+                                    onDeleteStuff={props.onDeleteStuff}
+                                    onSaveStuffName={props.onSaveStuffName}
+                                    onSaveStuffVolume={props.onSaveStuffVolume}
+                                    onSelectColor={props.onSelectColor}
+                                    validateNumber={props.validateNumber}
+                                />
+                            })
+                        }
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

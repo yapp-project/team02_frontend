@@ -7,6 +7,8 @@ import {
   loginRequest,
   checkIDRequest,
   registerRequest,
+  usereditRequest,
+  userDeleteRequest,
   actions
 } from "../../action/userAction";
 import { CircleSpinner } from "react-spinners-kit";
@@ -19,14 +21,18 @@ const mapStateToProps = state => {
     bRegisterResult: state.userReducer.bRegisterResult,
     bIDCheckResult: state.userReducer.bIDCheckResult,
     bLoginResult: state.userReducer.bLoginResult,
-    user: state.userReducer.user
+    user: state.userReducer.user,
+    bModifyUser: state.userReducer.bModifyUser,
+    bUserDelete: state.userReducer.bUserDelete
   };
 };
 
 const mapDispatchToProps = {
   loginRequest,
   checkIDRequest,
-  registerRequest
+  registerRequest,
+  usereditRequest,
+  userDeleteRequest
 };
 
 /**
@@ -43,7 +49,8 @@ class LoginPopup extends Component {
     passwd: null,
     recheck: false,
     checkID: false,
-    loading: false
+    loading: false,
+    notifyPopup: false
   };
 
   componentDidUpdate(prevProps, prevSate) {
@@ -185,7 +192,11 @@ class LoginPopup extends Component {
           />
         </div>
         <div className={cx("close_button_rect")}>
-          <div id="login" className={cx("close")} onClick={this.props.onClick}>
+          <div
+            id={this.props.id}
+            className={cx("close")}
+            onClick={this.props.onClick}
+          >
             x
           </div>
         </div>
@@ -245,7 +256,11 @@ class LoginPopup extends Component {
           />
         </div>
         <div className={cx("close_button_rect")}>
-          <div id="login" className={cx("close")} onClick={this.props.onClick}>
+          <div
+            id={this.props.id}
+            className={cx("close")}
+            onClick={this.props.onClick}
+          >
             x
           </div>
         </div>
@@ -312,7 +327,7 @@ class LoginPopup extends Component {
         <div>
           <Button
             className={cx("register")}
-            value="가입완료"
+            value="회원가입"
             key="btn_register"
             onClick={this.onRegisterClick}
           />
@@ -327,15 +342,157 @@ class LoginPopup extends Component {
     ];
   };
 
+  userModifyForm = () => {
+    return [
+      <div className={cx("usermodifyinner")}>
+        <div className={cx("loading_rect", !this.state.loading && "_hide")}>
+          <CircleSpinner
+            size={100}
+            color="white"
+            loading={this.state.loading}
+          />
+        </div>
+        <div className={cx("close_button_rect")}>
+          <div
+            id={this.props.id}
+            className={cx("close")}
+            onClick={this.props.onClick}
+          >
+            x
+          </div>
+        </div>
+        {this.state.notifyPopup && (
+          <div className={cx("notifypopup_rect")}>{this.showNotifyPopup()}</div>
+        )}
+        <div className={cx("title")}>Edit Profile</div>
+        <div>
+          <Edit
+            id="pwd"
+            className={cx("pwd")}
+            type="password"
+            placeholder="비밀번호를 입력해주세요"
+            key="edit_pwd"
+            onKeyUp={this.onChangePwdInput}
+          />
+        </div>
+        <div className={cx("recheck_rect")}>
+          <Div
+            id="recheck_container"
+            key="recheck_container"
+            className={cx("recheck_container")}
+            content={[
+              <Edit
+                id="pwdrecheck"
+                className={cx("pwdrecheck")}
+                type="password"
+                placeholder="비밀번호 재확인"
+                key="edit_pwdrecheck"
+                onKeyUp={this.onChangeReCheckInput}
+              />,
+              <Div
+                id="pwdrecheck"
+                className={cx("show_pwdrecheck", this.state.recheck && "ok")}
+                key="div_pwdrecheck"
+              />
+            ]}
+            onClick={function() {
+              document.getElementById("pwdrecheck").focus();
+            }}
+          />
+        </div>
+        <div>
+          <Button
+            className={cx("modify_ok")}
+            value="수정완료"
+            key="btn_modify_ok"
+            onClick={this.onModifyClick}
+          />
+          <Button
+            className={cx("userdelete")}
+            value="탈퇴하기"
+            key="btn_userdelete"
+            onClick={this.onUserDeleteClick}
+          />
+        </div>
+      </div>
+    ];
+  };
+
+  showNotifyPopup = () => {
+    return (
+      <div className={cx("showNotifyPopup")}>
+        <div className={cx("text")}>정말로 탈퇴 하겠습니까?</div>
+        <div className={cx("container")}>
+          <Button
+            className={cx("ok")}
+            value="확인"
+            onClick={this.userDeleteAPI}
+          />
+          <Button
+            className={cx("cancel")}
+            value="취소"
+            onClick={this.onNotifyCancelClick}
+          />
+        </div>
+      </div>
+    );
+  };
+
+  onNotifyCancelClick = evnet => {
+    this.setState({ notifyPopup: false });
+  };
+
+  onModifyClick = event => {
+    //수정 API
+    const id = this.props.userID;
+    const password = this.props.password;
+    if (!this.state.passwd || this.state.passwd.length < 8) {
+      alert("passwd를 8자 이상 입력해주세요");
+      document.getElementById("pwd").focus();
+    } else if (!this.state.recheck) {
+      alert("passwd 재확인을 입력해주세요");
+      document.getElementById("pwdrecheck").focus();
+    } else {
+      //성공 후 로컬 스토리지 수정해야함
+      this.props.usereditRequest({
+        id,
+        password,
+        newpasswd: this.state.passwd
+      });
+    }
+  };
+
+  //탈퇴 API
+  onUserDeleteClick = event => {
+    this.setState({ notifyPopup: true });
+  };
+  userDeleteAPI = event => {
+    const id = this.props.userID;
+    const password = this.props.password;
+
+    this.props.usereditRequest({
+      id,
+      password
+    });
+    this.setState({ notifyPopup: false });
+  };
+
   render() {
     const { bShowLogin } = this.state; //로그인, 회원가입 폼 전환
     const { onClick = null, id = "login" } = this.props; //부모로부터 click event, id 인자로 받음
 
-    return (
+    return id === "login" ? (
       <Popup
         id={id}
         className={cx(bShowLogin ? styles.loginform : styles.registerform)}
         content={bShowLogin ? this.login_form() : this.register_form()}
+        onClick={onClick}
+      />
+    ) : (
+      <Popup
+        id={id}
+        className={cx(styles.usermodify_form)}
+        content={this.userModifyForm()}
         onClick={onClick}
       />
     );
