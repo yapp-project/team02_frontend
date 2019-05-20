@@ -134,12 +134,19 @@ class SearchResult extends Component {
     const cocktailArray = list;
     const len = list.length;
     const modify = this.props.modify;
-
+    let size = "";
     for (let i = 0; i < len; ++i) {
+      if (cocktailArray[i].scrap > 50) {
+        size = "big";
+      } else if (cocktailArray[i].scrap > 20) {
+        size = "middle";
+      } else {
+        size = "";
+      }
       items.push(
         <SearchResultItem
           groupKey={groupKey}
-          className={cx("item")}
+          className={cx("item", size)}
           key={1 + start + i}
           props={cocktailArray[i]}
           modify={modify}
