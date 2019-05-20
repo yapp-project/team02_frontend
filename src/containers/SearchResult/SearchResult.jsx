@@ -23,7 +23,6 @@ const mapDispatchToProps = { dataRequest };
  */
 class SearchResult extends Component {
   state = {
-    list: [],
     showModify: false,
     modifyXY: { x: 0, y: 0 },
     index: "",
@@ -179,6 +178,40 @@ class SearchResult extends Component {
     });
   };
 
+  onLikeClick = event => {
+    event.preventDefault();
+    event.stopPropagation();
+    const id = event.target.id;
+    const { searchList, page } = this.state;
+
+    //서버 통신
+
+    //state.list에 반영
+    this.setState({
+      searchList: searchList.map(item =>
+        item.page === page
+          ? {
+              ...item,
+              list: item.list.map(cocktail =>
+                cocktail.props.props._id === id
+                  ? {
+                      ...cocktail,
+                      props: {
+                        ...cocktail.props,
+                        props: {
+                          ...cocktail.props.props,
+                          scrap: cocktail.props.props.scrap + 1
+                        }
+                      }
+                    }
+                  : cocktail
+              )
+            }
+          : item
+      )
+    });
+  };
+
   loadItems(groupKey, list) {
     const items = [];
     const start = this.start || 0;
@@ -203,6 +236,7 @@ class SearchResult extends Component {
           modify={modify}
           modifyClick={this.onModifyClick}
           informationClick={this.onCocktailClick}
+          likeClick={this.onLikeClick}
         />
       );
     }

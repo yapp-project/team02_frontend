@@ -47,7 +47,7 @@ const SearchResultItem = ({
           <div className={cx("bottom")}>
             <div className={cx("userName")}>{owner}</div>
             <div className={cx("right")}>
-              <div className={cx("like")} onClick={likeClick} />
+              <div id={_id} className={cx("like")} onClick={likeClick} />
               <div className={cx("number")}>{scrap}</div>
             </div>
           </div>
