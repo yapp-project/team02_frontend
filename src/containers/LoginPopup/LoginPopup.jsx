@@ -192,7 +192,11 @@ class LoginPopup extends Component {
           />
         </div>
         <div className={cx("close_button_rect")}>
-          <div id="login" className={cx("close")} onClick={this.props.onClick}>
+          <div
+            id={this.props.id}
+            className={cx("close")}
+            onClick={this.props.onClick}
+          >
             x
           </div>
         </div>
@@ -252,7 +256,11 @@ class LoginPopup extends Component {
           />
         </div>
         <div className={cx("close_button_rect")}>
-          <div id="login" className={cx("close")} onClick={this.props.onClick}>
+          <div
+            id={this.props.id}
+            className={cx("close")}
+            onClick={this.props.onClick}
+          >
             x
           </div>
         </div>
@@ -345,7 +353,11 @@ class LoginPopup extends Component {
           />
         </div>
         <div className={cx("close_button_rect")}>
-          <div id="login" className={cx("close")} onClick={this.props.onClick}>
+          <div
+            id={this.props.id}
+            className={cx("close")}
+            onClick={this.props.onClick}
+          >
             x
           </div>
         </div>

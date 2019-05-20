@@ -23,7 +23,6 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = { loginRequest, logout, searchRequest };
-const loginPopupID = "login";
 
 const customStyles = {
   control: base => ({
@@ -225,7 +224,7 @@ class Header extends Component {
   onShowLogin = event => {
     const _bShowLogin = this.state.bShowLogin;
     if (_bShowLogin) {
-      if (event.target.id === loginPopupID) {
+      if (event.target.id === this.state.popupID) {
         this.setState({ bShowLogin: false });
       }
     } else {
