@@ -185,5 +185,11 @@
     //     display: none !important; // 윈도우 크롬 등
     //   }
     // }
+
+    @media (max-width: 470px) {
+      & {
+        grid-column: 1 / span 3;
+      }
+    }
   }
 }
