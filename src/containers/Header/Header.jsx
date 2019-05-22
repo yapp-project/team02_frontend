@@ -218,6 +218,10 @@ class Header extends Component {
     if (this.props.bLoginResult && this.state.bShowUser) {
       this.setState({ bShowUser: false, popupID: "login" });
       this.props.logout();
+
+      const { history } = this.props;
+      if (history && history.location.pathname !== "/")
+        this.props.history.push("/");
     }
   };
 
