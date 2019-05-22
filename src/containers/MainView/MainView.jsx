@@ -41,6 +41,11 @@ class MainView extends Component {
     const _recommend = this.props.recommend;
     if (!_recommend.tags.length) {
       this.props.recommendRequest();
+    } else {
+      //뒤로가기 해서 들어온 경우 로딩을 끈다.
+      if (_recommend.result.length) {
+        this.setState({ loading: false, selectTag: _recommend.tags[0].tag });
+      }
     }
   }
 
