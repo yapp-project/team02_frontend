@@ -304,30 +304,32 @@ class Header extends Component {
         )}
         {bShowSearch && searchresult.cocktails.length > 0 ? (
           <div className={cx("searchresult_rect", bHideSearch ? "_over" : "")}>
-            <div className={cx("filter_rect")}>
-              <Combo
-                id="filter"
-                className={cx("filter")}
-                options={filter}
-                handleChange={this.handleChangeFilter}
-                isSearchable={false}
-                value={selectedOption}
-                defaultValue={selectedOption}
-                key="filter"
-                styles={customStyles}
-              />
+            <div className={cx("searchresult_container")}>
+              <div className={cx("filter_rect")}>
+                <Combo
+                  id="filter"
+                  className={cx("filter")}
+                  options={filter}
+                  handleChange={this.handleChangeFilter}
+                  isSearchable={false}
+                  value={selectedOption}
+                  defaultValue={selectedOption}
+                  key="filter"
+                  styles={customStyles}
+                />
+              </div>
+                <SearchResult
+                  className={cx("searchresult")}
+                  word={this.props.searchReducer.searchword}
+                  type={this.props.searchReducer.type}
+                  filter={this.props.searchReducer.filter}
+                  page={searchresult.page}
+                  pages={searchresult.pages}
+                  searchList={searchresult.cocktails}
+                  handleNotifyScroll={this.handleNotifyScroll}
+                  onChange={this.onHideSearchPopup}
+                />
             </div>
-            <SearchResult
-              className={cx("searchresultrect")}
-              word={this.props.searchReducer.searchword}
-              type={this.props.searchReducer.type}
-              filter={this.props.searchReducer.filter}
-              page={searchresult.page}
-              pages={searchresult.pages}
-              searchList={searchresult.cocktails}
-              handleNotifyScroll={this.handleNotifyScroll}
-              onChange={this.onHideSearchPopup}
-            />
           </div>
         ) : null}
 
