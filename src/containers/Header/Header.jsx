@@ -151,7 +151,16 @@ class Header extends Component {
   }
 
   onChangeSearchStatus = event => {
-    this.setState({ bShowSearch: !this.state.bShowSearch, bHideSearch: false });
+    if (this.state.bHideSearch && this.state.bShowSearch) {
+      this.setState({
+        bHideSearch: false
+      });
+    } else if (!this.state.bHideSearch) {
+      this.setState({
+        bShowSearch: !this.state.bShowSearch,
+        bHideSearch: false
+      });
+    }
   };
 
   handleChangeFilter = selectedOption => {
@@ -279,10 +288,21 @@ class Header extends Component {
         <div className={cx("toprect")}>
           <div className={cx("icon")} onClick={this.onLogoClick} />
           <div className={cx("right_container")}>
-            <Button
-              className={cx("search")}
-              onClick={this.onChangeSearchStatus}
-            />
+            <div className={cx("search_rect", bHideSearch ? "_over" : "")}>
+              <div
+                className={cx("search_container", bHideSearch ? "_over" : "")}
+              >
+                {bHideSearch && (
+                  <div className={cx("text_rect")}>
+                    {this.props.searchReducer.searchword}
+                  </div>
+                )}
+                <Button
+                  className={cx("search", bHideSearch ? "_over" : "")}
+                  onClick={this.onChangeSearchStatus}
+                />
+              </div>
+            </div>
             <Button
               className={cx("login", this.props.bLoginResult ? "_out" : "")}
               value={this.props.bLoginResult ? "" : "로그인"}
@@ -318,17 +338,17 @@ class Header extends Component {
                   styles={customStyles}
                 />
               </div>
-                <SearchResult
-                  className={cx("searchresult")}
-                  word={this.props.searchReducer.searchword}
-                  type={this.props.searchReducer.type}
-                  filter={this.props.searchReducer.filter}
-                  page={searchresult.page}
-                  pages={searchresult.pages}
-                  searchList={searchresult.cocktails}
-                  handleNotifyScroll={this.handleNotifyScroll}
-                  onChange={this.onHideSearchPopup}
-                />
+              <SearchResult
+                className={cx("searchresult")}
+                word={this.props.searchReducer.searchword}
+                type={this.props.searchReducer.type}
+                filter={this.props.searchReducer.filter}
+                page={searchresult.page}
+                pages={searchresult.pages}
+                searchList={searchresult.cocktails}
+                handleNotifyScroll={this.handleNotifyScroll}
+                onChange={this.onHideSearchPopup}
+              />
             </div>
           </div>
         ) : null}
