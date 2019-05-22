@@ -99,9 +99,11 @@ class LoginPopup extends Component {
     if (!this.state.ID) {
       alert("ID를 입력해주세요");
       document.getElementById("id").focus();
+      return false;
     } else if (!this.state.passwd) {
       alert("passwd를 입력해주세요");
       document.getElementById("pwd").focus();
+      return false;
     }
     this.setState({ loading: true });
     this.props.loginRequest(this.state.ID, this.state.passwd);
@@ -163,11 +165,15 @@ class LoginPopup extends Component {
   onChangePwdInput = event => {
     const _pwd = event.target.value;
     this.setState({ passwd: _pwd });
+
+    if (this.state.bShowLogin && event.keyCode === 13) {
+      this.onLoginClick(event);
+    }
   };
   onChangeReCheckInput = event => {
     const _value = event.target.value;
     const _pwd = this.state.passwd;
-    if (_pwd.length >= 8 && _value.length >= 8 && _pwd === _value) {
+    if (_pwd && _pwd.length >= 8 && _value.length >= 8 && _pwd === _value) {
       this.setState({ recheck: true });
     } else {
       if (this.state.recheck) {
