@@ -191,7 +191,7 @@ class SearchPopup extends Component {
           />,
           <Edit
             className={cx("search")}
-            placeholder="검색어를 입력해주세요"
+            placeholder="#을 붙여서 검색해주세요 ex)#맛있는#칵테일"
             key="edit_search"
             onKeyUp={this.onSearh}
           />,
