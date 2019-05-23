@@ -42,8 +42,7 @@ class SearchPopup extends Component {
     material_min: 0,
     material_max: 0,
     recommend: {},
-    selectedOption: type[0],
-    bSaerch: false
+    selectedOption: type[0]
   };
 
   componentDidUpdate() {
@@ -88,9 +87,6 @@ class SearchPopup extends Component {
 
       //검색 type
       const type = this.state.selectedOption.value;
-
-      //검색 유/무 상태 변경
-      this.setState({ bSaerch: !this.state.bSaerch });
 
       //검색 API 호출
       if (type === SEARCH_BASE_TAG)

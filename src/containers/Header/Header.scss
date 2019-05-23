@@ -221,6 +221,32 @@
         grid-row: 2 / span 1;
       }
 
+      .notresult_rect {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+
+        .image_rect {
+          width: 40%;
+          height: 40%;
+          background-image: url("../../static/images/SearchResultOff.svg");
+          background-repeat: no-repeat;
+          background-size: contain;
+          background-position: center;
+        }
+        .text_rect {
+          width: auto;
+          height: auto;
+          font-family: NotoSansCJKkr;
+          font-size: 30px;
+          color: white;
+        }
+      }
+
       // div {
       //   -ms-overflow-style: none; // IE에서 스크롤바 감춤
       //   &::-webkit-scrollbar {

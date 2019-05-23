@@ -88,7 +88,8 @@ class Header extends Component {
     bHideSearch: false,
     popupID: "login",
     userID: "",
-    password: ""
+    password: "",
+    bSearchAction: false
   };
 
   componentDidMount() {
@@ -120,8 +121,10 @@ class Header extends Component {
       }
     }
 
-    if (!bShowSearch && searchReducer.searchresult.cocktails.length) {
+    if (!bShowSearch && searchReducer.searchword) {
       searchReducer.searchresult.cocktails = [];
+      searchReducer.searchword = "";
+      return;
     }
 
     //filter 변경에 의한 searchAPI 호출
@@ -137,7 +140,7 @@ class Header extends Component {
       prevProps.searchReducer.searchword !== searchReducer.searchword ||
       prevProps.searchReducer.type !== searchReducer.type
     ) {
-      this.setState({ selectedOption: filter[0] });
+      this.setState({ selectedOption: filter[0], bSearchAction: true });
       return;
     }
 
@@ -158,7 +161,8 @@ class Header extends Component {
     } else if (!this.state.bHideSearch) {
       this.setState({
         bShowSearch: !this.state.bShowSearch,
-        bHideSearch: false
+        bHideSearch: false,
+        bSearchAction: false
       });
     }
   };
@@ -273,7 +277,8 @@ class Header extends Component {
       bShowLogin,
       bShowUser,
       selectedOption,
-      bHideSearch
+      bHideSearch,
+      bSearchAction
     } = this.state;
     const { searchresult } = this.props.searchReducer;
 
@@ -282,7 +287,7 @@ class Header extends Component {
         className={cx(
           "container",
           bShowSearch ? "_over" : "",
-          searchresult.cocktails.length ? "_result" : ""
+          bSearchAction ? "_result" : ""
         )}
       >
         <div className={cx("toprect")}>
@@ -351,7 +356,19 @@ class Header extends Component {
               />
             </div>
           </div>
-        ) : null}
+        ) : (
+          bShowSearch &&
+          bSearchAction && (
+            <div className={cx("searchresult_rect")}>
+              <div className={cx("searchresult_container")}>
+                <div className={cx("notresult_rect")}>
+                  <div className={cx("image_rect")} />
+                  <div className={cx("text_rect")}>검색 결과가 없습니다!</div>
+                </div>
+              </div>
+            </div>
+          )
+        )}
 
         {bShowLogin ? (
           <LoginPopup
