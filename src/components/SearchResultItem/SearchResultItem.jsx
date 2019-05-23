@@ -1,7 +1,7 @@
 import React from "react";
 import classNames from "classnames/bind";
 import styles from "./SearchResultItem.scss";
-import xbox from "../../static/images/a1.jpeg";
+import xbox from "../../static/images/ErrorImage.svg";
 
 const cx = classNames.bind(styles);
 
@@ -26,6 +26,7 @@ const SearchResultItem = ({
         onError={e => {
           e.target.onerror = null;
           e.target.src = xbox;
+          e.target.className = cx("item_img", "_xbox");
         }}
         src={image}
         alt="사진"
