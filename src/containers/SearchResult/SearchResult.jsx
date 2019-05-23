@@ -79,6 +79,14 @@ class SearchResult extends Component {
       return;
     }
 
+    //같은 word를 스크롤한 상태에서 검색 시
+    if (prevProps.word === nowProps.word) {
+      if (prevProps.page > nowProps.page) {
+        this.setState({ searchList: [], page: 0, pages: 0 });
+        return;
+      }
+    }
+
     //scroll 시 page 갱신 및 list update
     if (prevProps.page !== this.props.page) {
       const list = this.props.searchList;

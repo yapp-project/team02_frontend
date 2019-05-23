@@ -89,9 +89,15 @@ class SearchPopup extends Component {
       const type = this.state.selectedOption.value;
 
       //검색 API 호출
-      if (type === SEARCH_BASE_TAG)
+      if (type === SEARCH_BASE_TAG) {
+        if (this.props.searchAction) {
+          this.props.searchAction(true);
+        }
         this.props.searchRequest({ word, filter: 0, type });
-      else if (type === SEARCH_BASE_MATERIAL) {
+      } else if (type === SEARCH_BASE_MATERIAL) {
+        if (this.props.searchAction) {
+          this.props.searchAction(true);
+        }
         this.props.searchRequest({
           word,
           filter: 0,

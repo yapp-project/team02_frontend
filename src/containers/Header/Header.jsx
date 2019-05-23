@@ -12,6 +12,9 @@ import SearchResult from "../SearchResult/SearchResult";
 import { loginRequest, logout } from "../../action/userAction";
 import { searchRequest } from "../../action/searchAction";
 import { withRouter } from "react-router-dom";
+
+import { CircleSpinner } from "react-spinners-kit";
+
 const cx = classNames.bind(styles);
 
 const mapStateToProps = state => {
@@ -89,11 +92,12 @@ class Header extends Component {
     popupID: "login",
     userID: "",
     password: "",
-    bSearchAction: false
+    bSearchAction: false,
+    isScroll: false
   };
 
   componentDidMount() {
-    const auth = JSON.parse(localStorage.getItem("myData")); //localstorage에서 가져옴\
+    const auth = JSON.parse(localStorage.getItem("myData")); //localstorage에서 가져옴
     //자동 로그인 기능
     if (auth) {
       this.setState({ userID: auth.userid, password: auth.password });
@@ -106,7 +110,8 @@ class Header extends Component {
       bShowLogin,
       bShowSearch,
       selectedOption,
-      bsearchRequest
+      bsearchRequest,
+      bSearchAction
     } = this.state;
     const { searchReducer } = this.props;
     if (this.props.bLoginResult && bShowLogin) {
@@ -132,7 +137,9 @@ class Header extends Component {
       const word = searchReducer.searchword;
       const filter = selectedOption.value;
       const type = searchReducer.type;
+      this.setState({ bsearchRequest: true });
       this.props.searchRequest({ word, filter, type });
+      return;
     }
 
     // 결과창 떠있는 상태에서 검색 종류 or 단어 변경하여 검색 시 필터콤보 초기값으로 변경
@@ -140,8 +147,15 @@ class Header extends Component {
       prevProps.searchReducer.searchword !== searchReducer.searchword ||
       prevProps.searchReducer.type !== searchReducer.type
     ) {
-      this.setState({ selectedOption: filter[0], bSearchAction: true });
-      return;
+      if (bSearchAction && bsearchRequest) {
+        this.setState({
+          selectedOption: filter[0],
+          bsearchRequest: false,
+          isScroll: false
+        });
+      } else {
+        this.setState({ selectedOption: filter[0], isScroll: false });
+      }
     }
 
     if (
@@ -149,7 +163,7 @@ class Header extends Component {
       prevProps.searchReducer.searchresult.cocktails !==
         searchReducer.searchresult.cocktails
     ) {
-      this.setState({ bsearchRequest: false });
+      this.setState({ bsearchRequest: false, isScroll: false });
     }
   }
 
@@ -186,7 +200,7 @@ class Header extends Component {
       const filter = selectedOption.value;
       const type = searchReducer.type;
 
-      this.setState({ bsearchRequest: true });
+      this.setState({ bsearchRequest: true, isScroll: true });
       this.props.searchRequest({ word, filter, type, index: nextPage });
     }
   };
@@ -271,6 +285,11 @@ class Header extends Component {
     }
   };
 
+  //검색 유/무 알려고 만든 것(SearchPopup에 넘김)
+  onSearchAction = (action = false) => {
+    this.setState({ bSearchAction: action, bsearchRequest: action });
+  };
+
   render() {
     const {
       bShowSearch,
@@ -278,7 +297,9 @@ class Header extends Component {
       bShowUser,
       selectedOption,
       bHideSearch,
-      bSearchAction
+      bSearchAction,
+      bsearchRequest,
+      isScroll
     } = this.state;
     const { searchresult } = this.props.searchReducer;
 
@@ -325,51 +346,67 @@ class Header extends Component {
         {bShowSearch && (
           <SearchPopup
             className={cx("searchrect", bHideSearch ? "_hide" : "")}
+            searchAction={this.onSearchAction}
           />
         )}
-        {bShowSearch && searchresult.cocktails.length > 0 ? (
+        {bShowSearch && bSearchAction && (
           <div className={cx("searchresult_rect", bHideSearch ? "_over" : "")}>
-            <div className={cx("searchresult_container")}>
-              <div className={cx("filter_rect")}>
-                <Combo
-                  id="filter"
-                  className={cx("filter")}
-                  options={filter}
-                  handleChange={this.handleChangeFilter}
-                  isSearchable={false}
-                  value={selectedOption}
-                  defaultValue={selectedOption}
-                  key="filter"
-                  styles={customStyles}
+            {searchresult.cocktails.length > 0 ? (
+              <div className={cx("searchresult_container")}>
+                <div className={cx("filter_rect")}>
+                  <Combo
+                    id="filter"
+                    className={cx("filter")}
+                    options={filter}
+                    handleChange={this.handleChangeFilter}
+                    isSearchable={false}
+                    value={selectedOption}
+                    defaultValue={selectedOption}
+                    key="filter"
+                    styles={customStyles}
+                  />
+                </div>
+                {!isScroll && bsearchRequest && (
+                  <div className={cx("loading_rect")}>
+                    <CircleSpinner
+                      size={300}
+                      color="white"
+                      loading={bsearchRequest}
+                    />
+                  </div>
+                )}
+                <SearchResult
+                  className={cx("searchresult")}
+                  word={this.props.searchReducer.searchword}
+                  type={this.props.searchReducer.type}
+                  filter={this.props.searchReducer.filter}
+                  page={searchresult.page}
+                  pages={searchresult.pages}
+                  searchList={searchresult.cocktails}
+                  handleNotifyScroll={this.handleNotifyScroll}
+                  onChange={this.onHideSearchPopup}
                 />
               </div>
-              <SearchResult
-                className={cx("searchresult")}
-                word={this.props.searchReducer.searchword}
-                type={this.props.searchReducer.type}
-                filter={this.props.searchReducer.filter}
-                page={searchresult.page}
-                pages={searchresult.pages}
-                searchList={searchresult.cocktails}
-                handleNotifyScroll={this.handleNotifyScroll}
-                onChange={this.onHideSearchPopup}
-              />
-            </div>
-          </div>
-        ) : (
-          bShowSearch &&
-          bSearchAction && (
-            <div className={cx("searchresult_rect")}>
+            ) : (
               <div className={cx("searchresult_container")}>
-                <div className={cx("notresult_rect")}>
-                  <div className={cx("image_rect")} />
-                  <div className={cx("text_rect")}>검색 결과가 없습니다!</div>
-                </div>
+                {bsearchRequest ? (
+                  <div className={cx("notresult_rect")}>
+                    <CircleSpinner
+                      size={300}
+                      color="white"
+                      loading={bsearchRequest}
+                    />
+                  </div>
+                ) : (
+                  <div className={cx("notresult_rect")}>
+                    <div className={cx("image_rect")} />
+                    <div className={cx("text_rect")}>검색 결과가 없습니다!</div>
+                  </div>
+                )}
               </div>
-            </div>
-          )
+            )}
+          </div>
         )}
-
         {bShowLogin ? (
           <LoginPopup
             id={this.state.popupID}
