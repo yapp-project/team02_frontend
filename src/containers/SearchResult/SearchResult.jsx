@@ -8,6 +8,7 @@ import { GridLayout } from "@egjs/react-infinitegrid";
 import { withRouter } from "react-router-dom";
 
 import { dataRequest } from "../../action/userAction.js";
+import { CircleSpinner } from "react-spinners-kit";
 
 const cx = classNames.bind(styles);
 
@@ -29,7 +30,8 @@ class SearchResult extends Component {
     page: 0,
     pages: 0,
     searchList: [], //[{page:number,list:[]}, ...]
-    bShowDelete: false
+    bShowDelete: false,
+    bLoding: false
   };
 
   componentDidMount() {
@@ -83,6 +85,7 @@ class SearchResult extends Component {
       const items = this.loadItems(parseFloat(this.groupKey) + 1, list);
 
       this.setState({
+        bLoding: false,
         page: this.props.page,
         searchList: this.state.searchList.concat({
           page: this.props.page,
@@ -328,8 +331,10 @@ class SearchResult extends Component {
         window.event.target.scrollHeight <=
         scrollPos + window.event.target.clientHeight
       ) {
-        if (this.props.pages > this.props.page)
+        if (this.props.pages > this.props.page) {
+          this.setState({ bLoding: true });
           this.props.handleNotifyScroll({ next: this.props.page + 1 });
+        }
       }
     }
   };
@@ -357,6 +362,15 @@ class SearchResult extends Component {
             list.map(item => {
               return item.list;
             })}
+          {this.state.bLoding && (
+            <div className={cx("loding_rect")}>
+              <CircleSpinner
+                size={30}
+                color="white"
+                loading={this.state.bLoding}
+              />
+            </div>
+          )}
           {this.state.showModify && this.showModifyPopup()}
         </GridLayout>
       </div>
