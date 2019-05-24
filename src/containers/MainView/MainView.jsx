@@ -213,7 +213,7 @@ class MainView extends Component {
           <div id="imageContainer" className={cx("innercontainer")}>
             <div className={cx("loading_rect", !this.state.loading && "_hide")}>
               <CircleSpinner
-                size={300}
+                size={100}
                 color="white"
                 loading={this.state.loading}
               />

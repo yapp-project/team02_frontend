@@ -369,7 +369,7 @@ class Header extends Component {
                 {!isScroll && bsearchRequest && (
                   <div className={cx("loading_rect")}>
                     <CircleSpinner
-                      size={300}
+                      size={100}
                       color="white"
                       loading={bsearchRequest}
                     />
@@ -392,7 +392,7 @@ class Header extends Component {
                 {bsearchRequest ? (
                   <div className={cx("notresult_rect")}>
                     <CircleSpinner
-                      size={300}
+                      size={100}
                       color="white"
                       loading={bsearchRequest}
                     />
