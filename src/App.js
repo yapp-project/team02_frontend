@@ -32,6 +32,7 @@ class App extends Component {
         <div className={cx("body")}>
           <Switch>
             <Route exact path="/" component={MainView} />
+            <Route exact path="/viewRecipe/:id" component={ViewRecipe} />
             <Route exact path="/viewRecipe" component={ViewRecipe} />
             <Route exact path="/mymenu" component={MyMenu} />
           </Switch>

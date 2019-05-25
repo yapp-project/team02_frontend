@@ -42,7 +42,7 @@ const SearchResultItem = ({
           </div>
         </div>
       )}
-      <div className={cx("information_rect")} onClick={informationClick}>
+      <div id={_id} className={cx("information_rect")} onClick={informationClick}>
         <div className={cx("inner")}>
           <div className={cx("cocktailName")}>{name}</div>
           <div className={cx("bottom")}>

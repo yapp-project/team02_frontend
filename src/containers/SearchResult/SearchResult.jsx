@@ -123,7 +123,7 @@ class SearchResult extends Component {
   };
 
   onCocktailClick = event => {
-    this.props.history.push(`/viewRecipe`);
+    this.props.history.push(`/viewRecipe/${event.target.id}`);
   };
 
   onDeleteCocktailClick = event => {
