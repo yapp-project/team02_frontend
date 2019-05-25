@@ -324,6 +324,7 @@
             line-height: 1.1;
             letter-spacing: normal;
             opacity: 0.2;
+            margin-bottom: 30px;
         }
     
         .stuff-area {
@@ -334,14 +335,13 @@
             // overflow: scroll;
             position: relative;
             width: 100%;
-            height: calc(100% - 80px);
+            height: calc(100% - 110px);
             overflow: auto;
 
             .stuff-add {
                 display: block;
                 width: 100%;
                 height:auto;
-                margin-top: 30px;
                 cursor: pointer;
             }
     
@@ -357,10 +357,8 @@
     
             .stuff-container {
                 position: absolute;
-                height: auto;
+                width: 100%;
                 bottom: 0;
-    
-                
         
                 .stuff-item {
                     position: relative;
@@ -372,7 +370,7 @@
                         position: relative;
         
                         .stuff-item-input {
-                            width: 100%;
+                            width: 93%;
                             position: relative;
                             float: left;
                             border: 1px solid #ff365d;
@@ -394,28 +392,6 @@
                                 float: left;
                                 // background-color: #4d191a;
                                 box-sizing: border-box;
-                            }
-        
-                            .color-picker {
-                                position: absolute;
-                                top: 10%;
-                                left: -180px;
-                                z-index: 2;
-                                background-color: #fff;
-                                padding: 5px 5px 10px 5px;
-                                border-radius: 2px;
-                                box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.8);
-        
-                                .picker-background {
-                                    display: block;
-                                    position: fixed;
-                                    width: 100%;
-                                    height: 100%;
-                                    top: 0;
-                                    left: 0;
-                                    background: transparent;
-                                    z-index: -1;
-                                }
                             }
                 
                             .stuff-item-input-stuff {
@@ -471,17 +447,19 @@
                                 font-size: 20px;
                                 text-align: right;
                             }
-        
-                            .stuff-item-delete {
-                                display: block;
-                                position: absolute;
-                                width: 3%;
-                                padding-bottom: 3%;
-                                top: 5%;
-                                right: 1%;
-                                border: 1px solid #707070;
-                                box-sizing: border-box;
-                            }
+                        }
+
+                        .stuff-delete {
+                            display: block;
+                            width: 5%;
+                            height: 35px;
+                            float:left;
+                            background-image: url(../../../static/images/trash.svg);
+                            background-size: contain;
+                            background-repeat: no-repeat;
+                            background-position: center;
+                            cursor: pointer;
+                            transform: translate3d(0,0,0);
                         }
                     }
                     

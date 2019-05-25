@@ -10,6 +10,8 @@ const EnrolmentStuffItem = (props) => {
     backgroundColor: props.color
   };
 
+  console.log(props);
+
   return (
     <div className={cx("detail-content-main-side-stuff-item")}>
         <span style={style} className={cx("stuff-color")}></span>

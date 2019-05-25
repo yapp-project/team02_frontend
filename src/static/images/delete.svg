@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 74 74">
+    <defs>
+        <style>
+            .cls-1,.cls-4{fill:none}.cls-1{stroke:#080f24}.cls-2{fill:#080f24}.cls-3{stroke:none}
+        </style>
+    </defs>
+    <g id="휴지통_아이콘_Side" data-name="휴지통 아이콘_Side" transform="translate(-1787 -318)">
+        <g id="타원_53" class="cls-1" data-name="타원 53" transform="translate(1787 318)">
+            <circle cx="37" cy="37" r="37" class="cls-3"/>
+            <circle cx="37" cy="37" r="36.5" class="cls-4"/>
+        </g>
+        <path id="패스_22" d="M20.833 2.778h-2.777V.694A.656.656 0 0 0 17.361 0H7.639a.656.656 0 0 0-.694.694v2.084H0v2.778h2.778v18.055A1.312 1.312 0 0 0 4.167 25h16.666a1.312 1.312 0 0 0 1.389-1.389V5.556H25V2.778zM9.722 20.139H7.5V9.028h2.222zm7.778 0h-2.222V9.028H17.5z" class="cls-2" data-name="패스 22" transform="translate(1812 342)"/>
+    </g>
+</svg>

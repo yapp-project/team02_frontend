@@ -17,27 +17,22 @@ const EnrolmentStep2 = (props) => {
             />
 
             <div className={cx("stuff-area")}>
+                <div id="stuff-container" className={cx("stuff-container")}>
                 <span id="add-button" className={cx("stuff-add")} onClick={props.onAddStuff}></span>
-                <div className={cx("stuff-container")}>
- 
-                    <div className={cx("inner")}>
-                        <div className={cx("stuff-item-rect")}>
-                        {
-                            props.stuff.map((input, index) => {
-                                return <StuffItem
-                                    key={`stuff${index}`}
-                                    idx={index}
-                                    stuff={input}
-                                    onDeleteStuff={props.onDeleteStuff}
-                                    onSaveStuffName={props.onSaveStuffName}
-                                    onSaveStuffVolume={props.onSaveStuffVolume}
-                                    onSelectColor={props.onSelectColor}
-                                    validateNumber={props.validateNumber}
-                                />
-                            })
-                        }
-                        </div>
-                    </div>
+                {
+                    props.stuff.map((input, index) => {
+                        return <StuffItem
+                            key={`stuff${index}`}
+                            idx={index}
+                            stuff={input}
+                            onDeleteStuff={props.onDeleteStuff}
+                            onSaveStuffName={props.onSaveStuffName}
+                            onSaveStuffVolume={props.onSaveStuffVolume}
+                            onSelectColor={props.onSelectColor}
+                            validateNumber={props.validateNumber}
+                        />
+                    })
+                }
                 </div>
             </div>
         </div>
