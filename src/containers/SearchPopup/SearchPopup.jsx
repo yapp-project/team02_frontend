@@ -42,8 +42,7 @@ class SearchPopup extends Component {
     material_min: 0,
     material_max: 0,
     recommend: {},
-    selectedOption: type[0],
-    bSaerch: false
+    selectedOption: type[0]
   };
 
   componentDidUpdate() {
@@ -89,13 +88,16 @@ class SearchPopup extends Component {
       //검색 type
       const type = this.state.selectedOption.value;
 
-      //검색 유/무 상태 변경
-      this.setState({ bSaerch: !this.state.bSaerch });
-
       //검색 API 호출
-      if (type === SEARCH_BASE_TAG)
+      if (type === SEARCH_BASE_TAG) {
+        if (this.props.searchAction) {
+          this.props.searchAction(true);
+        }
         this.props.searchRequest({ word, filter: 0, type });
-      else if (type === SEARCH_BASE_MATERIAL) {
+      } else if (type === SEARCH_BASE_MATERIAL) {
+        if (this.props.searchAction) {
+          this.props.searchAction(true);
+        }
         this.props.searchRequest({
           word,
           filter: 0,
@@ -191,7 +193,7 @@ class SearchPopup extends Component {
           />,
           <Edit
             className={cx("search")}
-            placeholder="검색어를 입력해주세요"
+            placeholder="#을 붙여서 검색해주세요 ex)#맛있는#칵테일"
             key="edit_search"
             onKeyUp={this.onSearh}
           />,

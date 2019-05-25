@@ -41,22 +41,62 @@
     .right_container {
       float: right;
       display: flex;
+      justify-items: center;
+      align-items: center;
 
-      .search {
-        width: 26px;
-        height: 26px;
-        border-width: 0;
-        padding: 0;
-        border-radius: 30px;
-        border-color: transparent;
-        margin: 26px 0 0 0;
-        background-image: url("../../static/images/Search.svg");
-        background-color: transparent;
-        background-repeat: no-repeat;
-        background-size: inherit;
-        background-position: center;
-        outline: none;
-        cursor: pointer;
+      .search_rect {
+        width: auto;
+        height: 40px;
+        &._over {
+          border-radius: 20px;
+          border: solid 2px #ff365d;
+          background-color: transparent;
+          opacity: 0.5;
+        }
+
+        .search_container {
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-items: center;
+          &._over {
+            justify-content: space-between;
+            margin-left: 21px;
+            margin-right: 15px;
+          }
+
+          .text_rect {
+            margin-right: 45px;
+            height: auto;
+            font-family: NotoSansCJKkr;
+            font-size: 20px;
+            font-weight: normal;
+            font-style: normal;
+            font-stretch: normal;
+            line-height: 0.55;
+            letter-spacing: normal;
+            text-align: left;
+            color: #ffffff;
+          }
+          .search {
+            width: 26px;
+            height: 26px;
+            border-width: 0;
+            padding: 0;
+            border-radius: 30px;
+            border-color: transparent;
+            background-image: url("../../static/images/Search.svg");
+            &._over {
+              background-image: url("../../static/images/gray_search.svg");
+            }
+            background-color: transparent;
+            background-repeat: no-repeat;
+            background-size: inherit;
+            background-position: center;
+            outline: none;
+            cursor: pointer;
+          }
+        }
       }
 
       .login {
@@ -65,7 +105,7 @@
         background: transparent;
         border: solid 2px #ff365d;
         border-radius: 20px;
-        margin: 20.1px 30px 0 30px;
+        margin: 0 30px 0 30px;
         outline: none;
         color: #ff365d;
         font-size: 20px;
@@ -77,7 +117,6 @@
           height: 39.7px;
           border-color: transparent;
           margin-left: 20px;
-          margin-top: 20.1px;
           margin-right: 20.3px;
           background-color: transparent;
           background-image: url("../../static/images/user_button.png");
@@ -90,7 +129,7 @@
         width: 40px;
         height: 40px;
         border-color: transparent;
-        margin: 20.1px 31px 0 0;
+        margin: 0 31px 0 0;
         background-image: url("../../static/images/white_button.svg");
         background-color: transparent;
         background-repeat: no-repeat;
@@ -104,7 +143,7 @@
         position: absolute;
         width: 166px;
         height: 186px;
-        margin-top: 70px;
+        margin-top: 120px;
         margin-right: 90px;
         right: 0;
         background-color: #18184e;
@@ -145,51 +184,96 @@
     width: 100%;
     height: 100%;
     position: absolute;
-    grid-column: 2 / span 1;
     grid-row: 3 / span 1;
     background-color: #0f1835;
     display: grid;
-    grid-template-rows: 47px auto;
+    grid-template-columns: 201.5px auto 201px;
 
-    .filter_rect {
-      grid-row: 1 / span 1;
-      background-color: transparent;
-      height: auto;
-      display: flex;
-      justify-content: flex-end;
-
-      .filter {
-        background-color: transparent;
-        width: 123px;
-        min-width: 123px;
-        height: auto;
-        line-height: 1.8;
-      }
-    }
-
-    .searchresultrect {
-      position: absolute;
-      background-color: transparent;
+    .searchresult_container {
       width: 100%;
       height: 100%;
-      grid-row: 2 / span 1;
+      position: absolute;
+      grid-column: 2 / span 1;
+      display: grid;
+      grid-template-rows: 47px auto;
+
+      .filter_rect {
+        grid-row: 1 / span 1;
+        background-color: transparent;
+        height: auto;
+        display: flex;
+        justify-content: flex-end;
+
+        .filter {
+          background-color: transparent;
+          width: 123px;
+          min-width: 123px;
+          height: auto;
+          line-height: 1.8;
+        }
+      }
+
+      .loading_rect {
+        position: absolute;
+        background-color: transparent;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1;
+      }
+
+      .searchresult {
+        position: absolute;
+        background-color: transparent;
+        width: 100%;
+        height: 100%;
+        grid-row: 2 / span 1;
+      }
+
+      .notresult_rect {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+
+        .image_rect {
+          width: 40%;
+          height: 40%;
+          background-image: url("../../static/images/SearchResultOff.svg");
+          background-repeat: no-repeat;
+          background-size: contain;
+          background-position: center;
+        }
+        .text_rect {
+          width: auto;
+          height: auto;
+          font-family: NotoSansCJKkr;
+          font-size: 30px;
+          color: white;
+        }
+      }
+
+      // div {
+      //   -ms-overflow-style: none; // IE에서 스크롤바 감춤
+      //   &::-webkit-scrollbar {
+      //     display: none !important; // 윈도우 크롬 등
+      //   }
+      // }
+
+      @media (max-width: 470px) {
+        & {
+          grid-column: 1 / span 3;
+        }
+      }
     }
 
     &._over {
       grid-row: 2 / span 2;
-    }
-
-    // div {
-    //   -ms-overflow-style: none; // IE에서 스크롤바 감춤
-    //   &::-webkit-scrollbar {
-    //     display: none !important; // 윈도우 크롬 등
-    //   }
-    // }
-
-    @media (max-width: 470px) {
-      & {
-        grid-column: 1 / span 3;
-      }
     }
   }
 }

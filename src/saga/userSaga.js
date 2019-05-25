@@ -20,7 +20,8 @@ import {
   getMyScrap,
   getMyRecipes,
   setUserEdit,
-  setUserDelete
+  setUserDelete,
+  deleteCocktail
 } from "../api/userAPI";
 
 const dumy_data = [
@@ -371,10 +372,13 @@ function* getUserData(action) {
     } else if (type === 1) {
       // result = yield call(getMyRecipes, id);
       result = [dumy_data[0], dumy_data[1]];
+    } else if (type === 2) {
+      // result = yield call(deleteCocktail, id);
+      result = true;
     }
     yield put(dataEnd(type, result));
   } catch (error) {
-    yield put(dataError(false));
+    yield put(dataError(type, false));
   }
 }
 

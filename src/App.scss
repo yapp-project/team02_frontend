@@ -2,9 +2,13 @@
   position: absolute;
   display: grid;
   grid-template-rows: 80px auto;
+  &.one {
+    grid-template-rows: auto;
+  }
   height: 100%;
   width: 100%;
   .top {
+    position: absolute;
     grid-row: 1 / span 1;
     height: 100%;
     width: 100%;

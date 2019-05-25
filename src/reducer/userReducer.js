@@ -6,7 +6,8 @@ const initialState = {
   bLoginResult: false,
   mymenu: {
     scrap: [],
-    recipes: []
+    recipes: [],
+    bRecipeDelete: false
   },
   user: {
     state: "none",
@@ -80,6 +81,45 @@ const reducer = (state = initialState, action) => {
           mymenu: {
             ...state.mymenu,
             recipes: result
+          }
+        };
+      } else if (type === 2) {
+        return {
+          ...state,
+          mymenu: {
+            ...state.mymenu,
+            bRecipeDelete: result
+          }
+        };
+      }
+      return {
+        ...state
+      };
+    }
+    case actions.COMMUNICATION.ERROR: {
+      const { type, result } = action.payload;
+      if (type === 0) {
+        return {
+          ...state,
+          mymenu: {
+            ...state.mymenu,
+            scrap: []
+          }
+        };
+      } else if (type === 1) {
+        return {
+          ...state,
+          mymenu: {
+            ...state.mymenu,
+            recipes: []
+          }
+        };
+      } else if (type === 2) {
+        return {
+          ...state,
+          mymenu: {
+            ...state.mymenu,
+            bRecipeDelete: result
           }
         };
       }

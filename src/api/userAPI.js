@@ -69,3 +69,12 @@ export async function setUserDelete(userid, password) {
   const res = await webRequestUtil.post({ url, body });
   return res.data;
 }
+
+export async function deleteCocktail(id) {
+  const url = "del/";
+  const body = {
+    id
+  };
+  const res = await webRequestUtil.get({ url, body });
+  return res.data;
+}

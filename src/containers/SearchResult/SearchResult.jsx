@@ -2,10 +2,13 @@ import React, { Component } from "react";
 import classNames from "classnames/bind";
 import styles from "./SearchResult.scss";
 import { connect } from "react-redux";
-import { SearchResultItem } from "../../components";
+import { SearchResultItem, Button } from "../../components";
 
 import { GridLayout } from "@egjs/react-infinitegrid";
 import { withRouter } from "react-router-dom";
+
+import { dataRequest } from "../../action/userAction.js";
+import { CircleSpinner } from "react-spinners-kit";
 
 const cx = classNames.bind(styles);
 
@@ -13,7 +16,7 @@ const mapStateToProps = state => {
   return state;
 };
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = { dataRequest };
 
 /**
  * @author AnGwangHo
@@ -21,21 +24,20 @@ const mapDispatchToProps = {};
  */
 class SearchResult extends Component {
   state = {
-    list: [],
     showModify: false,
     modifyXY: { x: 0, y: 0 },
     index: "",
     page: 0,
     pages: 0,
     searchList: [], //[{page:number,list:[]}, ...]
-    _index: { page: 0, index: 0 }
+    bShowDelete: false,
+    bLoding: false
   };
 
   componentDidMount() {
-    const { searchresult } = this.props.searchReducer;
     this.setState({
-      page: searchresult.page,
-      pages: searchresult.pages,
+      page: this.props.page,
+      pages: this.props.pages,
       showModify: this.props.modify
     });
   }
@@ -77,12 +79,21 @@ class SearchResult extends Component {
       return;
     }
 
+    //같은 word를 스크롤한 상태에서 검색 시
+    if (prevProps.word === nowProps.word) {
+      if (prevProps.page > nowProps.page) {
+        this.setState({ searchList: [], page: 0, pages: 0 });
+        return;
+      }
+    }
+
     //scroll 시 page 갱신 및 list update
     if (prevProps.page !== this.props.page) {
       const list = this.props.searchList;
       const items = this.loadItems(parseFloat(this.groupKey) + 1, list);
 
       this.setState({
+        bLoding: false,
         page: this.props.page,
         searchList: this.state.searchList.concat({
           page: this.props.page,
@@ -91,6 +102,20 @@ class SearchResult extends Component {
       });
       return;
     }
+
+    if (nowProps.userReducer) {
+      if (
+        prevState.bShowDelete &&
+        !this.state.bShowDelete &&
+        !this.state.showModify
+      ) {
+        if (nowProps.userReducer.mymenu.bRecipeDelete) {
+          console.log("삭제 성공");
+        } else {
+          console.log("삭제 실패");
+        }
+      }
+    }
   }
 
   onPopupModifyClick = event => {
@@ -98,7 +123,21 @@ class SearchResult extends Component {
   };
 
   onCocktailClick = event => {
-    this.props.history.push(`/viewRecipe`);
+    this.props.history.push(`/viewRecipe/${event.target.id}`);
+  };
+
+  onDeleteCocktailClick = event => {
+    this.setState({ bShowDelete: true });
+  };
+
+  onNotifyPopupCancelClick = event => {
+    this.setState({ bShowDelete: false });
+  };
+
+  cocktailDeleteAPI = event => {
+    //칵테일 삭제 API 호출
+    this.props.dataRequest(2, this.state.index);
+    this.setState({ showModify: false, bShowDelete: false });
   };
 
   showModifyPopup = () => {
@@ -110,7 +149,29 @@ class SearchResult extends Component {
           </div>
         </div>
         <div className={cx("container")}>
-          <div className={cx("text")}>삭제하기</div>
+          <div className={cx("text")} onClick={this.onDeleteCocktailClick}>
+            삭제하기
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  showNotifyPopup = () => {
+    return (
+      <div className={cx("showNotifyPopup")}>
+        <div className={cx("text")}>정말로 삭제 하겠습니까?</div>
+        <div className={cx("container")}>
+          <Button
+            className={cx("ok")}
+            value="확인"
+            onClick={this.cocktailDeleteAPI}
+          />
+          <Button
+            className={cx("cancel")}
+            value="취소"
+            onClick={this.onNotifyPopupCancelClick}
+          />
         </div>
       </div>
     );
@@ -125,6 +186,40 @@ class SearchResult extends Component {
         y: parseInt(comp.style.top.split("px"), 10) + 60
       },
       index: event.target.id
+    });
+  };
+
+  onLikeClick = event => {
+    event.preventDefault();
+    event.stopPropagation();
+    const id = event.target.id;
+    const { searchList, page } = this.state;
+
+    //서버 통신
+
+    //state.list에 반영
+    this.setState({
+      searchList: searchList.map(item =>
+        item.page === page
+          ? {
+              ...item,
+              list: item.list.map(cocktail =>
+                cocktail.props.props._id === id
+                  ? {
+                      ...cocktail,
+                      props: {
+                        ...cocktail.props,
+                        props: {
+                          ...cocktail.props.props,
+                          scrap: cocktail.props.props.scrap + 1
+                        }
+                      }
+                    }
+                  : cocktail
+              )
+            }
+          : item
+      )
     });
   };
 
@@ -152,6 +247,7 @@ class SearchResult extends Component {
           modify={modify}
           modifyClick={this.onModifyClick}
           informationClick={this.onCocktailClick}
+          likeClick={this.onLikeClick}
         />
       );
     }
@@ -243,8 +339,10 @@ class SearchResult extends Component {
         window.event.target.scrollHeight <=
         scrollPos + window.event.target.clientHeight
       ) {
-        if (this.props.pages > this.props.page)
+        if (this.props.pages > this.props.page) {
+          this.setState({ bLoding: true });
           this.props.handleNotifyScroll({ next: this.props.page + 1 });
+        }
       }
     }
   };
@@ -255,6 +353,9 @@ class SearchResult extends Component {
 
     return (
       <div className={this.props.className}>
+        {this.state.bShowDelete && (
+          <div className={cx("notifypopup_rect")}>{this.showNotifyPopup()}</div>
+        )}
         <GridLayout
           margin={27}
           align="center"
@@ -269,6 +370,15 @@ class SearchResult extends Component {
             list.map(item => {
               return item.list;
             })}
+          {this.state.bLoding && (
+            <div className={cx("loding_rect")}>
+              <CircleSpinner
+                size={30}
+                color="white"
+                loading={this.state.bLoding}
+              />
+            </div>
+          )}
           {this.state.showModify && this.showModifyPopup()}
         </GridLayout>
       </div>

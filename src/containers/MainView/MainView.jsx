@@ -41,6 +41,11 @@ class MainView extends Component {
     const _recommend = this.props.recommend;
     if (!_recommend.tags.length) {
       this.props.recommendRequest();
+    } else {
+      //뒤로가기 해서 들어온 경우 로딩을 끈다.
+      if (_recommend.result.length) {
+        this.setState({ loading: false, selectTag: _recommend.tags[0].tag });
+      }
     }
   }
 
@@ -89,7 +94,7 @@ class MainView extends Component {
   };
 
   onCocktailClick = event => {
-    this.props.history.push(`/viewRecipe`);
+    this.props.history.push(`/viewRecipe/${event.target.id}`);
   };
 
   onLikeClick = event => {
@@ -208,7 +213,7 @@ class MainView extends Component {
           <div id="imageContainer" className={cx("innercontainer")}>
             <div className={cx("loading_rect", !this.state.loading && "_hide")}>
               <CircleSpinner
-                size={300}
+                size={100}
                 color="white"
                 loading={this.state.loading}
               />

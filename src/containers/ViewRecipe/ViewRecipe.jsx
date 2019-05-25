@@ -201,11 +201,11 @@ class ViewRecipe extends Component {
       comment.style.opacity = 1;
 
     }
-  }
+  };
 
   onAddComment = () => {
     let comment = document.querySelector("#commentText").value;
-    if (comment !== '' && comment !== undefined && comment !== null) {
+    if (comment !== "" && comment !== undefined && comment !== null) {
       let now = new Date();
       let time = now.getHours > 9 ? `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}` : `0${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
       let comments = this.state.comments;
@@ -252,9 +252,7 @@ class ViewRecipe extends Component {
 
           <div className={cx("detail-content-main")}>
             <div className={cx("detail-content-main-view")}>
-
-            {this.state.main}
-              
+              {this.state.main}
             </div>
 
             <div className={cx("detail-content-main-side")}>
@@ -274,10 +272,8 @@ class ViewRecipe extends Component {
               </div>
 
               {this.state.side}
-
             </div>
           </div>
-
         </div>
 
         <div className={cx("side-button-container")}>
@@ -307,7 +303,6 @@ class ViewRecipe extends Component {
         className={cx("recipe-view-detail")}
         content={this.viewRecipe_form()}
       />
-      
     );
   }
 }

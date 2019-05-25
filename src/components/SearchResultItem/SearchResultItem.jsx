@@ -1,7 +1,7 @@
 import React from "react";
 import classNames from "classnames/bind";
 import styles from "./SearchResultItem.scss";
-import xbox from "../../static/images/a1.jpeg";
+import xbox from "../../static/images/ErrorImage.svg";
 
 const cx = classNames.bind(styles);
 
@@ -26,6 +26,7 @@ const SearchResultItem = ({
         onError={e => {
           e.target.onerror = null;
           e.target.src = xbox;
+          e.target.className = cx("item_img", "_xbox");
         }}
         src={image}
         alt="사진"
@@ -41,13 +42,13 @@ const SearchResultItem = ({
           </div>
         </div>
       )}
-      <div className={cx("information_rect")} onClick={informationClick}>
+      <div id={_id} className={cx("information_rect")} onClick={informationClick}>
         <div className={cx("inner")}>
           <div className={cx("cocktailName")}>{name}</div>
           <div className={cx("bottom")}>
             <div className={cx("userName")}>{owner}</div>
             <div className={cx("right")}>
-              <div className={cx("like")} onClick={likeClick} />
+              <div id={_id} className={cx("like")} onClick={likeClick} />
               <div className={cx("number")}>{scrap}</div>
             </div>
           </div>
