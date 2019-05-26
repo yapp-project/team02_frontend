@@ -9,7 +9,9 @@ import Step1 from "./Function/Step1";
 import Step2 from "./Function/Step2";
 import Step3 from "./Function/Step3";
 import Done from "./Function/Done";
-import { enrolmentRequest } from "../../action/enrolmentAction"
+import { enrolmentRequest } from "../../action/enrolmentAction";
+import axios from "axios";
+import { ChromePicker } from 'react-color';
 
 const cx = classNames.bind(styles);
 
@@ -21,6 +23,8 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = { enrolmentRequest };
+
+let colorTarget = "";
 
 class Enrolment extends Component {
   constructor (props){
@@ -60,13 +64,14 @@ class Enrolment extends Component {
   doneClose;
   contents;
   inputTarget;
+  colorClose;
 
   componentDidMount() {
     document.addEventListener('DOMContentLoaded', () => {
       this.selectCup = document.querySelector(".cup-item1").classList[1];
       this.selectAlcohol = document.querySelector(".alcohol-item1").classList[1];
       this.doneClose = document.querySelector("#done-container").classList[1];
-
+      this.colorClose = document.querySelector("#color-picker").classList[1];
       this.inputTarget = document.querySelectorAll("#recipe-name, #recipe-descripe, #recipe-tag");
     });
     this.selectStep = document.querySelector(".step-1").classList[1];
@@ -94,6 +99,14 @@ class Enrolment extends Component {
     />});
 
   };
+
+  componentDidUpdate(prevProps, prevState) {
+    if(prevProps.result === undefined && this.props.state === 'success') {
+      this.onUploadImage(this.state.images, this.props.result._id);
+      // 이미지 데이터를 제외한 나머지 등록 정보가 서버에 잘 반영되면 여기 분기문으로 들어옴
+      // 즉, 이제 이미지 업로드 실행!
+    }
+  }
 
   onChangeStepStatus = event => {
     let stepTarget = document.querySelectorAll(".step-1, .step-2, .step-3");
@@ -155,7 +168,6 @@ class Enrolment extends Component {
   
   onChangeCup = event => {
     let cupText = event.target.innerText.trim();
-
     this.changeCup(cupText);
   };
 
@@ -200,7 +212,7 @@ class Enrolment extends Component {
 
   onChangeAlcohol = event => {
     let alcoholTarget = document.querySelectorAll(".alcohol > li");
-    let cupTarget = event.target;
+    let cupTarget = event.target.nodeName === 'SPAN' ? event.target.parentNode : event.target;
     let enrolmentData = {...this.state.enrolmentData};
 
     alcoholTarget.forEach(val => {
@@ -285,6 +297,16 @@ class Enrolment extends Component {
   };
 
   onAddStuff = () => {
+    let containerStyle = window.getComputedStyle ? getComputedStyle(document.querySelector("#stuff-container"), null) : document.querySelector("#stuff-container").currentStyle;
+    let maxHegihtStyle = window.getComputedStyle ? getComputedStyle(document.querySelector("#stuff-container").parentElement, null) : document.querySelector("#stuff-container").parentElement.currentStyle;
+
+    let containerHeight = parseInt(containerStyle.height);
+    let maxHeight = parseInt(maxHegihtStyle.height);
+
+    if (containerHeight + 62 >= maxHeight) {
+      document.querySelector("#stuff-container").style.position = 'relative';
+    }
+
     let enrolmentData = {...this.state.enrolmentData};
     let lastIndexID = this.state.stuffID;
 
@@ -306,41 +328,64 @@ class Enrolment extends Component {
   };
 
   onDeleteStuff = event => {
+    let containerStyle = window.getComputedStyle ? getComputedStyle(document.querySelector("#stuff-container"), null) : document.querySelector("#stuff-container").currentStyle;
+    let maxHegihtStyle = window.getComputedStyle ? getComputedStyle(document.querySelector("#stuff-container").parentElement, null) : document.querySelector("#stuff-container").parentElement.currentStyle;
+
+    let containerHeight = parseInt(containerStyle.height);
+    let maxHeight = parseInt(maxHegihtStyle.height);
+    
+    if (containerHeight - 62 <= maxHeight) {
+      document.querySelector("#stuff-container").style.position = 'absolute';
+    }
+
     let enrolmentData = {...this.state.enrolmentData};
     let clickIndex = event.target.parentNode.parentNode.parentNode.getAttribute("stuff");
 
-    enrolmentData.stuff.splice(clickIndex, 1);
+    enrolmentData.stuff[clickIndex] = {};
 
     this.setState(enrolmentData);
 
-    event.target.parentNode.parentNode.parentNode.remove();
+    event.target.parentNode.parentNode.remove();
   }
 
   onSelectColor = event => {
-    if (event.target.getAttribute("stuff")) {
-      let colorNumber = event.target.getAttribute("stuff");
-      this.setState({color_idx: colorNumber});
+    let colorContainer = document.querySelector("#color-picker");
 
-      document.querySelector(`#color-picker_${colorNumber}`).classList.toggle(this.doneClose);
-    } else {
-      let colorNumber = this.state.color_idx;
-      let enrolmentData = {...this.state.enrolmentData};
-      let rgb = document.querySelector(`#item-color_${colorNumber}`).style.backgroundColor.replace(/^(rgb|rgba)\(/,'').replace(/\)$/,'').replace(/\s/g,'').split(',');
+    colorTarget = event.target.id;
+    colorContainer.classList.remove(this.colorClose);
+    // console.log(document.querySelector("#color-picker").classList.contains(this.colorClose));
 
-      document.querySelector(`#color-picker_${colorNumber}`).classList.toggle(this.doneClose);
 
-      enrolmentData.stuff[colorNumber].color = "#" + ((1 << 24) + (parseInt(rgb[0]) << 16) + (parseInt(rgb[1]) << 8) + parseInt(rgb[2])).toString(16).slice(1);
-      
-      this.setState(enrolmentData);
-    }
+    // if (event.target.getAttribute("stuff")) {
+    //   let colorNumber = event.target.getAttribute("stuff");
+    //   this.setState({color_idx: colorNumber});
+
+    //   document.querySelector(`#color-picker_${colorNumber}`).classList.toggle(this.doneClose);
+    // } else {
+
+    // }
   };
+
+  onSelectColorClose = () => {
+    let colorContainer = document.querySelector("#color-picker");
+    let target = document.querySelector(`#${colorTarget}`);
+    let targetNumber = target.getAttribute("stuff");
+    let enrolmentData = {...this.state.enrolmentData};
+    let rgb = target.style.backgroundColor.replace(/^(rgb|rgba)\(/,'').replace(/\)$/,'').replace(/\s/g,'').split(',');
+
+
+    colorContainer.classList.add(this.colorClose);
+
+    enrolmentData.stuff[targetNumber].color = "#" + ((1 << 24) + (parseInt(rgb[0]) << 16) + (parseInt(rgb[1]) << 8) + parseInt(rgb[2])).toString(16).slice(1);
+    
+    this.setState(enrolmentData);
+  }
 
   onSaveImages = images => {
     this.setState({images: images});
   }
 
   onSaveRecipe = () => {
-    let doneView = document.querySelector("#done-container");
     let cup = this.state.enrolmentData.info.name;
     if (cup === '하이볼') cup = 0;
     else if (cup === '리큐르') cup = 1;
@@ -349,16 +394,28 @@ class Enrolment extends Component {
     else cup = 4;
 
     // let tag = this.state.enrolmentData.info.tags;
+
+    console.log(this.state);
     
     //태그 배열 형태로 나누는거 처리해야 됨
     //재료 포멧은 정해야 될듯
+    // let data = {
+    //   name: this.state.enrolmentData.info.name,
+    //   glass: cup,
+    //   percent: 50,
+    //   description: this.state.enrolmentData.info.describe,
+    //   tag: [],
+    //   ingredient: this.state.stuff,
+    //   owner: 'fonnie'
+    // }
+
     let data = {
-      name: this.state.enrolmentData.info.name,
-      glass: cup,
-      percent: 50,
-      description: this.state.enrolmentData.info.describe,
-      tag: [],
-      ingredient: [{
+      "name": "martini",
+      "glass" : 4,
+      "percent" : 50,
+      "description" : "This is so delicious",
+      "tag" : ["sweet", "romantic", "johnmat"],
+      "ingredient" : [{
         "name" : "water",
         "color" : "blue",
         "ml" : 20
@@ -367,21 +424,54 @@ class Enrolment extends Component {
         "color" : "red",
         "ml" : 10
         }],
-      owner: '사용자'
+      "owner" : "maga40"
     }
 
     // data.tag.push(tag);
 
     this.props.enrolmentRequest(data);
-
-    doneView.classList.toggle(this.doneClose);
   };
+
+  onUploadImage = (images, id) => {
+    let formData = new FormData();
+    images.forEach(image => {
+      formData.append('images', image);
+      formData.append("timestamp", (Date.now() / 1000) | 0);
+    });
+
+    axios.post("http://ec2-18-191-88-64.us-east-2.compute.amazonaws.com:9000/recipe/upload", formData, {
+      headers: { "X-Requested-With": "XMLHttpRequest" },
+    }, {
+      params: {
+        id
+      }
+    }).then(response => {
+      const data = response.data;
+      // const fileURL = data.secure_url // You should store this URL for future references in your app
+      console.log(id);
+      console.log(data);
+    }).catch(e => {
+      console.error(e);
+    });
+  }
+
+  handleChange = color => {
+    let target = document.querySelector(`#${colorTarget}`);
+    target.style.backgroundColor = color.hex;
+  }
 
   render() {
     const { left, middle, step, done } = this.state;
 
     return (
       <div className={cx("enrolment-container")}>
+
+        <div id={"color-picker"} className={cx("color-picker", "close")}>
+          <ChromePicker 
+            onChange={ this.handleChange }
+          />
+          <span id={"color-picker-background"} className={cx("picker-background")} onClick={ this.onSelectColorClose }></span>
+        </div>
 
         <Header
           onChangeStepStatus={this.onChangeStepStatus}

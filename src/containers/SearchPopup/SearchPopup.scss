@@ -8,7 +8,7 @@
   background-color: $main-color;
 
   input.search {
-    width: 1220.5px;
+    width: 100%;
     min-width: 300px;
     height: auto;
     background-color: $main-color;
@@ -19,18 +19,83 @@
     outline: none;
   }
 
-  .filter {
+  .type {
     width: 123px;
     min-width: 123px;
     height: auto;
     line-height: 1.8;
   }
-  .type {
-    margin-left: 70px;
-    width: 123px;
-    min-width: 123px;
-    height: auto;
-    line-height: 1.8;
+
+  .material_rect {
+    width: auto;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    .material_container {
+      height: auto;
+      display: flex;
+      align-items: center;
+
+      .text {
+        width: 78px;
+        height: auto;
+        font-family: NotoSansCJKkr;
+        font-size: 20px;
+        text-align: center;
+        color: white;
+      }
+      .number_rect {
+        width: 130px;
+        height: auto;
+        margin-left: 20px;
+        display: flex;
+        font-family: NotoSansCJKkr;
+        font-size: 40px;
+        font-weight: normal;
+        font-style: normal;
+        font-stretch: normal;
+        line-height: 0.28;
+        letter-spacing: normal;
+        text-align: center;
+        color: white;
+        align-items: center;
+        justify-content: space-between;
+        .start {
+          width: 44px;
+          height: 40px;
+          border: solid 1px white;
+          background-color: transparent;
+          color: white;
+          font-family: NotoSansCJKkr;
+          font-size: 20px;
+          font-weight: normal;
+          font-style: normal;
+          font-stretch: normal;
+          line-height: 0.55;
+          letter-spacing: normal;
+          text-align: center;
+        }
+        .number_text {
+          height: auto;
+          text-align: center;
+        }
+        .end {
+          width: 44px;
+          height: 40px;
+          border: solid 1px white;
+          background-color: transparent;
+          color: white;
+          font-family: NotoSansCJKkr;
+          font-size: 20px;
+          font-weight: normal;
+          font-style: normal;
+          font-stretch: normal;
+          line-height: 0.55;
+          letter-spacing: normal;
+          text-align: center;
+        }
+      }
+    }
   }
 }
 

@@ -6,8 +6,15 @@ const initialState = {
   bLoginResult: false,
   mymenu: {
     scrap: [],
-    recipes: []
-  }
+    recipes: [],
+    bRecipeDelete: false
+  },
+  user: {
+    state: "none",
+    checkID: false
+  },
+  bModifyUser: false,
+  bUserDelete: false
 };
 
 const reducer = (state = initialState, action) => {
@@ -20,18 +27,35 @@ const reducer = (state = initialState, action) => {
         bLoginResult: result
       };
     }
+    case actions.IDCHECK.REQUEST: {
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          state: action.type
+        }
+      };
+    }
     case actions.IDCHECK.SUCCESS: {
       const { result } = action.payload;
       return {
         ...state,
-        bIDCheckResult: result
+        bIDCheckResult: result,
+        user: {
+          state: action.type,
+          checkID: result
+        }
       };
     }
     case actions.IDCHECK.FAILED: {
       const { result } = action.payload;
       return {
         ...state,
-        bIDCheckResult: result
+        bIDCheckResult: result,
+        user: {
+          ...state.user,
+          state: action.type
+        }
       };
     }
     case actions.REGISTER.SUCCESS: {
@@ -59,6 +83,45 @@ const reducer = (state = initialState, action) => {
             recipes: result
           }
         };
+      } else if (type === 2) {
+        return {
+          ...state,
+          mymenu: {
+            ...state.mymenu,
+            bRecipeDelete: result
+          }
+        };
+      }
+      return {
+        ...state
+      };
+    }
+    case actions.COMMUNICATION.ERROR: {
+      const { type, result } = action.payload;
+      if (type === 0) {
+        return {
+          ...state,
+          mymenu: {
+            ...state.mymenu,
+            scrap: []
+          }
+        };
+      } else if (type === 1) {
+        return {
+          ...state,
+          mymenu: {
+            ...state.mymenu,
+            recipes: []
+          }
+        };
+      } else if (type === 2) {
+        return {
+          ...state,
+          mymenu: {
+            ...state.mymenu,
+            bRecipeDelete: result
+          }
+        };
       }
       return {
         ...state
@@ -67,6 +130,26 @@ const reducer = (state = initialState, action) => {
     case actions.LOGIN.LOGOUT: {
       return {
         ...state,
+        set_auth: false,
+        bLoginResult: false
+      };
+    }
+    case actions.USEREDIT.SUCCESS: {
+      return {
+        ...state,
+        bModifyUser: true
+      };
+    }
+    case actions.USEREDIT.FAILED: {
+      return {
+        ...state,
+        bModifyUser: false
+      };
+    }
+    case actions.USERDELETE.SUCCESS: {
+      return {
+        ...state,
+        bUserDelete: true,
         set_auth: false,
         bLoginResult: false
       };

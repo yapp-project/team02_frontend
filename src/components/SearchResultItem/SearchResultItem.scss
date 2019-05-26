@@ -2,6 +2,12 @@
 .item_img {
   width: inherit;
   height: inherit;
+
+  &._xbox {
+    min-width: 360px;
+    background-color: gray;
+    opacity: 0.5;
+  }
 }
 
 .modify_rect {
@@ -12,7 +18,7 @@
   height: 24px;
   margin-top: 25px;
   margin-right: 20px;
-  z-index: 100;
+  z-index: 1;
 
   .modify_container {
     color: #ffffff;
@@ -60,7 +66,6 @@
       letter-spacing: normal;
       text-align: left;
       color: #ffffff;
-      cursor: pointer;
     }
 
     .bottom {
@@ -100,6 +105,7 @@
           background-position: center;
           background-size: inherit;
           margin-right: 10.2px;
+          cursor: pointer;
         }
         .number {
           height: 100%;

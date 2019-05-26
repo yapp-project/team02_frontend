@@ -129,5 +129,12 @@ body {
     width: 100%;
     height: 100%;
     grid-row: 2 / span 1;
+
+    // div {
+    // -ms-overflow-style: -ms-autohiding-scrollbar; // IE에서 스크롤바 감춤
+    // &::-webkit-scrollbar {
+    //   display: none !important; // 윈도우 크롬 등
+    // }
+    // }
   }
 }

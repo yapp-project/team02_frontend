@@ -1,15 +1,30 @@
 import * as webRequestUtil from "./rootAPI";
 
 //검색 시 get방식인데 body로 data req가아닌 params 방식으로 해야함
-export async function searchCocktails(word, type) {
+export async function searchCocktails(word, type, filter, page, number) {
   let url, body;
   if (type === 0) {
-    url = "recipe/tag/view";
+    // fillter : true-1(스크랩순), false-0(최신순)
+    if (filter) {
+      url = "recipe/tag/view";
+    } else {
+      url = "recipe/tag/new";
+    }
     body = {
-      tag: word
+      tag: word,
+      page: page
     };
   } else {
-    url = "recipe/ingredient/view";
+    if (filter) {
+      url = "recipe/ingredient/view";
+    } else {
+      url = "recipe/ingredient/new";
+    }
+    body = {
+      ingredient: word,
+      page: page,
+      range: number
+    };
   }
 
   const res = await webRequestUtil.get({ url, body });
