@@ -304,7 +304,14 @@ function* requestLogin(action) {
     const localData = { userid: userid, password: password };
     localStorage.setItem("myData", JSON.stringify(localData));
     yield put(loginSuccess(result));
-  } catch (error) {}
+  } catch (error) {
+    if (error.status === 404) {
+      const auth = JSON.parse(localStorage.getItem("myData"));
+      if (auth) {
+        logout();
+      }
+    }
+  }
 }
 
 function* requestRegister(action) {
