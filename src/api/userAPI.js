@@ -78,3 +78,13 @@ export async function deleteCocktail(id) {
   const res = await webRequestUtil.get({ url, body });
   return res.data;
 }
+
+export async function setScrap(userid, cocktaiID) {
+  const url = "scrap/";
+  const body = {
+    userid,
+    cocktaiID
+  };
+  const res = await webRequestUtil.post({ url, body });
+  return res.data;
+}

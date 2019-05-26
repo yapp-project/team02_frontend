@@ -21,7 +21,8 @@ import {
   getMyRecipes,
   setUserEdit,
   setUserDelete,
-  deleteCocktail
+  deleteCocktail,
+  setScrap
 } from "../api/userAPI";
 
 const dumy_data = [
@@ -367,9 +368,10 @@ function* requseUserDelete(action) {
   }
 }
 
-//MyMenu에서 스크랩, 등록한 레시피 정보 얻어오는 API
-function* getUserData(action) {
-  const { type, id } = action.payload;
+//MyMenu에서 스크랩, 등록한 레시피 정보, 레시피 삭제 하는 API
+//type [0: 스크랩 정보, 1: 등록한 레시피, 2: 레시피 삭제, 3: 스크랩 기능]
+function* requestData(action) {
+  const { type, id, userID } = action.payload;
 
   try {
     var result = [];
@@ -382,7 +384,11 @@ function* getUserData(action) {
     } else if (type === 2) {
       // result = yield call(deleteCocktail, id);
       result = true;
+    } else if (type === 3) {
+      // result = yield call(setScrap, id, userID);
+      result = true;
     }
+
     yield put(dataEnd(type, result));
   } catch (error) {
     yield put(dataError(type, false));
@@ -399,7 +405,7 @@ export default function* saga() {
     takeLatest(actions.REGISTER.REQUEST, requestRegister),
     takeLatest(actions.IDCHECK.REQUEST, requsetIdChek),
     takeLatest(actions.LOGIN.LOGOUT, logout),
-    takeLatest(actions.COMMUNICATION.REQUEST, getUserData),
+    takeLatest(actions.COMMUNICATION.REQUEST, requestData),
     takeLatest(actions.USEREDIT.REQUEST, requsetUserEdit),
     takeLatest(actions.USERDELETE.REQUEST, requseUserDelete)
   ]);

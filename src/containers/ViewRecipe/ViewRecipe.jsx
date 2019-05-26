@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import classNames from "classnames/bind";
 import styles from "./ViewRecipe.scss";
 import { connect } from "react-redux";
-import { Popup } from "../../components";
+import { Popup, Button } from "../../components";
 import RecipeHeader from "./Function/Header";
 import RecipeCup from "./Function/ViewCup";
 import RecipeImage from "./Function/ViewImage";
@@ -30,6 +30,9 @@ import heartIcon from "../../static/images/heart-button.svg";
 import arrowLeft from "../../static/images/arrow-left.svg";
 import arrowRight from "../../static/images/arrow-right.svg";
 
+import { dataRequest } from "../../action/userAction.js";
+import { withRouter } from "react-router-dom";
+
 const toolbarStyleCommon = {
   backgroundRepeat: "no-repeat",
   backgroundSize: "21px",
@@ -54,7 +57,7 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = { recipeIDRequest };
+const mapDispatchToProps = { recipeIDRequest, dataRequest };
 
 class ViewRecipe extends Component {
   state = {
@@ -73,7 +76,9 @@ class ViewRecipe extends Component {
     photos: [],
     comments: [],
     main: <RecipeCup glass="0" />,
-    side: <RecipeInfo alcohol="0" recipe="" descripe="" tags={[]} />
+    side: <RecipeInfo alcohol="0" recipe="" descripe="" tags={[]} />,
+    bShowDelete: false,
+    userID: ""
   };
 
   componentDidMount() {
@@ -82,6 +87,7 @@ class ViewRecipe extends Component {
     document.getElementById("viewRecipe").style.backgroundColor =
       "rgba(255, 255, 255, 0.4)";
     const { id } = this.props;
+
     this.props.recipeIDRequest(id);
   }
 
@@ -92,6 +98,7 @@ class ViewRecipe extends Component {
       prevProps.comments === undefined &&
       prevProps.recipe_info === undefined
     ) {
+      const auth = JSON.parse(localStorage.getItem("myData")); //localstorage에서 가져옴
       this.setState(
         {
           recipe_info: this.props.recipe_info,
@@ -106,7 +113,8 @@ class ViewRecipe extends Component {
               descripe={this.state.recipe_info.description}
               tags={this.state.recipe_info.tags}
             />
-          )
+          ),
+          userID: auth.userid
         },
         () => {
           document.getElementById(
@@ -228,9 +236,57 @@ class ViewRecipe extends Component {
     });
   };
 
+  onDeleteCocktailClick = event => {
+    this.setState({ bShowDelete: true });
+  };
+
+  onNotifyPopupCancelClick = event => {
+    this.setState({ bShowDelete: false });
+  };
+
+  cocktailDeleteAPI = event => {
+    //칵테일 삭제 API 호출
+    const type = 2;
+    this.props.dataRequest(type, this.props.id);
+    this.setState({ bShowDelete: false });
+    this.props.closeClick();
+  };
+
+  onLikeClick = event => {
+    const type = 3;
+    this.props.dataRequest(type, this.props.id, this.state.userID);
+  };
+
+  showNotifyPopup = () => {
+    return (
+      <div className={cx("showNotifyPopup")}>
+        <div className={cx("text")}>정말로 삭제 하겠습니까?</div>
+        <div className={cx("container")}>
+          <Button
+            className={cx("ok")}
+            value="확인"
+            onClick={this.cocktailDeleteAPI}
+          />
+          <Button
+            className={cx("cancel")}
+            value="취소"
+            onClick={this.onNotifyPopupCancelClick}
+          />
+        </div>
+      </div>
+    );
+  };
+
+  onDetailViewEdit = () => {
+    this.props.history.push(`/enrolment/${this.props.id}`);
+  };
+
   viewRecipe_form = () => {
     return [
       <div key="viewRecipe" className={cx("detail-container")}>
+        {this.state.bShowDelete && (
+          <div className={cx("notifypopup_rect")}>{this.showNotifyPopup()}</div>
+        )}
         <div className={cx("detail-content")}>
           <span
             style={Object.assign({}, toolbarStyleCommon, {
@@ -310,23 +366,29 @@ class ViewRecipe extends Component {
               id="close-botton"
               onClick={this.props.closeClick}
             />
-            <span
-              style={Object.assign({}, toolbarStyleCommon, {
-                backgroundImage: `url(${modifyIcon})`,
-                backgroundSize: "cover",
-                opacity: 1
-              })}
-              id="edit-botton"
-              onClick={this.props.editClick}
-            />
-            <span
-              style={Object.assign({}, toolbarStyleCommon, {
-                backgroundImage: `url(${deleteIcon})`,
-                backgroundSize: "cover",
-                opacity: 1
-              })}
-              id="delete-botton"
-            />
+            {this.state.userID === this.state.recipe_info.nick &&
+              ((
+                <span
+                  style={Object.assign({}, toolbarStyleCommon, {
+                    backgroundImage: `url(${modifyIcon})`,
+                    backgroundSize: "cover",
+                    opacity: 1
+                  })}
+                  id="edit-botton"
+                  onClick={this.onDetailViewEdit}
+                />
+              ),
+              (
+                <span
+                  style={Object.assign({}, toolbarStyleCommon, {
+                    backgroundImage: `url(${deleteIcon})`,
+                    backgroundSize: "cover",
+                    opacity: 1
+                  })}
+                  id="delete-botton"
+                  onClick={this.onDeleteCocktailClick}
+                />
+              ))}
             <span
               style={Object.assign({}, toolbarStyleCommon, {
                 backgroundImage: `url(${heartIcon})`,
@@ -334,6 +396,7 @@ class ViewRecipe extends Component {
                 opacity: 1
               })}
               id="like-botton"
+              onClick={this.onLikeClick}
             />
           </div>
         </div>
@@ -352,7 +415,9 @@ class ViewRecipe extends Component {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ViewRecipe);
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(ViewRecipe)
+);

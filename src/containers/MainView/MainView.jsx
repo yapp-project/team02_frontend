@@ -112,10 +112,6 @@ class MainView extends Component {
     this.setState({ bShowViewRecipe: false });
   };
 
-  onDetailViewEdit = () => {
-    this.props.history.push(`/enrolment/${this.state.showViewRecipeID}`);
-  };
-
   onLikeClick = event => {
     event.preventDefault();
     event.stopPropagation();
@@ -203,7 +199,6 @@ class MainView extends Component {
             <ViewRecipe
               id={this.state.showViewRecipeID}
               closeClick={this.onDetailViewClose}
-              editClick={this.onDetailViewEdit}
             />
           </div>
         )}

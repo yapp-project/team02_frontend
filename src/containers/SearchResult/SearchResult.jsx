@@ -135,10 +135,6 @@ class SearchResult extends Component {
     this.setState({ bShowViewRecipe: false });
   };
 
-  onDetailViewEdit = () => {
-    this.props.history.push(`/enrolment/${this.state.showViewRecipeID}`);
-  };
-
   onDeleteCocktailClick = event => {
     this.setState({ bShowDelete: true });
   };
@@ -149,7 +145,8 @@ class SearchResult extends Component {
 
   cocktailDeleteAPI = event => {
     //칵테일 삭제 API 호출
-    this.props.dataRequest(2, this.state.index);
+    const type = 2;
+    this.props.dataRequest(type, this.state.index);
     this.setState({ showModify: false, bShowDelete: false });
   };
 
@@ -373,7 +370,6 @@ class SearchResult extends Component {
           <ViewRecipe
             id={this.state.showViewRecipeID}
             closeClick={this.onDetailViewClose}
-            editClick={this.onDetailViewEdit}
           />
         )}
         <GridLayout
