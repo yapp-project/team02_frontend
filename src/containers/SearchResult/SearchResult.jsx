@@ -10,6 +10,8 @@ import { withRouter } from "react-router-dom";
 import { dataRequest } from "../../action/userAction.js";
 import { CircleSpinner } from "react-spinners-kit";
 
+import ViewRecipe from "../ViewRecipe/ViewRecipe";
+
 const cx = classNames.bind(styles);
 
 const mapStateToProps = state => {
@@ -31,7 +33,9 @@ class SearchResult extends Component {
     pages: 0,
     searchList: [], //[{page:number,list:[]}, ...]
     bShowDelete: false,
-    bLoding: false
+    bLoding: false,
+    bShowViewRecipe: false,
+    showViewRecipeID: ""
   };
 
   componentDidMount() {
@@ -123,7 +127,16 @@ class SearchResult extends Component {
   };
 
   onCocktailClick = event => {
-    this.props.history.push(`/viewRecipe/${event.target.id}`);
+    // this.props.history.push(`/viewRecipe/${event.target.id}`);
+    this.setState({ bShowViewRecipe: true, showViewRecipeID: event.target.id });
+  };
+
+  onDetailViewClose = () => {
+    this.setState({ bShowViewRecipe: false });
+  };
+
+  onDetailViewEdit = () => {
+    this.props.history.push(`/enrolment/${this.state.showViewRecipeID}`);
   };
 
   onDeleteCocktailClick = event => {
@@ -355,6 +368,13 @@ class SearchResult extends Component {
       <div className={this.props.className}>
         {this.state.bShowDelete && (
           <div className={cx("notifypopup_rect")}>{this.showNotifyPopup()}</div>
+        )}
+        {this.state.bShowViewRecipe && (
+          <ViewRecipe
+            id={this.state.showViewRecipeID}
+            closeClick={this.onDetailViewClose}
+            editClick={this.onDetailViewEdit}
+          />
         )}
         <GridLayout
           margin={27}

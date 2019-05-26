@@ -7,7 +7,7 @@ import { Button } from "../../components";
 import { SearchResultItem } from "../../components";
 import { recommendRequest, searchRequest } from "../../action/searchAction";
 
-// import Header from "../Header/Header";
+import ViewRecipe from "../ViewRecipe/ViewRecipe";
 
 import { CircleSpinner } from "react-spinners-kit";
 
@@ -28,7 +28,9 @@ class MainView extends Component {
     scroll: {
       start: true,
       end: true
-    }
+    },
+    bShowViewRecipe: false,
+    showViewRecipeID: ""
   };
 
   /**
@@ -78,6 +80,15 @@ class MainView extends Component {
           this.setState({ scroll: { start: true, end: true } });
       }
     }
+
+    //Random Tag.length = 0, result = []인 경우 예외처리
+    if (
+      this.state.loading &&
+      !this.props.recommend.tags.length &&
+      !this.props.recommend.result.length
+    ) {
+      this.setState({ loading: false });
+    }
   }
 
   /**
@@ -94,7 +105,15 @@ class MainView extends Component {
   };
 
   onCocktailClick = event => {
-    this.props.history.push(`/viewRecipe/${event.target.id}`);
+    this.setState({ bShowViewRecipe: true, showViewRecipeID: event.target.id });
+  };
+
+  onDetailViewClose = () => {
+    this.setState({ bShowViewRecipe: false });
+  };
+
+  onDetailViewEdit = () => {
+    this.props.history.push(`/enrolment/${this.state.showViewRecipeID}`);
   };
 
   onLikeClick = event => {
@@ -179,9 +198,15 @@ class MainView extends Component {
     const { tags } = this.props.recommend;
     return (
       <div className={cx("mainview")}>
-        {/* <div className={cx("header")}>
-            <Header />
-          </div> */}
+        {this.state.bShowViewRecipe && (
+          <div className={cx("viewreipe_rect")}>
+            <ViewRecipe
+              id={this.state.showViewRecipeID}
+              closeClick={this.onDetailViewClose}
+              editClick={this.onDetailViewEdit}
+            />
+          </div>
+        )}
         <div className={cx("explanation_rect")}>
           <div className={cx("left")}>
             <div className={cx("logo")} />
@@ -218,6 +243,16 @@ class MainView extends Component {
                 loading={this.state.loading}
               />
             </div>
+            {!this.state.loading &&
+              !this.props.recommend.tags.length &&
+              !this.props.recommend.result.length && (
+                <div className={cx("nodata_rect")}>
+                  <div className={cx("nodata_image")} />
+                  <div className={cx("nodata_text")}>
+                    현재 등록된 레시피가 없습니다.
+                  </div>
+                </div>
+              )}
             <span
               className={cx("prevbspan", this.state.scroll.start && "_hide")}
               onClick={this.onPrevScrollClick}

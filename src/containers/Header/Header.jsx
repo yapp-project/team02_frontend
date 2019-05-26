@@ -269,6 +269,15 @@ class Header extends Component {
 
   onLogoClick = event => {
     const { history } = this.props;
+    this.setState({
+      bShowSearch: false,
+      bShowUser: false,
+      selectedOption: filter[0],
+      bsearchRequest: false,
+      bHideSearch: false,
+      bSearchAction: false,
+      isScroll: false
+    });
     history.push("/");
   };
 

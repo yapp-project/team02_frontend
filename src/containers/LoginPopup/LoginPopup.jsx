@@ -189,7 +189,7 @@ class LoginPopup extends Component {
    */
   login_form = () => {
     return [
-      <div className={cx("logininner")}>
+      <div className={cx("logininner")} key="logininner">
         <div className={cx("loading_rect", !this.state.loading && "_hide")}>
           <CircleSpinner
             size={100}
@@ -253,7 +253,7 @@ class LoginPopup extends Component {
    */
   register_form = () => {
     return [
-      <div className={cx("registerinner")}>
+      <div className={cx("registerinner")} key="registerinner">
         <div className={cx("loading_rect", !this.state.loading && "_hide")}>
           <CircleSpinner
             size={100}
@@ -350,7 +350,7 @@ class LoginPopup extends Component {
 
   userModifyForm = () => {
     return [
-      <div className={cx("usermodifyinner")}>
+      <div className={cx("usermodifyinner")} key="usermodifyinner">
         <div className={cx("loading_rect", !this.state.loading && "_hide")}>
           <CircleSpinner
             size={100}
