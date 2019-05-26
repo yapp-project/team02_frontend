@@ -32,6 +32,12 @@ body {
   width: 100%;
   height: 100%;
 
+  .viewreipe_rect {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
+
   //중간 text Style
   .explanation_rect {
     grid-column: 1 / span 5;

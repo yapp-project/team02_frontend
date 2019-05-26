@@ -105,8 +105,15 @@ class MainView extends Component {
   };
 
   onCocktailClick = event => {
-    // this.props.history.push(`/viewRecipe/${event.target.id}`);
     this.setState({ bShowViewRecipe: true, showViewRecipeID: event.target.id });
+  };
+
+  onDetailViewClose = () => {
+    this.setState({ bShowViewRecipe: false });
+  };
+
+  onDetailViewEdit = () => {
+    this.props.history.push(`/enrolment/${this.state.showViewRecipeID}`);
   };
 
   onLikeClick = event => {
@@ -192,7 +199,13 @@ class MainView extends Component {
     return (
       <div className={cx("mainview")}>
         {this.state.bShowViewRecipe && (
-          <ViewRecipe id={this.state.showViewRecipeID} />
+          <div className={cx("viewreipe_rect")}>
+            <ViewRecipe
+              id={this.state.showViewRecipeID}
+              closeClick={this.onDetailViewClose}
+              editClick={this.onDetailViewEdit}
+            />
+          </div>
         )}
         <div className={cx("explanation_rect")}>
           <div className={cx("left")}>

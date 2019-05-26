@@ -16,7 +16,7 @@
     height: 90%;
     left: 50%;
     top: 50%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.6);
     background-color: #080f24;
 
@@ -29,33 +29,33 @@
       -ms-transform: translateY(-50%);
       transform: translateY(-50%);
       cursor: pointer;
+
+      &.left {
+        left: -6%;
+      }
+
+      &.right {
+        right: -6%;
+      }
     }
 
-    .left {
-      left: -6%;
-    }
-
-    .right {
-      right: -6%;
-    }
-  
     .detail-content-main {
       position: relative;
       width: 100%;
       height: calc(100% - 100px);
-  
+
       .detail-content-main-view {
         float: left;
         position: relative;
         width: 70%;
         height: 100%;
       }
-  
+
       .detail-content-main-side {
         float: right;
         width: 30%;
         height: 100%;
-        background-color:#0f1835;
+        background-color: #0f1835;
 
         .detail-content-main-side-toolbar {
           width: 100%;
@@ -64,7 +64,7 @@
           text-align: center;
           background-color: rgba(8, 15, 36, 0.4);
 
-          >span {
+          > span {
             display: inline-block;
             width: 15%;
             height: 100%;
@@ -73,22 +73,19 @@
             cursor: pointer;
           }
 
-          >span#comment {
+          > span#comment {
             background-image: url("/src/static/images/comment-w.svg");
             background-color: #fff;
           }
-          
         }
-
       }
     }
 
     .detail-content-main::after {
       display: block;
-      content: '';
+      content: "";
       clear: both;
     }
-  
   }
 
   .side-button-container {
@@ -96,7 +93,7 @@
     width: 10%;
     height: 100%;
     right: 0;
-    z-index: -1;
+    // z-index: -1;
 
     .side-button-area {
       position: absolute;
@@ -104,7 +101,7 @@
       height: 90%;
       left: 50%;
       top: 50%;
-      transform: translate(-50%,-50%);
+      transform: translate(-50%, -50%);
 
       span {
         display: block;
@@ -114,7 +111,7 @@
         cursor: pointer;
       }
 
-      span:last-child{
+      span:last-child {
         position: absolute;
         bottom: 0;
         margin: 0;
