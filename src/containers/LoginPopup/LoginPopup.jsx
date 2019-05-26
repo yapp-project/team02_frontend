@@ -350,7 +350,7 @@ class LoginPopup extends Component {
 
   userModifyForm = () => {
     return [
-      <div className={cx("usermodifyinner")}>
+      <div className={cx("usermodifyinner")} key="usermodifyinner">
         <div className={cx("loading_rect", !this.state.loading && "_hide")}>
           <CircleSpinner
             size={100}
