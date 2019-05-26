@@ -34,8 +34,14 @@ class SearchResult extends Component {
     searchList: [], //[{page:number,list:[]}, ...]
     bShowDelete: false,
     bLoding: false,
-    bShowViewRecipe: false,
-    showViewRecipeID: ""
+    viewRecipeInfo: {
+      bShow: false,
+      ID: "",
+      page: 0, //현재 ID가 위치한 Page
+      index: 0, //현재 ID가 List에 위치한 index
+      prev: false,
+      next: false
+    }
   };
 
   componentDidMount() {
@@ -127,12 +133,139 @@ class SearchResult extends Component {
   };
 
   onCocktailClick = event => {
-    // this.props.history.push(`/viewRecipe/${event.target.id}`);
-    this.setState({ bShowViewRecipe: true, showViewRecipeID: event.target.id });
+    event.preventDefault();
+    event.stopPropagation();
+
+    const cocktailID = event.target.id;
+    const List = this.state.searchList;
+
+    //click한 칵테일의 위치를 List에서 찾는 Logic
+    const result = List.map(item => {
+      return (
+        item.page +
+        "," +
+        item.list.findIndex(cocktail => {
+          return cocktail.props.props._id === cocktailID;
+        })
+      );
+    })
+      .toString()
+      .split(",");
+    const page = parseInt(result[0]);
+    const index = parseInt(result[1]);
+    const next =
+      index === List[page - 1].list.length ? page !== this.state.pages : true;
+    const prev = index === 0 ? page !== 1 : true;
+
+    this.setState({
+      viewRecipeInfo: {
+        bShow: true,
+        ID: event.target.id,
+        page,
+        index,
+        next,
+        prev
+      }
+    });
+    return false;
+  };
+
+  onMoveClick = (event, bNext) => {
+    event.preventDefault();
+    event.stopPropagation();
+    const { page, index } = this.state.viewRecipeInfo;
+
+    if (bNext) {
+      //다음
+      const len = this.state.searchList[page - 1].list.length;
+      if (page === this.state.pages && index === len - 2) {
+        //마지막 직전
+        this.setState({
+          viewRecipeInfo: {
+            ...this.state.viewRecipeInfo,
+            ID: this.state.searchList[page - 1].list[index + 1].props.props._id,
+            index: index + 1,
+            next: false
+          }
+        });
+      } else {
+        if (index === len - 1) {
+          //다음 page로 넘어가야함
+          if (page === this.state.pages) {
+            this.setState({
+              viewRecipeInfo: {
+                ...this.state.viewRecipeInfo,
+                next: false
+              }
+            });
+          } else {
+            this.setState({
+              viewRecipeInfo: {
+                ...this.state.viewRecipeInfo,
+                ID: this.state.searchList[page].list[0].props.props._id,
+                page: page + 1,
+                index: 0,
+                prev: true
+              }
+            });
+          }
+        } else {
+          //index만 변경
+          this.setState({
+            viewRecipeInfo: {
+              ...this.state.viewRecipeInfo,
+              ID: this.state.searchList[page - 1].list[index + 1].props.props
+                ._id,
+              index: index + 1,
+              prev: true
+            }
+          });
+        }
+      }
+    } else {
+      //이전
+      if (page === 1 && index === 1) {
+        this.setState({
+          viewRecipeInfo: {
+            ...this.state.viewRecipeInfo,
+            ID: this.state.searchList[page - 1].list[index - 1].props.props._id,
+            index: index - 1,
+            prev: false
+          }
+        });
+      } else {
+        if (index === 0) {
+          //이전 page로 넘어가야함
+          const lastIndex = this.state.searchList[page - 2].list.length;
+          this.setState({
+            viewRecipeInfo: {
+              ...this.state.viewRecipeInfo,
+              ID: this.state.searchList[page - 2].list[lastIndex].props.props
+                ._id,
+              page: page - 1,
+              index: lastIndex,
+              next: true
+            }
+          });
+        } else {
+          //index만 변경
+          this.setState({
+            viewRecipeInfo: {
+              ...this.state.viewRecipeInfo,
+              ID: this.state.searchList[page - 1].list[index - 1].props.props
+                ._id,
+              index: index - 1,
+              next: true
+            }
+          });
+        }
+      }
+    }
+    return false;
   };
 
   onDetailViewClose = () => {
-    this.setState({ bShowViewRecipe: false });
+    this.setState({ viewRecipeInfo: { bShow: false } });
   };
 
   onDeleteCocktailClick = event => {
@@ -279,8 +412,7 @@ class SearchResult extends Component {
         const items = this.loadItems(parseFloat(groupKey) + 1, searchList);
         this.setState({
           page,
-          searchList: _searchList.concat({ page, list: items }),
-          list: _searchList.concat(items)
+          searchList: _searchList.concat({ page, list: items })
         });
         endLoading();
       }
@@ -299,8 +431,7 @@ class SearchResult extends Component {
               );
               this.setState({
                 page,
-                searchList: _searchList.concat({ page, list: items }),
-                list: _searchList.concat(items)
+                searchList: _searchList.concat({ page, list: items })
               });
               endLoading();
             } else {
@@ -321,8 +452,7 @@ class SearchResult extends Component {
               );
               this.setState({
                 page,
-                searchList: _searchList.concat({ page, list: items }),
-                list: _searchList.concat(items)
+                searchList: _searchList.concat({ page, list: items })
               });
             } else {
               // console.log("다음 페이지 호출 해야함", this.props);
@@ -366,10 +496,13 @@ class SearchResult extends Component {
         {this.state.bShowDelete && (
           <div className={cx("notifypopup_rect")}>{this.showNotifyPopup()}</div>
         )}
-        {this.state.bShowViewRecipe && (
+        {this.state.viewRecipeInfo.bShow && (
           <ViewRecipe
-            id={this.state.showViewRecipeID}
+            id={this.state.viewRecipeInfo.ID}
             closeClick={this.onDetailViewClose}
+            onMove={this.onMoveClick}
+            isPrev={this.state.viewRecipeInfo.prev}
+            isNext={this.state.viewRecipeInfo.next}
           />
         )}
         <GridLayout

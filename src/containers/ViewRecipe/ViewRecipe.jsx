@@ -87,11 +87,16 @@ class ViewRecipe extends Component {
     document.getElementById("viewRecipe").style.backgroundColor =
       "rgba(255, 255, 255, 0.4)";
     const { id } = this.props;
-
     this.props.recipeIDRequest(id);
   }
 
   componentDidUpdate(prevProps, prevState) {
+    if (prevProps.id !== this.props.id) {
+      const { id } = this.props;
+      this.props.recipeIDRequest(id);
+      return;
+    }
+
     if (
       prevProps.stuff === undefined &&
       prevProps.photos === undefined &&
@@ -288,22 +293,32 @@ class ViewRecipe extends Component {
           <div className={cx("notifypopup_rect")}>{this.showNotifyPopup()}</div>
         )}
         <div className={cx("detail-content")}>
-          <span
-            style={Object.assign({}, toolbarStyleCommon, {
-              backgroundImage: `url(${arrowLeft})`,
-              backgroundSize: "contain",
-              opacity: 1
-            })}
-            className={cx("detail-content-arrow", "left")}
-          />
-          <span
-            style={Object.assign({}, toolbarStyleCommon, {
-              backgroundImage: `url(${arrowRight})`,
-              backgroundSize: "contain",
-              opacity: 1
-            })}
-            className={cx("detail-content-arrow", "right")}
-          />
+          {this.props.isPrev && (
+            <span
+              style={Object.assign({}, toolbarStyleCommon, {
+                backgroundImage: `url(${arrowLeft})`,
+                backgroundSize: "contain",
+                opacity: 1
+              })}
+              className={cx("detail-content-arrow", "left")}
+              onClick={event => {
+                return this.props.onMove(event, false);
+              }}
+            />
+          )}
+          {this.props.isNext && (
+            <span
+              style={Object.assign({}, toolbarStyleCommon, {
+                backgroundImage: `url(${arrowRight})`,
+                backgroundSize: "contain",
+                opacity: 1
+              })}
+              className={cx("detail-content-arrow", "right")}
+              onClick={event => {
+                return this.props.onMove(event, true);
+              }}
+            />
+          )}
 
           <RecipeHeader
             cocktail={this.state.recipe_info.cocktail}
