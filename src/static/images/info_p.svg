@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20.3 20.3">
+    <defs>
+        <style>
+            .cls-1{fill:#ff365d}.cls-2{fill:#0f1835}
+        </style>
+    </defs>
+    <g id="정보_아이콘" data-name="정보 아이콘">
+        <ellipse id="타원_62" cx="10.15" cy="10.15" class="cls-1" data-name="타원 62" rx="10.15" ry="10.15"/>
+        <g id="그룹_83" data-name="그룹 83" transform="translate(8.766 2.768)">
+            <rect id="사각형_344" width="2.544" height="11.266" class="cls-2" data-name="사각형 344" rx="1.272" transform="translate(0 3.408)"/>
+            <ellipse id="타원_63" cx="1.237" cy="1.237" class="cls-2" data-name="타원 63" rx="1.237" ry="1.237" transform="translate(.069)"/>
+        </g>
+    </g>
+</svg>

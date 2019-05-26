@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 74 74">
+    <defs>
+        <style>
+            .cls-1,.cls-3{fill:none}.cls-1{stroke:#080f24}.cls-2{stroke:none}
+        </style>
+    </defs>
+    <g id="하트_아이콘_Side" data-name="하트 아이콘_Side" transform="translate(-1787 -934)">
+        <g id="타원_29" class="cls-1" data-name="타원 29" transform="translate(1787 934)">
+            <circle cx="37" cy="37" r="37" class="cls-2"/>
+            <circle cx="37" cy="37" r="36.5" class="cls-3"/>
+        </g>
+        <path id="패스_9" d="M30.8 0A11.1 11.1 0 0 0 21 6.3a11.034 11.034 0 0 0-21 4.9 10.3 10.3 0 0 0 2.333 6.767L21 37.333l18.667-19.366A10.3 10.3 0 0 0 42 11.2 11.057 11.057 0 0 0 30.8 0z" class="cls-1" data-name="패스 9" transform="translate(1803 955.697)"/>
+    </g>
+</svg>

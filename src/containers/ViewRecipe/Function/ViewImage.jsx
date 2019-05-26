@@ -4,9 +4,16 @@ import styles from "./ViewRecipe.scss";
 
 const cx = classNames.bind(styles);
 
-const RecipeImage = () => {
+const RecipeImage = (props) => {
+  const style = {
+    backgroundImage: `url(${props.image})`,
+    backgroundSize: 'contain',
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center'
+  }
+
   return (
-    <span className={cx("detail-content-main-view-image")}></span>
+    <span style={style} id="viewImage" className={cx("detail-content-main-view-image")}></span>
   );
 };
 

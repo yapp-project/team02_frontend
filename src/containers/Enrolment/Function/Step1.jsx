@@ -48,11 +48,31 @@ const EnrolmentStep1 = (props) => {
             <span>도수</span>
 
             <ul className={cx("alcohol")}>
-                <li className={cx("alcohol-item1", props.info.alcohol === 0 ? "select" : "")} onClick={props.onChangeAlcohol}></li>
-                <li className={cx("alcohol-item2", props.info.alcohol === 1 ? "select" : "")} onClick={props.onChangeAlcohol}></li>
-                <li className={cx("alcohol-item3", props.info.alcohol === 2 ? "select" : "")} onClick={props.onChangeAlcohol}></li>
-                <li className={cx("alcohol-item4", props.info.alcohol === 3 ? "select" : "")} onClick={props.onChangeAlcohol}></li>
-                <li className={cx("alcohol-item5", props.info.alcohol === 4 ? "select" : "")} onClick={props.onChangeAlcohol}></li>
+                <li className={cx("alcohol-item1", props.info.alcohol === 0 ? "select" : "")} onClick={props.onChangeAlcohol}>
+                    <span>0˚ ~ 5˚</span>
+                    <span>술이야?</span>
+                    <span>음료수야?</span>
+                </li>
+                <li className={cx("alcohol-item2", props.info.alcohol === 1 ? "select" : "")} onClick={props.onChangeAlcohol}>
+                    <span>5˚ ~ 15˚</span>
+                    <span>기분좋게</span>
+                    <span>알딸딸~</span>
+                </li>
+                <li className={cx("alcohol-item3", props.info.alcohol === 2 ? "select" : "")} onClick={props.onChangeAlcohol}>
+                    <span>15˚ ~ 25˚</span>
+                    <span>마셔라</span>
+                    <span>쭉쭉쭉~</span>
+                </li>
+                <li className={cx("alcohol-item4", props.info.alcohol === 3 ? "select" : "")} onClick={props.onChangeAlcohol}>
+                    <span>25˚ ~ 40˚</span>
+                    <span>너 죽고</span>
+                    <span>나 죽자!</span>
+                </li>
+                <li className={cx("alcohol-item5", props.info.alcohol === 4 ? "select" : "")} onClick={props.onChangeAlcohol}>
+                    <span>40˚ ~</span>
+                    <span>진정한</span>
+                    <span>술고래!</span>
+                </li>
             </ul>
         </div>
 

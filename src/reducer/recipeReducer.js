@@ -19,9 +19,7 @@ const reducer = (state = initialState, action) => {
       const { result } = action.payload;
 
       const stuffs = result[0].ingredient;
-      // const photos = result[0].
-      const photos = ["테스트 1", "테스트 2", "테스트 3", "테스트 4"];
-      // const comments = result[0].
+      const photos = result[0].image;
       const comments = [
         {nick: "닉네임 A", comments: "댓글내용 1", time: "00:00"},
         {nick: "닉네임 B", comments: "댓글내용 2", time: "11:11"},
@@ -35,7 +33,9 @@ const reducer = (state = initialState, action) => {
         like: result[0].scrap, 
         comment: 0,
         view: result[0].view,
-        tags: result[0].tag
+        tags: result[0].tag,
+        alcohol: result[0].numIngredient,
+        glass: result[0].glass
       };
 
       return {
@@ -44,7 +44,7 @@ const reducer = (state = initialState, action) => {
         stuffs: stuffs,
         photos: photos,
         comments: comments,
-        recipe_info: recipe_info
+        recipe_info: recipe_info,
       };
     }
     case actions.TAGBYLATEST.SUCCESS: {
