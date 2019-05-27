@@ -119,7 +119,7 @@ class ViewRecipe extends Component {
               tags={this.state.recipe_info.tags}
             />
           ),
-          userID: auth.userid
+          userID: auth ? auth.userid : ""
         },
         () => {
           document.getElementById(
@@ -133,6 +133,44 @@ class ViewRecipe extends Component {
           ).innerHTML = this.props.recipe_info.tags.join(" ");
         }
       );
+    } else {
+      //값이 있는 경우
+      if (
+        prevProps.id === this.props.id &&
+        !this.state.stuffs.length &&
+        !this.state.recipe_info.nick
+      ) {
+        const auth = JSON.parse(localStorage.getItem("myData")); //localstorage에서 가져옴
+        this.setState(
+          {
+            recipe_info: this.props.recipe_info,
+            stuffs: this.props.stuffs,
+            photos: this.props.photos,
+            comments: this.props.comments,
+            main: <RecipeCup glass={this.props.recipe_info.glass} />,
+            side: (
+              <RecipeInfo
+                alcohol={this.state.recipe_info.alcohol}
+                recipe={this.state.recipe_info.cocktail}
+                descripe={this.state.recipe_info.description}
+                tags={this.state.recipe_info.tags}
+              />
+            ),
+            userID: auth ? auth.userid : ""
+          },
+          () => {
+            document.getElementById(
+              "cocktail"
+            ).innerHTML = this.props.recipe_info.cocktail;
+            document.getElementById(
+              "description"
+            ).innerHTML = this.props.recipe_info.description;
+            document.getElementById(
+              "tag"
+            ).innerHTML = this.props.recipe_info.tags.join(" ");
+          }
+        );
+      }
     }
   }
 

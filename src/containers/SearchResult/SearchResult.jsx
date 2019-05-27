@@ -154,7 +154,9 @@ class SearchResult extends Component {
     const page = parseInt(result[0]);
     const index = parseInt(result[1]);
     const next =
-      index === List[page - 1].list.length ? page !== this.state.pages : true;
+      index === List[page - 1].list.length - 1
+        ? page !== this.state.pages
+        : true;
     const prev = index === 0 ? page !== 1 : true;
 
     this.setState({
@@ -185,7 +187,8 @@ class SearchResult extends Component {
             ...this.state.viewRecipeInfo,
             ID: this.state.searchList[page - 1].list[index + 1].props.props._id,
             index: index + 1,
-            next: false
+            next: false,
+            prev: true
           }
         });
       } else {
@@ -230,7 +233,8 @@ class SearchResult extends Component {
             ...this.state.viewRecipeInfo,
             ID: this.state.searchList[page - 1].list[index - 1].props.props._id,
             index: index - 1,
-            prev: false
+            prev: false,
+            next: true
           }
         });
       } else {
