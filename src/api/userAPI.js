@@ -32,7 +32,7 @@ export async function checkID(userid) {
 }
 
 export async function getMyScrap(userid) {
-  const url = ""; //서버 작업후 추가
+  const url = "user/get/mypage/scraps";
   const body = {
     userid
   };
@@ -41,7 +41,7 @@ export async function getMyScrap(userid) {
 }
 
 export async function getMyRecipes(userid) {
-  const url = ""; //서버 작업후 추가
+  const url = "user/get/mypage/myrecipe";
   const body = {
     userid
   };

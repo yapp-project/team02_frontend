@@ -28,8 +28,8 @@ class MyMenu extends Component {
     const auth = JSON.parse(localStorage.getItem("myData")); //localstorage에서 가져옴
     if (auth) {
       this.setState({ userid: auth.userid });
-      this.props.dataRequest(0, auth.userid);
-      this.props.dataRequest(1, auth.userid);
+      this.props.dataRequest({ type: 0, data: { userID: "jihong" } });
+      // this.props.dataRequest({ type: 1, data: { userID: "maga40" } });
     }
   }
 
@@ -38,7 +38,9 @@ class MyMenu extends Component {
     const _prevMyMenu = prevProps.mymenu;
     if (this.state.tabIndex === 0) {
       if (_prevMyMenu.scrap !== _myMenu.scrap) {
-        this.setState({ scrapArray: _myMenu.scrap });
+        this.setState({
+          scrapArray: _myMenu.scrap
+        });
       } else if (_myMenu.scrap.length && !this.state.scrapArray.length) {
         this.setState({ scrapArray: _myMenu.scrap });
       }
@@ -46,6 +48,14 @@ class MyMenu extends Component {
       //최초 통신 시 등록한 레시피 갯수 반영
       if (_prevMyMenu.recipes !== _myMenu.recipes) {
         this.setState({ recipesArray: _myMenu.recipes });
+      }
+
+      if (
+        this.state.scrapArray.length &&
+        !_prevMyMenu.recipes.length &&
+        !_myMenu.recipes.length
+      ) {
+        this.props.dataRequest({ type: 1, data: { userID: "maga40" } });
       }
     } else if (this.state.tabIndex === 1) {
       if (_prevMyMenu.recipes !== _myMenu.recipes) {
