@@ -11,13 +11,19 @@ import ViewRecipe from "../ViewRecipe/ViewRecipe";
 
 import { CircleSpinner } from "react-spinners-kit";
 
+import { dataRequest } from "../../action/userAction.js";
+import { debounce } from "lodash";
+
 const cx = classNames.bind(styles);
 
 const mapStateToProps = state => {
-  return { recommend: state.searchReducer.recommend };
+  return {
+    recommend: state.searchReducer.recommend,
+    scrap: state.userReducer.scrap
+  };
 };
 
-const mapDispatchToProps = { recommendRequest, searchRequest };
+const mapDispatchToProps = { recommendRequest, searchRequest, dataRequest };
 
 class MainView extends Component {
   state = {
@@ -35,7 +41,8 @@ class MainView extends Component {
       index: 0, //현재 ID가 List에 위치한 index
       prev: false,
       next: false
-    }
+    },
+    bScrapAction: false
   };
 
   /**
@@ -94,6 +101,25 @@ class MainView extends Component {
     ) {
       this.setState({ loading: false });
     }
+
+    //스크랩 한 경우
+    if (this.props.scrap.result) {
+      if (
+        prevProps.scrap.status !== this.props.scrap.status ||
+        prevState.viewRecipeInfo.ID !== this.state.viewRecipeInfo.ID
+      ) {
+        let num = 0; //0-save 1-delete
+        if (this.props.scrap.status === "delete") {
+          num = -1;
+        } else {
+          num = 1;
+        }
+        const index = this.state.viewRecipeInfo.index;
+        this.props.recommend.result[index].scrap += num;
+        this.setState({ bScrapAction: false });
+        return;
+      }
+    }
   }
 
   /**
@@ -114,14 +140,9 @@ class MainView extends Component {
     event.stopPropagation();
 
     const cocktailID = event.target.id;
-    const List = this.props.recommend.result;
 
     //click한 칵테일의 위치를 List에서 찾는 Logic
-    const index = parseInt(
-      List.findIndex(item => {
-        return item._id === cocktailID;
-      }).toString()
-    );
+    const index = this.findCocktailIndex(cocktailID);
     const next = index !== this.props.recommend.result.length - 1;
     const prev = index !== 0;
     this.setState({
@@ -136,6 +157,16 @@ class MainView extends Component {
     return false;
   };
 
+  findCocktailIndex = cocktailID => {
+    const List = this.props.recommend.result;
+
+    return parseInt(
+      List.findIndex(item => {
+        return item._id === cocktailID;
+      }).toString()
+    );
+  };
+
   onDetailViewClose = () => {
     this.setState({
       viewRecipeInfo: { ...this.state.viewRecipeInfo, bShow: false }
@@ -145,7 +176,27 @@ class MainView extends Component {
   onLikeClick = event => {
     event.preventDefault();
     event.stopPropagation();
+    //서버 통신
+    const type = 3;
+    const cocktailID = event.target.id;
+    const auth = JSON.parse(localStorage.getItem("myData")); //localstorage에서 가져옴
+    const userID = auth.userid;
+
+    const index = this.findCocktailIndex(cocktailID);
+
+    this.debounceRequestScrap({ index, cocktailID, type, userID });
   };
+
+  debounceRequestScrap = debounce(({ index, cocktailID, type, userID }) => {
+    this.setState({
+      viewRecipeInfo: {
+        ...this.state.viewRecipeInfo,
+        index: index,
+        ID: cocktailID
+      }
+    });
+    this.props.dataRequest({ type, data: { cocktailID, userID } });
+  }, 300);
 
   recommend_cocktail = ({ data }) => {
     return data.map(item => {

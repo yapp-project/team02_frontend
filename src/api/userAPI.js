@@ -79,11 +79,11 @@ export async function deleteCocktail(id) {
   return res.data;
 }
 
-export async function setScrap(userid, cocktaiID) {
-  const url = "scrap/";
+export async function setScrap(userid, recipeid) {
+  const url = "user/update/scrap";
   const body = {
     userid,
-    cocktaiID
+    recipeid
   };
   const res = await webRequestUtil.post({ url, body });
   return res.data;

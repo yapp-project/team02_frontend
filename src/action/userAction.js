@@ -104,12 +104,12 @@ export function checkIDFailed(result) {
   };
 }
 
-export function dataRequest(type, id) {
+export function dataRequest({ type, data }) {
   return {
     type: actions.COMMUNICATION.REQUEST,
     payload: {
       type,
-      id
+      data
     }
   };
 }

@@ -371,7 +371,7 @@ function* requseUserDelete(action) {
 //MyMenu에서 스크랩, 등록한 레시피 정보, 레시피 삭제 하는 API
 //type [0: 스크랩 정보, 1: 등록한 레시피, 2: 레시피 삭제, 3: 스크랩 기능]
 function* requestData(action) {
-  const { type, id, userID } = action.payload;
+  const { type, data } = action.payload;
 
   try {
     var result = [];
@@ -385,8 +385,7 @@ function* requestData(action) {
       // result = yield call(deleteCocktail, id);
       result = true;
     } else if (type === 3) {
-      // result = yield call(setScrap, id, userID);
-      result = true;
+      result = yield call(setScrap, data.userID, data.cocktailID);
     }
 
     yield put(dataEnd(type, result));
