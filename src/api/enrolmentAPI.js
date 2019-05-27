@@ -5,7 +5,6 @@ export async function enrolmentRecipe({ data }) {
   const body = {
     data
   };
-  console.log(body);
   const res = await webRequestUtil.post({ url, body });
   return res.data;
 }

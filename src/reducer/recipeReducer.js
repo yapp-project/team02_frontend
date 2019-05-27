@@ -20,12 +20,13 @@ const reducer = (state = initialState, action) => {
 
       const stuffs = result[0].ingredient;
       const photos = result[0].image;
-      const comments = [
-        {nick: "닉네임 A", comments: "댓글내용 1", time: "00:00"},
-        {nick: "닉네임 B", comments: "댓글내용 2", time: "11:11"},
-        {nick: "닉네임 C", comments: "댓글내용 3", time: "22:22"},
-        {nick: "닉네임 D", comments: "댓글내용 4", time: "12:44"}
-      ];
+      // const comments = [
+      //   {nick: "닉네임 A", comments: "댓글내용 1", time: "00:00"},
+      //   {nick: "닉네임 B", comments: "댓글내용 2", time: "11:11"},
+      //   {nick: "닉네임 C", comments: "댓글내용 3", time: "22:22"},
+      //   {nick: "닉네임 D", comments: "댓글내용 4", time: "12:44"}
+      // ];
+      const comments = result[0].comment;
       const recipe_info = {
         cocktail: result[0].name,
         description: result[0].description,
@@ -43,7 +44,7 @@ const reducer = (state = initialState, action) => {
         state: "success",
         stuffs: stuffs,
         photos: photos,
-        comments: comments,
+        comment: comments,
         recipe_info: recipe_info,
       };
     }
@@ -70,6 +71,19 @@ const reducer = (state = initialState, action) => {
       return {
         bIDCheckResult: result
       };
+    }
+
+    case actions.ADDCOMMENT.SUCCESS: {
+      const { result } = action.payload;
+      console.log(result);
+
+      if (result[0].ok === 1) {
+        return {
+          ...state,
+          state: "success",
+        };
+      } else return {...state};
+      
     }
     default:
       return state;

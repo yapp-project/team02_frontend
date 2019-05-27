@@ -50,7 +50,7 @@ const mapStateToProps = state => {
     recipe_info: state.recipeReducer.recipe_info,
     stuffs: state.recipeReducer.stuffs,
     photos: state.recipeReducer.photos,
-    comments: state.recipeReducer.comments
+    comment: state.recipeReducer.comment
   };
 };
 
@@ -71,7 +71,7 @@ class ViewRecipe extends Component {
     },
     stuffs: [],
     photos: [],
-    comments: [],
+    comment: [],
     main: 
       <RecipeCup
         glass="0"
@@ -89,16 +89,16 @@ class ViewRecipe extends Component {
     document.getElementById('viewRecipe').parentElement.style.backgroundColor = "#0f1835";
     document.getElementById('viewRecipe').style.backgroundColor = "rgba(255, 255, 255, 0.4)";
     
-    this.props.recipeIDRequest("5cdd7b4e11fcfd662cdd0888");
+    this.props.recipeIDRequest("5cea7d63cfbe760bc8612140");
   }
 
   componentDidUpdate(prevProps, prevState) {    
-    if (prevProps.stuff === undefined && prevProps.photos === undefined && prevProps.comments === undefined && prevProps.recipe_info === undefined) {
+    if (prevProps.stuff === undefined && prevProps.photos === undefined && prevProps.comment === undefined && prevProps.recipe_info === undefined) {
       this.setState({
         recipe_info: this.props.recipe_info,
         stuffs: this.props.stuffs,
         photos: this.props.photos,
-        comments: this.props.comments,
+        comment: this.props.comment,
         main: 
         <RecipeCup
           glass={this.props.recipe_info.glass}
@@ -192,7 +192,7 @@ class ViewRecipe extends Component {
         />, 
         side: 
         <RecipeComment
-          comments={this.state.comments}
+          comment={this.state.comment}
           onAddComment={this.onAddComment}
         />
       } );
@@ -208,14 +208,14 @@ class ViewRecipe extends Component {
     if (comment !== "" && comment !== undefined && comment !== null) {
       let now = new Date();
       let time = now.getHours > 9 ? `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}` : `0${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
-      let comments = this.state.comments;
-      comments.push({nick: "사용자", comments: comment, time: time});
+      let comment = this.state.comment;
+      comment.push({nick: "사용자", comment: comment, time: time});
 
-      this.setState({comments: comments});
+      this.setState({comment: comment});
       this.setState( {
         side: 
         <RecipeComment
-          comments={comments}
+          comment={comment}
           onAddComment={this.onAddComment}
         />
       } );

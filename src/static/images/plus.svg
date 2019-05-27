@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25">
+    <defs>
+        <style>
+            .cls-1{fill:#fff}
+        </style>
+    </defs>
+    <path id="플러스_아이콘" d="M25 10.938H14.063V0h-3.125v10.938H0v3.125h10.938V25h3.125V14.063H25z" class="cls-1" data-name="플러스 아이콘"/>
+</svg>

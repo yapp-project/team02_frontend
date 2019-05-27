@@ -353,6 +353,10 @@
                 margin: auto;
                 border-radius: 50px;
                 background-color: #ff365d;
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: 30px;
+                background-image: url(../../../static/images/plus.svg);
             }
     
             .stuff-container {
@@ -451,9 +455,10 @@
 
                         .stuff-delete {
                             display: block;
+                            position: absolute;
                             width: 5%;
-                            height: 35px;
-                            float:left;
+                            height: 100%;
+                            right: 0;
                             background-image: url(../../../static/images/trash.svg);
                             background-size: contain;
                             background-repeat: no-repeat;

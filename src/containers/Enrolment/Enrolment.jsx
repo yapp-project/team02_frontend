@@ -353,17 +353,6 @@ class Enrolment extends Component {
 
     colorTarget = event.target.id;
     colorContainer.classList.remove(this.colorClose);
-    // console.log(document.querySelector("#color-picker").classList.contains(this.colorClose));
-
-
-    // if (event.target.getAttribute("stuff")) {
-    //   let colorNumber = event.target.getAttribute("stuff");
-    //   this.setState({color_idx: colorNumber});
-
-    //   document.querySelector(`#color-picker_${colorNumber}`).classList.toggle(this.doneClose);
-    // } else {
-
-    // }
   };
 
   onSelectColorClose = () => {
@@ -386,48 +375,33 @@ class Enrolment extends Component {
   }
 
   onSaveRecipe = () => {
-    let cup = this.state.enrolmentData.info.name;
+    let cup = this.state.enrolmentData.info.cup;
     if (cup === '하이볼') cup = 0;
     else if (cup === '리큐르') cup = 1;
     else if (cup === '허리케인') cup = 2;
     else if (cup === '마가렛') cup = 3;
     else cup = 4;
 
-    // let tag = this.state.enrolmentData.info.tags;
+    let tags = this.state.enrolmentData.info.tags.split(' ');
 
-    console.log(this.state);
-    
-    //태그 배열 형태로 나누는거 처리해야 됨
-    //재료 포멧은 정해야 될듯
-    // let data = {
-    //   name: this.state.enrolmentData.info.name,
-    //   glass: cup,
-    //   percent: 50,
-    //   description: this.state.enrolmentData.info.describe,
-    //   tag: [],
-    //   ingredient: this.state.stuff,
-    //   owner: 'fonnie'
-    // }
+    const convertTags = tags.map(val => {
+      if (val[0] !== '#') return `#${val}`;
+      return val;
+    });
 
     let data = {
-      "name": "martini",
-      "glass" : 4,
-      "percent" : 50,
-      "description" : "This is so delicious",
-      "tag" : ["sweet", "romantic", "johnmat"],
-      "ingredient" : [{
-        "name" : "water",
-        "color" : "blue",
-        "ml" : 20
-        }, {
-        "name" : "hongcho",
-        "color" : "red",
-        "ml" : 10
-        }],
-      "owner" : "maga40"
+      "name": this.state.enrolmentData.info.name,
+      "glass" : cup,
+      "percent" : this.state.enrolmentData.info.alcohol,
+      "description" : this.state.enrolmentData.info.describe,
+      "tag" : convertTags,
+      "ingredient" : this.state.enrolmentData.stuff,
+      "owner" : "fonnie"
     }
 
-    // data.tag.push(tag);
+    // TODO
+    // owner 를 사용자 받아와서 넣는거 해야함
+    // 데이터 validation 체크 해야 함
 
     this.props.enrolmentRequest(data);
   };
