@@ -7,18 +7,19 @@ import { SearchResultItem, Button } from "../../components";
 import { GridLayout } from "@egjs/react-infinitegrid";
 import { withRouter } from "react-router-dom";
 
-import { dataRequest } from "../../action/userAction.js";
+import { setScrapRequest } from "../../action/userAction.js";
 import { CircleSpinner } from "react-spinners-kit";
+import { debounce } from "lodash";
 
 import ViewRecipe from "../ViewRecipe/ViewRecipe";
 
 const cx = classNames.bind(styles);
 
 const mapStateToProps = state => {
-  return state;
+  return { scrap: state.userReducer.scrap };
 };
 
-const mapDispatchToProps = { dataRequest };
+const mapDispatchToProps = { setScrapRequest };
 
 /**
  * @author AnGwangHo
@@ -126,6 +127,52 @@ class SearchResult extends Component {
         }
       }
     }
+
+    //스크랩 한 경우
+    if (this.props.scrap.result) {
+      if (
+        prevProps.scrap.status !== this.props.scrap.status ||
+        prevState.viewRecipeInfo.ID !== this.state.viewRecipeInfo.ID
+      ) {
+        let num = 0; //0-save 1-delete
+        if (this.props.scrap.status === "delete") {
+          num = -1;
+        } else {
+          num = 1;
+        }
+
+        const { index, page, ID } = this.state.viewRecipeInfo;
+        const { searchList } = this.state;
+
+        // this.props.recommend.result[index].scrap += num;
+        //state.list에 반영
+        this.setState({
+          searchList: searchList.map(item =>
+            item.page === page
+              ? {
+                  ...item,
+                  list: item.list.map((cocktail, i) =>
+                    i === index
+                      ? {
+                          ...cocktail,
+                          props: {
+                            ...cocktail.props,
+                            props: {
+                              ...cocktail.props.props,
+                              scrap: cocktail.props.props.scrap + num
+                            }
+                          }
+                        }
+                      : cocktail
+                  )
+                }
+              : item
+          )
+        });
+        this.setState({ bScrapAction: false });
+        return;
+      }
+    }
   }
 
   onPopupModifyClick = event => {
@@ -140,17 +187,7 @@ class SearchResult extends Component {
     const List = this.state.searchList;
 
     //click한 칵테일의 위치를 List에서 찾는 Logic
-    const result = List.map(item => {
-      return (
-        item.page +
-        "," +
-        item.list.findIndex(cocktail => {
-          return cocktail.props.props._id === cocktailID;
-        })
-      );
-    })
-      .toString()
-      .split(",");
+    const result = this.findCocktailIndex(cocktailID);
     const page = parseInt(result[0]);
     const index = parseInt(result[1]);
     const next =
@@ -170,6 +207,24 @@ class SearchResult extends Component {
       }
     });
     return false;
+  };
+
+  /**
+   * @returns [] - 0: page, 1: pageArray.index
+   */
+  findCocktailIndex = cocktailID => {
+    const List = this.state.searchList;
+    return List.map(item => {
+      return (
+        item.page +
+        "," +
+        item.list.findIndex(cocktail => {
+          return cocktail.props.props._id === cocktailID;
+        })
+      );
+    })
+      .toString()
+      .split(",");
   };
 
   onMoveClick = (event, bNext) => {
@@ -339,36 +394,41 @@ class SearchResult extends Component {
   onLikeClick = event => {
     event.preventDefault();
     event.stopPropagation();
-    const id = event.target.id;
-    const { searchList, page } = this.state;
 
     //서버 통신
+    const type = 3;
+    const cocktailID = event.target.id;
+    const auth = JSON.parse(localStorage.getItem("myData")); //localstorage에서 가져옴
+    const userID = auth.userid;
+    console.log("Like 클릭 ! : ", cocktailID, userID);
 
-    //state.list에 반영
-    this.setState({
-      searchList: searchList.map(item =>
-        item.page === page
-          ? {
-              ...item,
-              list: item.list.map(cocktail =>
-                cocktail.props.props._id === id
-                  ? {
-                      ...cocktail,
-                      props: {
-                        ...cocktail.props,
-                        props: {
-                          ...cocktail.props.props,
-                          scrap: cocktail.props.props.scrap + 1
-                        }
-                      }
-                    }
-                  : cocktail
-              )
-            }
-          : item
-      )
+    const result = this.findCocktailIndex(cocktailID);
+    const page = parseInt(result[0]);
+    const index = parseInt(result[1]);
+
+    this.debounceRequestScrap({
+      page,
+      index,
+      cocktailID,
+      type,
+      userID
     });
+    return false;
   };
+
+  debounceRequestScrap = debounce(
+    ({ page, index, cocktailID, type, userID }) => {
+      this.setState({
+        viewRecipeInfo: {
+          ID: cocktailID,
+          page,
+          index
+        }
+      });
+      this.props.setScrapRequest({ type, data: { cocktailID, userID } });
+    },
+    300
+  );
 
   loadItems(groupKey, list) {
     const items = [];

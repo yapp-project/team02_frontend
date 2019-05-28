@@ -15,7 +15,7 @@ const initialState = {
   },
   bModifyUser: false,
   bUserDelete: false,
-  bScrap: false
+  scrap: { status: "", result: false }
 };
 
 const reducer = (state = initialState, action) => {
@@ -95,7 +95,7 @@ const reducer = (state = initialState, action) => {
       } else if (type === 3) {
         return {
           ...state,
-          bScrap: result
+          scrap: { result: result.result, status: result.status }
         };
       }
       return {
@@ -131,7 +131,7 @@ const reducer = (state = initialState, action) => {
       } else if (type === 3) {
         return {
           ...state,
-          bScrap: result
+          scrap: { result: result.result, status: result.status }
         };
       }
       return {

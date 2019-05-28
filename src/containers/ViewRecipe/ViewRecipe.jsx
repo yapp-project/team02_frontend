@@ -55,7 +55,8 @@ const mapStateToProps = state => {
     recipe_info: state.recipeReducer.recipe_info,
     stuffs: state.recipeReducer.stuffs,
     photos: state.recipeReducer.photos,
-    comment: state.recipeReducer.comment
+    comment: state.recipeReducer.comment,
+    scrap: state.userReducer.scrap
   };
 };
 
@@ -172,6 +173,17 @@ class ViewRecipe extends Component {
             ).innerHTML = this.props.recipe_info.tags.join(" ");
           }
         );
+      } else {
+        const nowScrap = this.props.scrap;
+        if (nowScrap.result && prevProps.scrap.status !== nowScrap.status) {
+          let num = 1;
+          if (nowScrap.status === "delete") {
+            num = -1;
+          }
+          this.setState({
+            recipe_info: { like: this.state.recipe_info.like + num }
+          });
+        }
       }
     }
   }
@@ -304,7 +316,10 @@ class ViewRecipe extends Component {
 
   onLikeClick = event => {
     const type = 3;
-    this.props.dataRequest(type, this.props.id, this.state.userID);
+    this.props.dataRequest({
+      type,
+      data: { cocktailID: this.props.id, userID: this.state.userID }
+    });
   };
 
   showNotifyPopup = () => {
