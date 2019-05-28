@@ -22,8 +22,8 @@ class MyMenu extends Component {
     tabIndex: 0, // 0-스크랩, 1-등록한 레시피,
     scrapArray: [],
     recipesArray: [],
-    page: 0,
-    pages: 0
+    page: 1,
+    pages: 1
   };
 
   componentDidMount() {
@@ -111,6 +111,7 @@ class MyMenu extends Component {
   render() {
     const { userid, tabIndex, scrapArray, recipesArray } = this.state;
     const tabArray = tabIndex ? recipesArray : scrapArray;
+
     return (
       <div className={cx("mymenu_container")}>
         <div className={cx("top_rect")}>

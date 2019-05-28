@@ -30,7 +30,7 @@ import heartIcon from "../../static/images/heart-button.svg";
 import arrowLeft from "../../static/images/arrow-left.svg";
 import arrowRight from "../../static/images/arrow-right.svg";
 
-import { dataRequest } from "../../action/userAction.js";
+import { setScrapRequest } from "../../action/userAction.js";
 import { withRouter } from "react-router-dom";
 
 const toolbarStyleCommon = {
@@ -58,7 +58,7 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = { recipeIDRequest, dataRequest };
+const mapDispatchToProps = { recipeIDRequest, setScrapRequest };
 
 class ViewRecipe extends Component {
   state = {
@@ -97,7 +97,6 @@ class ViewRecipe extends Component {
       this.props.recipeIDRequest(id);
       return;
     }
-
     if (
       prevProps.stuff === undefined &&
       prevProps.photos === undefined &&
@@ -172,6 +171,39 @@ class ViewRecipe extends Component {
           }
         );
       } else {
+        if (prevProps.recipe_info !== this.props.recipe_info) {
+          const auth = JSON.parse(localStorage.getItem("myData")); //localstorage에서 가져옴
+          this.setState(
+            {
+              recipe_info: this.props.recipe_info,
+              stuffs: this.props.stuffs,
+              photos: this.props.photos,
+              comments: this.props.comments,
+              main: <RecipeCup glass={this.props.recipe_info.glass} />,
+              side: (
+                <RecipeInfo
+                  alcohol={this.state.recipe_info.alcohol}
+                  recipe={this.state.recipe_info.cocktail}
+                  descripe={this.state.recipe_info.description}
+                  tags={this.state.recipe_info.tags}
+                />
+              ),
+              userID: auth ? auth.userid : ""
+            },
+            () => {
+              document.getElementById(
+                "cocktail"
+              ).innerHTML = this.props.recipe_info.cocktail;
+              document.getElementById(
+                "description"
+              ).innerHTML = this.props.recipe_info.description;
+              document.getElementById(
+                "tag"
+              ).innerHTML = this.props.recipe_info.tags.join(" ");
+            }
+          );
+          return;
+        }
         const nowScrap = this.props.scrap;
         if (nowScrap.result && prevProps.scrap.status !== nowScrap.status) {
           let num = 1;
@@ -179,7 +211,10 @@ class ViewRecipe extends Component {
             num = -1;
           }
           this.setState({
-            recipe_info: { like: this.state.recipe_info.like + num }
+            recipe_info: {
+              ...this.state.recipe_info,
+              like: this.state.recipe_info.like + num
+            }
           });
         }
       }
@@ -309,7 +344,7 @@ class ViewRecipe extends Component {
 
   onLikeClick = event => {
     const type = 3;
-    this.props.dataRequest({
+    this.props.setScrapRequest({
       type,
       data: { cocktailID: this.props.id, userID: this.state.userID }
     });
