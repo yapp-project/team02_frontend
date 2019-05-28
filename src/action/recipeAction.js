@@ -141,18 +141,18 @@ export function recipeStuffViewSuccess(result) {
   };
 }
 
-export function addCommentRequest(ingredient) {
+export function addCommentRequest(comment) {
   return {
-    type: actions.STUFFBYVIEW.REQUEST,
+    type: actions.ADDCOMMENT.REQUEST,
     payload: {
-      ingredient
+      comment
     }
   };
 }
 
 export function addCommentSuccess(result) {
   return {
-    type: actions.STUFFBYVIEW.SUCCESS,
+    type: actions.ADDCOMMENT.SUCCESS,
     payload: {
       result
     }

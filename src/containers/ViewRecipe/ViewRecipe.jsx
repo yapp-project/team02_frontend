@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import classNames from "classnames/bind";
 import styles from "./ViewRecipe.scss";
 import { connect } from "react-redux";
-import { Popup } from "../../components";
+import { Popup, Button } from "../../components";
 import RecipeHeader from "./Function/Header";
 import RecipeCup from "./Function/ViewCup";
 import RecipeImage from "./Function/ViewImage";
@@ -30,18 +30,23 @@ import heartIcon from "../../static/images/heart-button.svg";
 import arrowLeft from "../../static/images/arrow-left.svg";
 import arrowRight from "../../static/images/arrow-right.svg";
 
+import { dataRequest } from "../../action/userAction.js";
+import { withRouter } from "react-router-dom";
+
+import { addCommentRequest } from "../../action/recipeAction";
+
 const toolbarStyleCommon = {
-  backgroundRepeat: 'no-repeat',
-  backgroundSize: '21px',
-  opacity: '0.4',
-  backgroundPosition: 'center'
-}
+  backgroundRepeat: "no-repeat",
+  backgroundSize: "21px",
+  opacity: "0.4",
+  backgroundPosition: "center"
+};
 
 const viewImageStyle = {
-  backgroundRepeat: 'no-repeat',
-  backgroundPosition: 'center',
-  backgroundSize: 'contain'
-}
+  backgroundRepeat: "no-repeat",
+  backgroundPosition: "center",
+  backgroundSize: "contain"
+};
 
 const cx = classNames.bind(styles);
 
@@ -54,7 +59,7 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = { recipeIDRequest };
+const mapDispatchToProps = { recipeIDRequest, dataRequest, addCommentRequest };
 
 class ViewRecipe extends Component {
   state = {
@@ -72,49 +77,102 @@ class ViewRecipe extends Component {
     stuffs: [],
     photos: [],
     comment: [],
-    main: 
-      <RecipeCup
-        glass="0"
-      />,
-    side: 
-      <RecipeInfo
-        alcohol="0"
-        recipe=""
-        descripe=""
-        tags={[]}
-      />
+    main: <RecipeCup glass="0" />,
+    side: <RecipeInfo alcohol="0" recipe="" descripe="" tags={[]} />,
+    bShowDelete: false,
+    userID: ""
   };
 
   componentDidMount() {
-    document.getElementById('viewRecipe').parentElement.style.backgroundColor = "#0f1835";
-    document.getElementById('viewRecipe').style.backgroundColor = "rgba(255, 255, 255, 0.4)";
-    
-    this.props.recipeIDRequest("5cea7d63cfbe760bc8612140");
+    document.getElementById("viewRecipe").parentElement.style.backgroundColor =
+      "#0f1835";
+    document.getElementById("viewRecipe").style.backgroundColor =
+      "rgba(255, 255, 255, 0.4)";
+    const { id } = this.props;
+    this.props.recipeIDRequest(id);
   }
 
-  componentDidUpdate(prevProps, prevState) {    
-    if (prevProps.stuff === undefined && prevProps.photos === undefined && prevProps.comment === undefined && prevProps.recipe_info === undefined) {
-      this.setState({
-        recipe_info: this.props.recipe_info,
-        stuffs: this.props.stuffs,
-        photos: this.props.photos,
-        comment: this.props.comment,
-        main: 
-        <RecipeCup
-          glass={this.props.recipe_info.glass}
-        />,
-        side: 
-        <RecipeInfo
-          alcohol={this.state.recipe_info.alcohol}
-          recipe={this.state.recipe_info.cocktail}
-          descripe={this.state.recipe_info.description}
-          tags={this.state.recipe_info.tags}
-        />
-      }, () => {
-        document.getElementById('cocktail').innerHTML = this.props.recipe_info.cocktail;
-        document.getElementById('description').innerHTML = this.props.recipe_info.description;
-        document.getElementById('tag').innerHTML = this.props.recipe_info.tags.join(' ');
-      });
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.id !== this.props.id) {
+      const { id } = this.props;
+      this.props.recipeIDRequest(id);
+      return;
+    }
+
+    if (
+      prevProps.stuff === undefined &&
+      prevProps.photos === undefined &&
+      prevProps.comment === undefined &&
+      prevProps.recipe_info === undefined
+    ) {
+      const auth = JSON.parse(localStorage.getItem("myData")); //localstorage에서 가져옴
+      this.setState(
+        {
+          recipe_info: this.props.recipe_info,
+          stuffs: this.props.stuffs,
+          photos: this.props.photos,
+          comment: this.props.comment,
+          main: <RecipeCup glass={this.props.recipe_info.glass} />,
+          side: (
+            <RecipeInfo
+              alcohol={this.state.recipe_info.alcohol}
+              recipe={this.state.recipe_info.cocktail}
+              descripe={this.state.recipe_info.description}
+              tags={this.state.recipe_info.tags}
+            />
+          ),
+          userID: auth ? auth.userid : ""
+        },
+        () => {
+          document.getElementById(
+            "cocktail"
+          ).innerHTML = this.props.recipe_info.cocktail;
+          document.getElementById(
+            "description"
+          ).innerHTML = this.props.recipe_info.description;
+          document.getElementById(
+            "tag"
+          ).innerHTML = this.props.recipe_info.tags.join(" ");
+        }
+      );
+    } else {
+      //값이 있는 경우
+      if (
+        prevProps.id === this.props.id &&
+        !this.state.stuffs.length &&
+        !this.state.recipe_info.nick
+      ) {
+        const auth = JSON.parse(localStorage.getItem("myData")); //localstorage에서 가져옴
+        this.setState(
+          {
+            recipe_info: this.props.recipe_info,
+            stuffs: this.props.stuffs,
+            photos: this.props.photos,
+            comment: this.props.comment,
+            main: <RecipeCup glass={this.props.recipe_info.glass} />,
+            side: (
+              <RecipeInfo
+                alcohol={this.state.recipe_info.alcohol}
+                recipe={this.state.recipe_info.cocktail}
+                descripe={this.state.recipe_info.description}
+                tags={this.state.recipe_info.tags}
+              />
+            ),
+            userID: auth ? auth.userid : ""
+          },
+          () => {
+            document.getElementById(
+              "cocktail"
+            ).innerHTML = this.props.recipe_info.cocktail;
+            document.getElementById(
+              "description"
+            ).innerHTML = this.props.recipe_info.description;
+            document.getElementById(
+              "tag"
+            ).innerHTML = this.props.recipe_info.tags.join(" ");
+          }
+        );
+      }
     }
   }
 
@@ -123,7 +181,7 @@ class ViewRecipe extends Component {
     let stuff = document.querySelector("#stuff");
     let photo = document.querySelector("#photo");
     let comment = document.querySelector("#comment");
-    
+
     info.style.backgroundImage = `url(${infoImage})`;
     info.style.opacity = 0.4;
 
@@ -137,111 +195,175 @@ class ViewRecipe extends Component {
     comment.style.opacity = 0.4;
 
     if (info === event.target || info === event.target.parentNode) {
-      this.setState( { 
-        main: 
-        <RecipeCup
-          glass={this.state.recipe_info.glass}
-        />, 
-        side: 
-        <RecipeInfo
-          alcohol={this.state.recipe_info.alcohol}
-          recipe={this.state.recipe_info.cocktail}
-          descripe={this.state.recipe_info.description}
-          tags={this.state.recipe_info.tags}
-        />
-      } );
+      this.setState({
+        main: <RecipeCup glass={this.state.recipe_info.glass} />,
+        side: (
+          <RecipeInfo
+            alcohol={this.state.recipe_info.alcohol}
+            recipe={this.state.recipe_info.cocktail}
+            descripe={this.state.recipe_info.description}
+            tags={this.state.recipe_info.tags}
+          />
+        )
+      });
 
       info.style.backgroundImage = `url(${infoImageP})`;
       info.style.opacity = 1;
-
     } else if (stuff === event.target || stuff === event.target.parentNode) {
-      this.setState( { 
-        main: 
-        <RecipeCup
-          glass={this.state.recipe_info.glass}
-        />,  
-        side: 
-        <RecipeStuff
-          stuffs={this.state.stuffs}
-        />
-      } );
+      this.setState({
+        main: <RecipeCup glass={this.state.recipe_info.glass} />,
+        side: <RecipeStuff stuffs={this.state.stuffs} />
+      });
 
       stuff.style.backgroundImage = `url(${stuffImageP})`;
       stuff.style.opacity = 1;
-
     } else if (photo === event.target || photo === event.target.parentNode) {
-      this.setState( { 
-        main: <RecipeImage
-          image={this.state.photos[0]}
-        />, 
-        side: 
-        <RecipePhoto
-          photos={this.state.photos}
-          changePhoto={this.onChangePhoto}
-        />
-      } );
+      this.setState({
+        main: <RecipeImage image={this.state.photos[0]} />,
+        side: (
+          <RecipePhoto
+            photos={this.state.photos}
+            changePhoto={this.onChangePhoto}
+          />
+        )
+      });
 
       photo.style.backgroundImage = `url(${photoImageP})`;
       photo.style.opacity = 1;
-
-    } else if (comment === event.target || comment === event.target.parentNode) {
-      this.setState( { 
-        main: 
-        <RecipeCup
-          glass={this.state.recipe_info.glass}
-        />, 
-        side: 
-        <RecipeComment
-          comment={this.state.comment}
-          onAddComment={this.onAddComment}
-        />
-      } );
+    } else if (
+      comment === event.target ||
+      comment === event.target.parentNode
+    ) {
+      this.setState({
+        main: <RecipeCup glass={this.state.recipe_info.glass} />,
+        side: (
+          <RecipeComment
+            comment={this.state.comment}
+            onAddComment={this.onAddComment}
+          />
+        )
+      });
 
       comment.style.backgroundImage = `url(${commentImageP})`;
       comment.style.opacity = 1;
-
     }
   };
 
   onAddComment = () => {
-    let comment = document.querySelector("#commentText").value;
-    if (comment !== "" && comment !== undefined && comment !== null) {
+    let commentText = document.querySelector("#commentText").value;
+    if (commentText !== "" && commentText !== undefined && commentText !== null) {
       let now = new Date();
-      let time = now.getHours > 9 ? `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}` : `0${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
+      let time =
+        now.getHours() > 9
+          ? `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`
+          : `0${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
+      let thisComment = { nick: this.state.recipe_info.nick, comment: commentText, time: time };
       let comment = this.state.comment;
-      comment.push({nick: "사용자", comment: comment, time: time});
+      comment.push();
+      //TODO : 형 로그인 했을 경우 그 로그인 한 사람의 닉네임 어떤식으로 활용해요?
+      //comment 안에 nick 여기에 로그인 한 사람의 닉네임이 들어가야되요
 
-      this.setState({comment: comment});
-      this.setState( {
-        side: 
-        <RecipeComment
-          comment={comment}
-          onAddComment={this.onAddComment}
-        />
-      } );
-
+      this.setState({ comment: comment });
+      this.setState({
+        side: (
+          <RecipeComment comment={comment} onAddComment={this.onAddComment} />
+        )
+      });
+      this.props.addCommentRequest({id: this.props.id, comment: thisComment});
+      // 여기 이 api 호출하고 성공할 시 그때 ui 에 추가해주는건 그때 해줘야함
+      // 즉, update 그 function 에서 해야함
       document.querySelector("#commentText").value = "";
     }
   };
 
   onChangePhoto = event => {
-    this.setState( { 
-      main: <RecipeImage
-        image={this.state.photos[event.target.getAttribute('idx')]}
-      />
-    } );
-  }
+    this.setState({
+      main: (
+        <RecipeImage
+          image={this.state.photos[event.target.getAttribute("idx")]}
+        />
+      )
+    });
+  };
+
+  onDeleteCocktailClick = event => {
+    this.setState({ bShowDelete: true });
+  };
+
+  onNotifyPopupCancelClick = event => {
+    this.setState({ bShowDelete: false });
+  };
+
+  cocktailDeleteAPI = event => {
+    //칵테일 삭제 API 호출
+    const type = 2;
+    this.props.dataRequest(type, this.props.id);
+    this.setState({ bShowDelete: false });
+    this.props.closeClick();
+  };
+
+  onLikeClick = event => {
+    const type = 3;
+    this.props.dataRequest(type, this.props.id, this.state.userID);
+  };
+
+  showNotifyPopup = () => {
+    return (
+      <div className={cx("showNotifyPopup")}>
+        <div className={cx("text")}>정말로 삭제 하겠습니까?</div>
+        <div className={cx("container")}>
+          <Button
+            className={cx("ok")}
+            value="확인"
+            onClick={this.cocktailDeleteAPI}
+          />
+          <Button
+            className={cx("cancel")}
+            value="취소"
+            onClick={this.onNotifyPopupCancelClick}
+          />
+        </div>
+      </div>
+    );
+  };
+
+  onDetailViewEdit = () => {
+    this.props.history.push(`/enrolment/${this.props.id}`);
+  };
 
   viewRecipe_form = () => {
     return [
       <div key="viewRecipe" className={cx("detail-container")}>
+        {this.state.bShowDelete && (
+          <div className={cx("notifypopup_rect")}>{this.showNotifyPopup()}</div>
+        )}
         <div className={cx("detail-content")}>
-          <span style={Object.assign({},
-            toolbarStyleCommon,
-            {backgroundImage: `url(${arrowLeft})`, backgroundSize: 'contain', opacity: 1})} className={cx("detail-content-arrow", "left")}></span>
-          <span style={Object.assign({},
-            toolbarStyleCommon,
-            {backgroundImage: `url(${arrowRight})`, backgroundSize: 'contain', opacity: 1})} className={cx("detail-content-arrow", "right")}></span>
+          {this.props.isPrev && (
+            <span
+              style={Object.assign({}, toolbarStyleCommon, {
+                backgroundImage: `url(${arrowLeft})`,
+                backgroundSize: "contain",
+                opacity: 1
+              })}
+              className={cx("detail-content-arrow", "left")}
+              onClick={event => {
+                return this.props.onMove(event, false);
+              }}
+            />
+          )}
+          {this.props.isNext && (
+            <span
+              style={Object.assign({}, toolbarStyleCommon, {
+                backgroundImage: `url(${arrowRight})`,
+                backgroundSize: "contain",
+                opacity: 1
+              })}
+              className={cx("detail-content-arrow", "right")}
+              onClick={event => {
+                return this.props.onMove(event, true);
+              }}
+            />
+          )}
 
           <RecipeHeader
             cocktail={this.state.recipe_info.cocktail}
@@ -257,18 +379,35 @@ class ViewRecipe extends Component {
 
             <div className={cx("detail-content-main-side")}>
               <div className={cx("detail-content-main-side-toolbar")}>
-                <span style={Object.assign({},
-                  toolbarStyleCommon,
-                  {backgroundImage: `url(${infoImageP})`, opacity: 1})} id="info" onClick={this.onChangeFocusing}></span>
-                <span style={Object.assign({},
-                  toolbarStyleCommon,
-                  {backgroundImage: `url(${stuffImage})`})} id="stuff" onClick={this.onChangeFocusing}></span>
-                <span style={Object.assign({},
-                  toolbarStyleCommon,
-                  {backgroundImage: `url(${photoImage})`})} id="photo" onClick={this.onChangeFocusing}></span>
-                <span style={Object.assign({},
-                  toolbarStyleCommon,
-                  {backgroundImage: `url(${commentImage})`})} id="comment" onClick={this.onChangeFocusing}></span>
+                <span
+                  style={Object.assign({}, toolbarStyleCommon, {
+                    backgroundImage: `url(${infoImageP})`,
+                    opacity: 1
+                  })}
+                  id="info"
+                  onClick={this.onChangeFocusing}
+                />
+                <span
+                  style={Object.assign({}, toolbarStyleCommon, {
+                    backgroundImage: `url(${stuffImage})`
+                  })}
+                  id="stuff"
+                  onClick={this.onChangeFocusing}
+                />
+                <span
+                  style={Object.assign({}, toolbarStyleCommon, {
+                    backgroundImage: `url(${photoImage})`
+                  })}
+                  id="photo"
+                  onClick={this.onChangeFocusing}
+                />
+                <span
+                  style={Object.assign({}, toolbarStyleCommon, {
+                    backgroundImage: `url(${commentImage})`
+                  })}
+                  id="comment"
+                  onClick={this.onChangeFocusing}
+                />
               </div>
 
               {this.state.side}
@@ -278,18 +417,47 @@ class ViewRecipe extends Component {
 
         <div className={cx("side-button-container")}>
           <div className={cx("side-button-area")}>
-            <span style={Object.assign({},
-              toolbarStyleCommon,
-              {backgroundImage: `url(${closeIcon})`, backgroundSize: 'cover', opacity: 1})} id="close-botton"></span>
-            <span style={Object.assign({},
-              toolbarStyleCommon,
-              {backgroundImage: `url(${modifyIcon})`, backgroundSize: 'cover', opacity: 1})} id="edit-botton"></span>
-            <span style={Object.assign({},
-              toolbarStyleCommon,
-              {backgroundImage: `url(${deleteIcon})`, backgroundSize: 'cover', opacity: 1})} id="delete-botton"></span>
-            <span style={Object.assign({},
-              toolbarStyleCommon,
-              {backgroundImage: `url(${heartIcon})`, backgroundSize: 'cover', opacity: 1})} id="like-botton"></span>
+            <span
+              style={Object.assign({}, toolbarStyleCommon, {
+                backgroundImage: `url(${closeIcon})`,
+                backgroundSize: "cover",
+                opacity: 1
+              })}
+              id="close-botton"
+              onClick={this.props.closeClick}
+            />
+            {this.state.userID === this.state.recipe_info.nick &&
+              ((
+                <span
+                  style={Object.assign({}, toolbarStyleCommon, {
+                    backgroundImage: `url(${modifyIcon})`,
+                    backgroundSize: "cover",
+                    opacity: 1
+                  })}
+                  id="edit-botton"
+                  onClick={this.onDetailViewEdit}
+                />
+              ),
+              (
+                <span
+                  style={Object.assign({}, toolbarStyleCommon, {
+                    backgroundImage: `url(${deleteIcon})`,
+                    backgroundSize: "cover",
+                    opacity: 1
+                  })}
+                  id="delete-botton"
+                  onClick={this.onDeleteCocktailClick}
+                />
+              ))}
+            <span
+              style={Object.assign({}, toolbarStyleCommon, {
+                backgroundImage: `url(${heartIcon})`,
+                backgroundSize: "cover",
+                opacity: 1
+              })}
+              id="like-botton"
+              onClick={this.onLikeClick}
+            />
           </div>
         </div>
       </div>
@@ -307,7 +475,9 @@ class ViewRecipe extends Component {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ViewRecipe);
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(ViewRecipe)
+);

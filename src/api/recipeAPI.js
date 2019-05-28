@@ -52,10 +52,10 @@ export async function getStuffByView({ingredient}) {
   return res.data;
 }
 
-export async function addComment({ data }) {
+export async function addComment({ comment }) {
   const url = "recipe/comment";
   const body = {
-    data
+    comment
   };
   const res = await webRequestUtil.post({ url, body });
   return res.data;

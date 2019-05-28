@@ -10,6 +10,11 @@
   font-weight: normal;
   src: url("../../static/MyriadPro-It.otf") format("opentype");
 }
+@font-face {
+  font-family: "NotoSansCJKkr";
+  font-weight: 300;
+  src: url("../../static/NotoSans-Light.otf") format("opentype");
+}
 html,
 body {
   padding: 0;
@@ -31,6 +36,12 @@ body {
   position: absolute;
   width: 100%;
   height: 100%;
+
+  .viewreipe_rect {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
 
   //중간 text Style
   .explanation_rect {
@@ -230,13 +241,38 @@ body {
 
       .loading_rect {
         position: absolute;
-        z-index: 10000;
+        z-index: 100;
         width: auto;
         height: auto;
         left: 50%;
 
         &._hide {
           display: none;
+        }
+      }
+
+      .nodata_rect {
+        position: absolute;
+        width: 100%;
+        height: auto;
+
+        .nodata_image {
+          width: auto;
+          height: 100px;
+          background-image: url("../../static/images/error.png");
+          background-repeat: no-repeat;
+          background-position: center;
+          background-size: contain;
+        }
+
+        .nodata_text {
+          width: auto;
+          height: auto;
+          margin-top: 20px;
+          font-family: NotoSansCJKkr;
+          font-size: 40px;
+          color: #ffffff;
+          text-align: center;
         }
       }
 

@@ -14,7 +14,7 @@ const EnrolmentStuffItem = (props) => {
     <div className={cx("stuff-item")} stuff={props.idx}>
         <div className={cx("stuff-item-container")}>
             <div className={cx("stuff-item-input")}>
-                <span id={`item-color_${props.idx}`} className={cx("stuff-item-color")} stuff={props.idx} onClick={props.onSelectColor} style={styles}></span>
+                <span id={`item-color_${props.idx}`} className={cx("stuff-item-color")} stuff={props.idx} onClick={ e => props.onSelectColor(e)} style={styles}></span>
 
                 <Edit
                     className={cx("stuff-item-input-stuff")}
@@ -26,6 +26,7 @@ const EnrolmentStuffItem = (props) => {
                 <Edit
                     className={cx("stuff-item-input-volume")}
                     placeholder="용량"
+                    type="number"
                     defaultValue={props.stuff.volume}
                     onChange={e => props.onSaveStuffVolume(e, props.idx)}
                 />

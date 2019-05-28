@@ -13,6 +13,18 @@ import { enrolmentRequest } from "../../action/enrolmentAction";
 import axios from "axios";
 import { ChromePicker } from 'react-color';
 
+import cup_empty1 from '../../static/images/glass1_empty_enrolment.png';
+import cup_empty2 from '../../static/images/glass2_empty_enrolment.png';
+import cup_empty3 from '../../static/images/glass3_empty_enrolment.png';
+import cup_empty4 from '../../static/images/glass4_empty_enrolment.png';
+import cup_empty5 from '../../static/images/glass5_empty_enrolment.png';
+
+import cup_full1 from '../../static/images/glass1_full_enrolment.png';
+import cup_full2 from '../../static/images/glass2_full_enrolment.png';
+import cup_full3 from '../../static/images/glass3_full_enrolment.png';
+import cup_full4 from '../../static/images/glass4_full_enrolment.png';
+import cup_full5 from '../../static/images/glass5_full_enrolment.png';
+
 const cx = classNames.bind(styles);
 
 const mapStateToProps = state => {
@@ -172,9 +184,10 @@ class Enrolment extends Component {
   };
 
   changeCup = cupText => {
+    let cupArea = document.querySelector("#cup-area");
     let cupTarget = document.querySelectorAll(".cup-item1, .cup-item2, .cup-item3, .cup-item4, .cup-item5");
     let enrolmentData = {...this.state.enrolmentData};
-
+    
     cupTarget.forEach(val => {
       val.classList.remove(this.selectCup);
     });
@@ -184,26 +197,36 @@ class Enrolment extends Component {
         cupTarget[0].classList.add(this.selectCup);
         enrolmentData.info.cup = "하이볼";
         this.setState({ enrolmentData });
+
+        cupArea.style.backgroundImage = `url(${cup_empty1})`;
         break;
       case "리큐르":
         cupTarget[1].classList.add(this.selectCup);
         enrolmentData.info.cup = "리큐르";
         this.setState({ enrolmentData });
+
+        cupArea.style.backgroundImage = `url(${cup_empty2})`;
         break;
       case "허리케인":
         cupTarget[2].classList.add(this.selectCup);
         enrolmentData.info.cup = "허리케인";
         this.setState({ enrolmentData });
+
+        cupArea.style.backgroundImage = `url(${cup_empty3})`;
         break;
       case "마가렛":
         cupTarget[3].classList.add(this.selectCup);
         enrolmentData.info.cup = "마가렛";
         this.setState({ enrolmentData });
+
+        cupArea.style.backgroundImage = `url(${cup_empty4})`;
         break;
       case "마티니":
         cupTarget[4].classList.add(this.selectCup);
         enrolmentData.info.cup = "마티니";
         this.setState({ enrolmentData });
+
+        cupArea.style.backgroundImage = `url(${cup_empty5})`;
         break;
       default:
         break;
@@ -384,17 +407,19 @@ class Enrolment extends Component {
 
     let tags = this.state.enrolmentData.info.tags.split(' ');
 
-    const convertTags = tags.map(val => {
-      if (val[0] !== '#') return `#${val}`;
-      return val;
-    });
+    // const convertTags = tags.map(val => {
+    //   if (val[0] !== '#') return `#${val}`;
+    //   return val;
+    //   맨 앞에 # 붙이는 기능
+    //   혹시 몰라서 남겨둠
+    // });
 
     let data = {
       "name": this.state.enrolmentData.info.name,
       "glass" : cup,
       "percent" : this.state.enrolmentData.info.alcohol,
       "description" : this.state.enrolmentData.info.describe,
-      "tag" : convertTags,
+      "tag" : tags,
       "ingredient" : this.state.enrolmentData.stuff,
       "owner" : "fonnie"
     }
@@ -410,15 +435,13 @@ class Enrolment extends Component {
     let formData = new FormData();
     images.forEach(image => {
       formData.append('images', image);
-      formData.append("timestamp", (Date.now() / 1000) | 0);
+      formData.append('timestamp', (Date.now() / 1000) | 0);
     });
+
+    formData.append('id', id);
 
     axios.post("http://ec2-18-191-88-64.us-east-2.compute.amazonaws.com:9000/recipe/upload", formData, {
       headers: { "X-Requested-With": "XMLHttpRequest" },
-    }, {
-      params: {
-        id
-      }
     }).then(response => {
       const data = response.data;
       // const fileURL = data.secure_url // You should store this URL for future references in your app

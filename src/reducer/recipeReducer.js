@@ -75,9 +75,8 @@ const reducer = (state = initialState, action) => {
 
     case actions.ADDCOMMENT.SUCCESS: {
       const { result } = action.payload;
-      console.log(result);
 
-      if (result[0].ok === 1) {
+      if (result.ok === 1) {
         return {
           ...state,
           state: "success",

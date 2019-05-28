@@ -69,7 +69,7 @@ function* requestRecipeStuffByView(action) {
 function* requestAddComment(action) {
   const { comment } = action.payload;
   try {
-    const result = yield call(addComment, comment);
+    const result = yield call(addComment, {comment: comment});
     yield put(addCommentSuccess(result));
   } catch (error) {}
 }

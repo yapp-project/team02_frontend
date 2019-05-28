@@ -47,6 +47,7 @@ const fullThumb = {
 
 const thumbInner = {
   display: "flex",
+  width: "100%",
   position: "relative",
   minWidth: 0,
   overflow: "hidden"
@@ -169,7 +170,7 @@ const EnrolmentStep3 = props => {
           >
             <div style={Object.assign({}, thumb, fullThumb)}>
               <div style={thumbInner}>
-                <img id="imgThumb" alt="Thumb" />
+                <img style={{width: "100%"}} id="imgThumb" alt="Thumb" />
               </div>
             </div>
           </div>

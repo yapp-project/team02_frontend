@@ -94,8 +94,10 @@
     span {
         display: block;
         height: 100%;
-        border: 1px solid #707070;
-        box-sizing: border-box;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+        background-image: url('../../../static/images/glass1_empty_enrolment.png');
     }
 }
 

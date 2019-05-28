@@ -7,7 +7,7 @@ import { Button } from "../../components";
 import { SearchResultItem } from "../../components";
 import { recommendRequest, searchRequest } from "../../action/searchAction";
 
-// import Header from "../Header/Header";
+import ViewRecipe from "../ViewRecipe/ViewRecipe";
 
 import { CircleSpinner } from "react-spinners-kit";
 
@@ -28,6 +28,13 @@ class MainView extends Component {
     scroll: {
       start: true,
       end: true
+    },
+    viewRecipeInfo: {
+      bShow: false,
+      ID: "",
+      index: 0, //현재 ID가 List에 위치한 index
+      prev: false,
+      next: false
     }
   };
 
@@ -78,6 +85,15 @@ class MainView extends Component {
           this.setState({ scroll: { start: true, end: true } });
       }
     }
+
+    //Random Tag.length = 0, result = []인 경우 예외처리
+    if (
+      this.state.loading &&
+      !this.props.recommend.tags.length &&
+      !this.props.recommend.result.length
+    ) {
+      this.setState({ loading: false });
+    }
   }
 
   /**
@@ -94,7 +110,36 @@ class MainView extends Component {
   };
 
   onCocktailClick = event => {
-    this.props.history.push(`/viewRecipe/${event.target.id}`);
+    event.preventDefault();
+    event.stopPropagation();
+
+    const cocktailID = event.target.id;
+    const List = this.props.recommend.result;
+
+    //click한 칵테일의 위치를 List에서 찾는 Logic
+    const index = parseInt(
+      List.findIndex(item => {
+        return item._id === cocktailID;
+      }).toString()
+    );
+    const next = index !== this.props.recommend.result.length - 1;
+    const prev = index !== 0;
+    this.setState({
+      viewRecipeInfo: {
+        bShow: true,
+        ID: event.target.id,
+        index,
+        next,
+        prev
+      }
+    });
+    return false;
+  };
+
+  onDetailViewClose = () => {
+    this.setState({
+      viewRecipeInfo: { ...this.state.viewRecipeInfo, bShow: false }
+    });
   };
 
   onLikeClick = event => {
@@ -154,6 +199,58 @@ class MainView extends Component {
     }
   };
 
+  onMoveClick = (event, bNext) => {
+    event.preventDefault();
+    event.stopPropagation();
+    const { index } = this.state.viewRecipeInfo;
+    const list = this.props.recommend.result;
+
+    if (bNext) {
+      //다음
+      if (index === list.length - 2) {
+        this.setState({
+          viewRecipeInfo: {
+            ...this.state.viewRecipeInfo,
+            ID: list[index + 1],
+            index: index + 1,
+            next: false
+          }
+        });
+      } else {
+        this.setState({
+          viewRecipeInfo: {
+            ...this.state.viewRecipeInfo,
+            ID: list[index + 1],
+            index: index + 1,
+            prev: true
+          }
+        });
+      }
+    } else {
+      //이전
+      if (index === 1) {
+        this.setState({
+          viewRecipeInfo: {
+            ...this.state.viewRecipeInfo,
+            ID: list[index - 1],
+            index: index - 1,
+            prev: false
+          }
+        });
+      } else {
+        this.setState({
+          viewRecipeInfo: {
+            ...this.state.viewRecipeInfo,
+            ID: list[index - 1],
+            index: index - 1,
+            next: true
+          }
+        });
+      }
+    }
+    return false;
+  };
+
   /**
    * @author AnGwangHo
    * @description 랜덤 태그 반환
@@ -179,9 +276,17 @@ class MainView extends Component {
     const { tags } = this.props.recommend;
     return (
       <div className={cx("mainview")}>
-        {/* <div className={cx("header")}>
-            <Header />
-          </div> */}
+        {this.state.viewRecipeInfo.bShow && (
+          <div className={cx("viewreipe_rect")}>
+            <ViewRecipe
+              id={this.state.viewRecipeInfo.ID}
+              closeClick={this.onDetailViewClose}
+              onMove={this.onMoveClick}
+              isPrev={this.state.viewRecipeInfo.prev}
+              isNext={this.state.viewRecipeInfo.next}
+            />
+          </div>
+        )}
         <div className={cx("explanation_rect")}>
           <div className={cx("left")}>
             <div className={cx("logo")} />
@@ -218,6 +323,16 @@ class MainView extends Component {
                 loading={this.state.loading}
               />
             </div>
+            {!this.state.loading &&
+              !this.props.recommend.tags.length &&
+              !this.props.recommend.result.length && (
+                <div className={cx("nodata_rect")}>
+                  <div className={cx("nodata_image")} />
+                  <div className={cx("nodata_text")}>
+                    현재 등록된 레시피가 없습니다.
+                  </div>
+                </div>
+              )}
             <span
               className={cx("prevbspan", this.state.scroll.start && "_hide")}
               onClick={this.onPrevScrollClick}

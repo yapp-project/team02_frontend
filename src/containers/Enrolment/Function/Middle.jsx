@@ -7,7 +7,7 @@ const cx = classNames.bind(styles);
 const EnrolmentMiddle = (props) => {
   return (
     <div className={cx("middle")}>
-        <span></span>
+        <span id="cup-area"></span>
     </div>
   );
 };
