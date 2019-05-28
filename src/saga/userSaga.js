@@ -132,7 +132,9 @@ export default function* saga() {
     takeLatest(actions.REGISTER.REQUEST, requestRegister),
     takeLatest(actions.IDCHECK.REQUEST, requsetIdChek),
     takeLatest(actions.LOGIN.LOGOUT, logout),
-    takeLatest(actions.COMMUNICATION.REQUEST, requestData),
+    takeLatest(actions.SCRAP.REQUEST, requestData),
+    takeLatest(actions.RECIPE.REQUEST, requestData),
+    takeLatest(actions.LKIE.REQUEST, requestData),
     takeLatest(actions.USEREDIT.REQUEST, requsetUserEdit),
     takeLatest(actions.USERDELETE.REQUEST, requseUserDelete)
   ]);

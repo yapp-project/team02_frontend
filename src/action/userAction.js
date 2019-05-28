@@ -30,6 +30,15 @@ export const actions = {
     REQUEST: "USERDELETE_REQUEST",
     SUCCESS: "USERDELETE_SUCCESS",
     FAILED: "USERDELETE_FAILED"
+  },
+  SCRAP: {
+    REQUEST: "SCRAP_REQUEST"
+  },
+  RECIPE: {
+    REQUEST: "RECIPE_REQUEST"
+  },
+  LKIE: {
+    REQUEST: "LKIE_REQUEST"
   }
 };
 
@@ -182,6 +191,36 @@ export function userDeleteFailed(type, result) {
     payload: {
       type,
       result
+    }
+  };
+}
+
+export function scrapRequest({ type, data }) {
+  return {
+    type: actions.SCRAP.REQUEST,
+    payload: {
+      type,
+      data
+    }
+  };
+}
+
+export function recipeRequest({ type, data }) {
+  return {
+    type: actions.RECIPE.REQUEST,
+    payload: {
+      type,
+      data
+    }
+  };
+}
+
+export function setScrapRequest({ type, data }) {
+  return {
+    type: actions.LKIE.REQUEST,
+    payload: {
+      type,
+      data
     }
   };
 }
