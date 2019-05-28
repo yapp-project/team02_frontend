@@ -13,6 +13,18 @@ import { enrolmentRequest } from "../../action/enrolmentAction";
 import axios from "axios";
 import { ChromePicker } from 'react-color';
 
+import cup_empty1 from '../../static/images/glass1_empty_enrolment.png';
+import cup_empty2 from '../../static/images/glass2_empty_enrolment.png';
+import cup_empty3 from '../../static/images/glass3_empty_enrolment.png';
+import cup_empty4 from '../../static/images/glass4_empty_enrolment.png';
+import cup_empty5 from '../../static/images/glass5_empty_enrolment.png';
+
+import cup_full1 from '../../static/images/glass1_full_enrolment.png';
+import cup_full2 from '../../static/images/glass2_full_enrolment.png';
+import cup_full3 from '../../static/images/glass3_full_enrolment.png';
+import cup_full4 from '../../static/images/glass4_full_enrolment.png';
+import cup_full5 from '../../static/images/glass5_full_enrolment.png';
+
 const cx = classNames.bind(styles);
 
 const mapStateToProps = state => {
@@ -172,9 +184,10 @@ class Enrolment extends Component {
   };
 
   changeCup = cupText => {
+    let cupArea = document.querySelector("#cup-area");
     let cupTarget = document.querySelectorAll(".cup-item1, .cup-item2, .cup-item3, .cup-item4, .cup-item5");
     let enrolmentData = {...this.state.enrolmentData};
-
+    
     cupTarget.forEach(val => {
       val.classList.remove(this.selectCup);
     });
@@ -184,26 +197,36 @@ class Enrolment extends Component {
         cupTarget[0].classList.add(this.selectCup);
         enrolmentData.info.cup = "하이볼";
         this.setState({ enrolmentData });
+
+        cupArea.style.backgroundImage = `url(${cup_empty1})`;
         break;
       case "리큐르":
         cupTarget[1].classList.add(this.selectCup);
         enrolmentData.info.cup = "리큐르";
         this.setState({ enrolmentData });
+
+        cupArea.style.backgroundImage = `url(${cup_empty2})`;
         break;
       case "허리케인":
         cupTarget[2].classList.add(this.selectCup);
         enrolmentData.info.cup = "허리케인";
         this.setState({ enrolmentData });
+
+        cupArea.style.backgroundImage = `url(${cup_empty3})`;
         break;
       case "마가렛":
         cupTarget[3].classList.add(this.selectCup);
         enrolmentData.info.cup = "마가렛";
         this.setState({ enrolmentData });
+
+        cupArea.style.backgroundImage = `url(${cup_empty4})`;
         break;
       case "마티니":
         cupTarget[4].classList.add(this.selectCup);
         enrolmentData.info.cup = "마티니";
         this.setState({ enrolmentData });
+
+        cupArea.style.backgroundImage = `url(${cup_empty5})`;
         break;
       default:
         break;
@@ -353,17 +376,6 @@ class Enrolment extends Component {
 
     colorTarget = event.target.id;
     colorContainer.classList.remove(this.colorClose);
-    // console.log(document.querySelector("#color-picker").classList.contains(this.colorClose));
-
-
-    // if (event.target.getAttribute("stuff")) {
-    //   let colorNumber = event.target.getAttribute("stuff");
-    //   this.setState({color_idx: colorNumber});
-
-    //   document.querySelector(`#color-picker_${colorNumber}`).classList.toggle(this.doneClose);
-    // } else {
-
-    // }
   };
 
   onSelectColorClose = () => {
@@ -386,48 +398,35 @@ class Enrolment extends Component {
   }
 
   onSaveRecipe = () => {
-    let cup = this.state.enrolmentData.info.name;
+    let cup = this.state.enrolmentData.info.cup;
     if (cup === '하이볼') cup = 0;
     else if (cup === '리큐르') cup = 1;
     else if (cup === '허리케인') cup = 2;
     else if (cup === '마가렛') cup = 3;
     else cup = 4;
 
-    // let tag = this.state.enrolmentData.info.tags;
+    let tags = this.state.enrolmentData.info.tags.split(' ');
 
-    console.log(this.state);
-    
-    //태그 배열 형태로 나누는거 처리해야 됨
-    //재료 포멧은 정해야 될듯
-    // let data = {
-    //   name: this.state.enrolmentData.info.name,
-    //   glass: cup,
-    //   percent: 50,
-    //   description: this.state.enrolmentData.info.describe,
-    //   tag: [],
-    //   ingredient: this.state.stuff,
-    //   owner: 'fonnie'
-    // }
+    // const convertTags = tags.map(val => {
+    //   if (val[0] !== '#') return `#${val}`;
+    //   return val;
+    //   맨 앞에 # 붙이는 기능
+    //   혹시 몰라서 남겨둠
+    // });
 
     let data = {
-      "name": "martini",
-      "glass" : 4,
-      "percent" : 50,
-      "description" : "This is so delicious",
-      "tag" : ["sweet", "romantic", "johnmat"],
-      "ingredient" : [{
-        "name" : "water",
-        "color" : "blue",
-        "ml" : 20
-        }, {
-        "name" : "hongcho",
-        "color" : "red",
-        "ml" : 10
-        }],
-      "owner" : "maga40"
+      "name": this.state.enrolmentData.info.name,
+      "glass" : cup,
+      "percent" : this.state.enrolmentData.info.alcohol,
+      "description" : this.state.enrolmentData.info.describe,
+      "tag" : tags,
+      "ingredient" : this.state.enrolmentData.stuff,
+      "owner" : "fonnie"
     }
 
-    // data.tag.push(tag);
+    // TODO
+    // owner 를 사용자 받아와서 넣는거 해야함
+    // 데이터 validation 체크 해야 함
 
     this.props.enrolmentRequest(data);
   };
@@ -436,15 +435,13 @@ class Enrolment extends Component {
     let formData = new FormData();
     images.forEach(image => {
       formData.append('images', image);
-      formData.append("timestamp", (Date.now() / 1000) | 0);
+      formData.append('timestamp', (Date.now() / 1000) | 0);
     });
+
+    formData.append('id', id);
 
     axios.post("http://ec2-18-191-88-64.us-east-2.compute.amazonaws.com:9000/recipe/upload", formData, {
       headers: { "X-Requested-With": "XMLHttpRequest" },
-    }, {
-      params: {
-        id
-      }
     }).then(response => {
       const data = response.data;
       // const fileURL = data.secure_url // You should store this URL for future references in your app

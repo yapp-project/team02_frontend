@@ -10,6 +10,11 @@
   font-weight: normal;
   src: url("../../static/MyriadPro-It.otf") format("opentype");
 }
+@font-face {
+  font-family: "NotoSansCJKkr";
+  font-weight: 300;
+  src: url("../../static/NotoSans-Light.otf") format("opentype");
+}
 html,
 body {
   padding: 0;

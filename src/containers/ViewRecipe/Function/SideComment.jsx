@@ -10,10 +10,10 @@ const RecipeComment = (props) => {
     <div className={cx("detail-content-main-side-comment")}>
         <div className={cx("detail-content-main-side-comment-container")}>
         {
-            props.comments.map((input, index) => {
+            props.comment.map((input, index) => {
                 return <div key={`comment${index}`} className={cx("detail-content-main-side-comment-item")}>
                         <span className={cx("comment-name")}>{input.nick}</span>
-                        <span className={cx("comment-content")}>{input.comments}</span>
+                        <span className={cx("comment-content")}>{input.comment}</span>
                         <span className={cx("comment-time")}>{input.time}</span>
                     </div>
            })

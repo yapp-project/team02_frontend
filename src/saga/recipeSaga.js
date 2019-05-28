@@ -6,7 +6,8 @@ import {
   recipeTagLatestSuccess,
   recipeTagViewSuccess,
   recipeStuffLatestSuccess,
-  recipeStuffViewSuccess
+  recipeStuffViewSuccess,
+  addCommentSuccess
 } from "../action/recipeAction";
 import { 
   getRecipe,
@@ -14,7 +15,8 @@ import {
   getTagByLatest,
   getTagByView,
   getStuffByLatest,
-  getStuffByView
+  getStuffByView,
+  addComment
  } from "../api/recipeAPI";
 
 function* requestAll () {
@@ -64,6 +66,14 @@ function* requestRecipeStuffByView(action) {
   } catch (error) {}
 }
 
+function* requestAddComment(action) {
+  const { comment } = action.payload;
+  try {
+    const result = yield call(addComment, {comment: comment});
+    yield put(addCommentSuccess(result));
+  } catch (error) {}
+}
+
 export default function* saga() {
   yield all([
     takeEvery(actions.ALL.REQUEST, requestAll),
@@ -71,6 +81,7 @@ export default function* saga() {
     takeEvery(actions.TAGBYLATEST.REQUEST, requestRecipeTagByLatest),
     takeEvery(actions.TAGBYVIEW.REQUEST, requestRecipeTagByView),
     takeEvery(actions.STUFFBYLATEST.REQUEST, requestRecipeStuffByLatest),
-    takeEvery(actions.STUFFBYVIEW.REQUEST, requestRecipeStuffByView)
+    takeEvery(actions.STUFFBYVIEW.REQUEST, requestRecipeStuffByView),
+    takeEvery(actions.ADDCOMMENT.REQUEST, requestAddComment)
   ]);
 }

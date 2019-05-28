@@ -69,13 +69,19 @@ class LoginPopup extends Component {
       switch (user.state) {
         case actions.IDCHECK.SUCCESS:
           if (user.checkID) {
-            this.setState({ checkID: true });
+            if (!this.state.checkID) {
+              this.setState({ checkID: true });
+            }
           } else {
-            this.setState({ checkID: false });
+            if (this.state.checkID) {
+              this.setState({ checkID: false });
+            }
           }
           break;
         default:
-          this.setState({ checkID: false });
+          if (this.state.checkID) {
+            this.setState({ checkID: false });
+          }
           break;
       }
     }

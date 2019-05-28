@@ -14,7 +14,8 @@ const initialState = {
     checkID: false
   },
   bModifyUser: false,
-  bUserDelete: false
+  bUserDelete: false,
+  scrap: { status: "", result: false }
 };
 
 const reducer = (state = initialState, action) => {
@@ -91,6 +92,11 @@ const reducer = (state = initialState, action) => {
             bRecipeDelete: result
           }
         };
+      } else if (type === 3) {
+        return {
+          ...state,
+          scrap: { result: result.result, status: result.status }
+        };
       }
       return {
         ...state
@@ -121,6 +127,11 @@ const reducer = (state = initialState, action) => {
             ...state.mymenu,
             bRecipeDelete: result
           }
+        };
+      } else if (type === 3) {
+        return {
+          ...state,
+          scrap: { result: result.result, status: result.status }
         };
       }
       return {

@@ -8,7 +8,6 @@ export async function setJoin({ userid, password }) {
     password
   };
   const res = await webRequestUtil.post({ url, body });
-  console.log(res);
   return res.data;
 }
 export async function setLogin({ userid, password }) {
@@ -32,7 +31,7 @@ export async function checkID(userid) {
 }
 
 export async function getMyScrap(userid) {
-  const url = ""; //서버 작업후 추가
+  const url = "user/get/mypage/scraps";
   const body = {
     userid
   };
@@ -41,7 +40,7 @@ export async function getMyScrap(userid) {
 }
 
 export async function getMyRecipes(userid) {
-  const url = ""; //서버 작업후 추가
+  const url = "user/get/mypage/myrecipe";
   const body = {
     userid
   };
@@ -76,5 +75,15 @@ export async function deleteCocktail(id) {
     id
   };
   const res = await webRequestUtil.get({ url, body });
+  return res.data;
+}
+
+export async function setScrap(userid, recipeid) {
+  const url = "user/update/scrap";
+  const body = {
+    userid,
+    recipeid
+  };
+  const res = await webRequestUtil.post({ url, body });
   return res.data;
 }

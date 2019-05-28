@@ -28,6 +28,11 @@ export const actions = {
     REQUEST: "VIEW_BY_STUFF_VIEW",
     SUCCESS: "BY_STUFF_VIEWREAD_SUCCESS",
     FAILED: "BY_STUFF_VIEW_READ_FAILED"
+  },
+  ADDCOMMENT: {
+    REQUEST: "ADD_COMMENT",
+    SUCCESS: "ADD_COMMENT_SUCCESS",
+    FAILED: "ADD_COMMENT_FAILED"
   }
 };
 
@@ -130,6 +135,24 @@ export function recipeStuffViewRequest(ingredient) {
 export function recipeStuffViewSuccess(result) {
   return {
     type: actions.STUFFBYVIEW.SUCCESS,
+    payload: {
+      result
+    }
+  };
+}
+
+export function addCommentRequest(comment) {
+  return {
+    type: actions.ADDCOMMENT.REQUEST,
+    payload: {
+      comment
+    }
+  };
+}
+
+export function addCommentSuccess(result) {
+  return {
+    type: actions.ADDCOMMENT.SUCCESS,
     payload: {
       result
     }

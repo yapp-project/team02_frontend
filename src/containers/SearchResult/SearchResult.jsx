@@ -7,18 +7,19 @@ import { SearchResultItem, Button } from "../../components";
 import { GridLayout } from "@egjs/react-infinitegrid";
 import { withRouter } from "react-router-dom";
 
-import { dataRequest } from "../../action/userAction.js";
+import { setScrapRequest } from "../../action/userAction.js";
 import { CircleSpinner } from "react-spinners-kit";
+import { debounce } from "lodash";
 
 import ViewRecipe from "../ViewRecipe/ViewRecipe";
 
 const cx = classNames.bind(styles);
 
 const mapStateToProps = state => {
-  return state;
+  return { scrap: state.userReducer.scrap };
 };
 
-const mapDispatchToProps = { dataRequest };
+const mapDispatchToProps = { setScrapRequest };
 
 /**
  * @author AnGwangHo
@@ -34,8 +35,14 @@ class SearchResult extends Component {
     searchList: [], //[{page:number,list:[]}, ...]
     bShowDelete: false,
     bLoding: false,
-    bShowViewRecipe: false,
-    showViewRecipeID: ""
+    viewRecipeInfo: {
+      bShow: false,
+      ID: "",
+      page: 0, //현재 ID가 위치한 Page
+      index: 0, //현재 ID가 List에 위치한 index
+      prev: false,
+      next: false
+    }
   };
 
   componentDidMount() {
@@ -120,6 +127,52 @@ class SearchResult extends Component {
         }
       }
     }
+
+    //스크랩 한 경우
+    if (this.props.scrap.result) {
+      if (
+        prevProps.scrap.status !== this.props.scrap.status ||
+        prevState.viewRecipeInfo.ID !== this.state.viewRecipeInfo.ID
+      ) {
+        let num = 0; //0-save 1-delete
+        if (this.props.scrap.status === "delete") {
+          num = -1;
+        } else {
+          num = 1;
+        }
+
+        const { index, page, ID } = this.state.viewRecipeInfo;
+        const { searchList } = this.state;
+
+        // this.props.recommend.result[index].scrap += num;
+        //state.list에 반영
+        this.setState({
+          searchList: searchList.map(item =>
+            item.page === page
+              ? {
+                  ...item,
+                  list: item.list.map((cocktail, i) =>
+                    i === index
+                      ? {
+                          ...cocktail,
+                          props: {
+                            ...cocktail.props,
+                            props: {
+                              ...cocktail.props.props,
+                              scrap: cocktail.props.props.scrap + num
+                            }
+                          }
+                        }
+                      : cocktail
+                  )
+                }
+              : item
+          )
+        });
+        this.setState({ bScrapAction: false });
+        return;
+      }
+    }
   }
 
   onPopupModifyClick = event => {
@@ -127,16 +180,151 @@ class SearchResult extends Component {
   };
 
   onCocktailClick = event => {
-    // this.props.history.push(`/viewRecipe/${event.target.id}`);
-    this.setState({ bShowViewRecipe: true, showViewRecipeID: event.target.id });
+    event.preventDefault();
+    event.stopPropagation();
+
+    const cocktailID = event.target.id;
+    const List = this.state.searchList;
+
+    //click한 칵테일의 위치를 List에서 찾는 Logic
+    const result = this.findCocktailIndex(cocktailID);
+    const page = parseInt(result[0]);
+    const index = parseInt(result[1]);
+    const next =
+      index === List[page - 1].list.length - 1
+        ? page !== this.state.pages
+        : true;
+    const prev = index === 0 ? page !== 1 : true;
+
+    this.setState({
+      viewRecipeInfo: {
+        bShow: true,
+        ID: event.target.id,
+        page,
+        index,
+        next,
+        prev
+      }
+    });
+    return false;
+  };
+
+  /**
+   * @returns [] - 0: page, 1: pageArray.index
+   */
+  findCocktailIndex = cocktailID => {
+    const List = this.state.searchList;
+    return List.map(item => {
+      return (
+        item.page +
+        "," +
+        item.list.findIndex(cocktail => {
+          return cocktail.props.props._id === cocktailID;
+        })
+      );
+    })
+      .toString()
+      .split(",");
+  };
+
+  onMoveClick = (event, bNext) => {
+    event.preventDefault();
+    event.stopPropagation();
+    const { page, index } = this.state.viewRecipeInfo;
+
+    if (bNext) {
+      //다음
+      const len = this.state.searchList[page - 1].list.length;
+      if (page === this.state.pages && index === len - 2) {
+        //마지막 직전
+        this.setState({
+          viewRecipeInfo: {
+            ...this.state.viewRecipeInfo,
+            ID: this.state.searchList[page - 1].list[index + 1].props.props._id,
+            index: index + 1,
+            next: false,
+            prev: true
+          }
+        });
+      } else {
+        if (index === len - 1) {
+          //다음 page로 넘어가야함
+          if (page === this.state.pages) {
+            this.setState({
+              viewRecipeInfo: {
+                ...this.state.viewRecipeInfo,
+                next: false
+              }
+            });
+          } else {
+            this.setState({
+              viewRecipeInfo: {
+                ...this.state.viewRecipeInfo,
+                ID: this.state.searchList[page].list[0].props.props._id,
+                page: page + 1,
+                index: 0,
+                prev: true
+              }
+            });
+          }
+        } else {
+          //index만 변경
+          this.setState({
+            viewRecipeInfo: {
+              ...this.state.viewRecipeInfo,
+              ID: this.state.searchList[page - 1].list[index + 1].props.props
+                ._id,
+              index: index + 1,
+              prev: true
+            }
+          });
+        }
+      }
+    } else {
+      //이전
+      if (page === 1 && index === 1) {
+        this.setState({
+          viewRecipeInfo: {
+            ...this.state.viewRecipeInfo,
+            ID: this.state.searchList[page - 1].list[index - 1].props.props._id,
+            index: index - 1,
+            prev: false,
+            next: true
+          }
+        });
+      } else {
+        if (index === 0) {
+          //이전 page로 넘어가야함
+          const lastIndex = this.state.searchList[page - 2].list.length;
+          this.setState({
+            viewRecipeInfo: {
+              ...this.state.viewRecipeInfo,
+              ID: this.state.searchList[page - 2].list[lastIndex].props.props
+                ._id,
+              page: page - 1,
+              index: lastIndex,
+              next: true
+            }
+          });
+        } else {
+          //index만 변경
+          this.setState({
+            viewRecipeInfo: {
+              ...this.state.viewRecipeInfo,
+              ID: this.state.searchList[page - 1].list[index - 1].props.props
+                ._id,
+              index: index - 1,
+              next: true
+            }
+          });
+        }
+      }
+    }
+    return false;
   };
 
   onDetailViewClose = () => {
-    this.setState({ bShowViewRecipe: false });
-  };
-
-  onDetailViewEdit = () => {
-    this.props.history.push(`/enrolment/${this.state.showViewRecipeID}`);
+    this.setState({ viewRecipeInfo: { bShow: false } });
   };
 
   onDeleteCocktailClick = event => {
@@ -149,7 +337,8 @@ class SearchResult extends Component {
 
   cocktailDeleteAPI = event => {
     //칵테일 삭제 API 호출
-    this.props.dataRequest(2, this.state.index);
+    const type = 2;
+    this.props.dataRequest(type, this.state.index);
     this.setState({ showModify: false, bShowDelete: false });
   };
 
@@ -205,36 +394,41 @@ class SearchResult extends Component {
   onLikeClick = event => {
     event.preventDefault();
     event.stopPropagation();
-    const id = event.target.id;
-    const { searchList, page } = this.state;
 
     //서버 통신
+    const type = 3;
+    const cocktailID = event.target.id;
+    const auth = JSON.parse(localStorage.getItem("myData")); //localstorage에서 가져옴
+    const userID = auth.userid;
+    console.log("Like 클릭 ! : ", cocktailID, userID);
 
-    //state.list에 반영
-    this.setState({
-      searchList: searchList.map(item =>
-        item.page === page
-          ? {
-              ...item,
-              list: item.list.map(cocktail =>
-                cocktail.props.props._id === id
-                  ? {
-                      ...cocktail,
-                      props: {
-                        ...cocktail.props,
-                        props: {
-                          ...cocktail.props.props,
-                          scrap: cocktail.props.props.scrap + 1
-                        }
-                      }
-                    }
-                  : cocktail
-              )
-            }
-          : item
-      )
+    const result = this.findCocktailIndex(cocktailID);
+    const page = parseInt(result[0]);
+    const index = parseInt(result[1]);
+
+    this.debounceRequestScrap({
+      page,
+      index,
+      cocktailID,
+      type,
+      userID
     });
+    return false;
   };
+
+  debounceRequestScrap = debounce(
+    ({ page, index, cocktailID, type, userID }) => {
+      this.setState({
+        viewRecipeInfo: {
+          ID: cocktailID,
+          page,
+          index
+        }
+      });
+      this.props.setScrapRequest({ type, data: { cocktailID, userID } });
+    },
+    300
+  );
 
   loadItems(groupKey, list) {
     const items = [];
@@ -282,8 +476,7 @@ class SearchResult extends Component {
         const items = this.loadItems(parseFloat(groupKey) + 1, searchList);
         this.setState({
           page,
-          searchList: _searchList.concat({ page, list: items }),
-          list: _searchList.concat(items)
+          searchList: _searchList.concat({ page, list: items })
         });
         endLoading();
       }
@@ -302,8 +495,7 @@ class SearchResult extends Component {
               );
               this.setState({
                 page,
-                searchList: _searchList.concat({ page, list: items }),
-                list: _searchList.concat(items)
+                searchList: _searchList.concat({ page, list: items })
               });
               endLoading();
             } else {
@@ -324,8 +516,7 @@ class SearchResult extends Component {
               );
               this.setState({
                 page,
-                searchList: _searchList.concat({ page, list: items }),
-                list: _searchList.concat(items)
+                searchList: _searchList.concat({ page, list: items })
               });
             } else {
               // console.log("다음 페이지 호출 해야함", this.props);
@@ -369,11 +560,13 @@ class SearchResult extends Component {
         {this.state.bShowDelete && (
           <div className={cx("notifypopup_rect")}>{this.showNotifyPopup()}</div>
         )}
-        {this.state.bShowViewRecipe && (
+        {this.state.viewRecipeInfo.bShow && (
           <ViewRecipe
-            id={this.state.showViewRecipeID}
+            id={this.state.viewRecipeInfo.ID}
             closeClick={this.onDetailViewClose}
-            editClick={this.onDetailViewEdit}
+            onMove={this.onMoveClick}
+            isPrev={this.state.viewRecipeInfo.prev}
+            isNext={this.state.viewRecipeInfo.next}
           />
         )}
         <GridLayout
