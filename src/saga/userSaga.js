@@ -104,6 +104,9 @@ function* requestData(action) {
     let result = [];
     if (type === 0) {
       result = yield call(getMyScrap, data.userID);
+      result = result.map(item => {
+        return item.scraps[0];
+      });
     } else if (type === 1) {
       result = yield call(getMyRecipes, data.userID);
     } else if (type === 2) {

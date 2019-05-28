@@ -28,7 +28,7 @@ class MyMenu extends Component {
     const auth = JSON.parse(localStorage.getItem("myData")); //localstorage에서 가져옴
     if (auth) {
       this.setState({ userid: auth.userid });
-      this.props.dataRequest({ type: 0, data: { userID: "jihong" } });
+      this.props.dataRequest({ type: 0, data: { userID: auth.userid } });
       // this.props.dataRequest({ type: 1, data: { userID: "maga40" } });
     }
   }
@@ -51,11 +51,15 @@ class MyMenu extends Component {
       }
 
       if (
+        !prevState.scrapArray.length &&
         this.state.scrapArray.length &&
         !_prevMyMenu.recipes.length &&
         !_myMenu.recipes.length
       ) {
-        this.props.dataRequest({ type: 1, data: { userID: "maga40" } });
+        this.props.dataRequest({
+          type: 1,
+          data: { userID: this.state.userid }
+        });
       }
     } else if (this.state.tabIndex === 1) {
       if (_prevMyMenu.recipes !== _myMenu.recipes) {
@@ -68,10 +72,16 @@ class MyMenu extends Component {
     const target = event.target;
     if (target.id === "scrap") {
       this.setState({ tabIndex: 0 });
-      this.props.dataRequest(this.state.tabIndex, "drinkme001");
+      this.props.dataRequest({
+        type: 0,
+        data: { userID: this.state.userid }
+      });
     } else if (target.id === "recipes") {
       this.setState({ tabIndex: 1 });
-      this.props.dataRequest(this.state.tabIndex, "drinkme001");
+      this.props.dataRequest({
+        type: 1,
+        data: { userID: this.state.userid }
+      });
     }
   };
 
