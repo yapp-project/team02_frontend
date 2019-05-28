@@ -313,14 +313,12 @@ class ViewRecipe extends Component {
           ? `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`
           : `0${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
       let thisComment = {
-        nick: this.state.recipe_info.nick,
+        nick: this.state.userID,
         comment: commentText,
         time: time
       };
       let comment = this.state.comment;
-      comment.push();
-      //TODO : 형 로그인 했을 경우 그 로그인 한 사람의 닉네임 어떤식으로 활용해요?
-      //comment 안에 nick 여기에 로그인 한 사람의 닉네임이 들어가야되요
+      comment.push(thisComment);
 
       this.setState({ comment: comment });
       this.setState({
