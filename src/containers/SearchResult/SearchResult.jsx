@@ -7,7 +7,7 @@ import { SearchResultItem, Button } from "../../components";
 import { GridLayout } from "@egjs/react-infinitegrid";
 import { withRouter } from "react-router-dom";
 
-import { dataRequest } from "../../action/userAction.js";
+import { setScrapRequest } from "../../action/userAction.js";
 import { CircleSpinner } from "react-spinners-kit";
 import { debounce } from "lodash";
 
@@ -19,7 +19,7 @@ const mapStateToProps = state => {
   return { scrap: state.userReducer.scrap };
 };
 
-const mapDispatchToProps = { dataRequest };
+const mapDispatchToProps = { setScrapRequest };
 
 /**
  * @author AnGwangHo
@@ -425,7 +425,7 @@ class SearchResult extends Component {
           index
         }
       });
-      this.props.dataRequest({ type, data: { cocktailID, userID } });
+      this.props.setScrapRequest({ type, data: { cocktailID, userID } });
     },
     300
   );

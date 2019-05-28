@@ -11,7 +11,7 @@ import ViewRecipe from "../ViewRecipe/ViewRecipe";
 
 import { CircleSpinner } from "react-spinners-kit";
 
-import { dataRequest } from "../../action/userAction.js";
+import { setScrapRequest } from "../../action/userAction.js";
 import { debounce } from "lodash";
 
 const cx = classNames.bind(styles);
@@ -23,7 +23,7 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = { recommendRequest, searchRequest, dataRequest };
+const mapDispatchToProps = { recommendRequest, searchRequest, setScrapRequest };
 
 class MainView extends Component {
   state = {
@@ -195,7 +195,7 @@ class MainView extends Component {
         ID: cocktailID
       }
     });
-    this.props.dataRequest({ type, data: { cocktailID, userID } });
+    this.props.setScrapRequest({ type, data: { cocktailID, userID } });
   }, 300);
 
   recommend_cocktail = ({ data }) => {
