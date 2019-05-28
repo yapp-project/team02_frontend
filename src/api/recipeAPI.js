@@ -51,3 +51,12 @@ export async function getStuffByView({ingredient}) {
   const res = await webRequestUtil.get({ url, body });
   return res.data;
 }
+
+export async function addComment({ comment }) {
+  const url = "recipe/comment";
+  const body = {
+    comment
+  };
+  const res = await webRequestUtil.post({ url, body });
+  return res.data;
+}

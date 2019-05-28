@@ -33,6 +33,8 @@ import arrowRight from "../../static/images/arrow-right.svg";
 import { setScrapRequest } from "../../action/userAction.js";
 import { withRouter } from "react-router-dom";
 
+import { addCommentRequest } from "../../action/recipeAction";
+
 const toolbarStyleCommon = {
   backgroundRepeat: "no-repeat",
   backgroundSize: "21px",
@@ -53,12 +55,16 @@ const mapStateToProps = state => {
     recipe_info: state.recipeReducer.recipe_info,
     stuffs: state.recipeReducer.stuffs,
     photos: state.recipeReducer.photos,
-    comments: state.recipeReducer.comments,
+    comment: state.recipeReducer.comment,
     scrap: state.userReducer.scrap
   };
 };
 
-const mapDispatchToProps = { recipeIDRequest, setScrapRequest };
+const mapDispatchToProps = {
+  recipeIDRequest,
+  setScrapRequest,
+  addCommentRequest
+};
 
 class ViewRecipe extends Component {
   state = {
@@ -75,7 +81,7 @@ class ViewRecipe extends Component {
     },
     stuffs: [],
     photos: [],
-    comments: [],
+    comment: [],
     main: <RecipeCup glass="0" />,
     side: <RecipeInfo alcohol="0" recipe="" descripe="" tags={[]} />,
     bShowDelete: false,
@@ -100,7 +106,7 @@ class ViewRecipe extends Component {
     if (
       prevProps.stuff === undefined &&
       prevProps.photos === undefined &&
-      prevProps.comments === undefined &&
+      prevProps.comment === undefined &&
       prevProps.recipe_info === undefined
     ) {
       const auth = JSON.parse(localStorage.getItem("myData")); //localstorage에서 가져옴
@@ -109,7 +115,7 @@ class ViewRecipe extends Component {
           recipe_info: this.props.recipe_info,
           stuffs: this.props.stuffs,
           photos: this.props.photos,
-          comments: this.props.comments,
+          comment: this.props.comment,
           main: <RecipeCup glass={this.props.recipe_info.glass} />,
           side: (
             <RecipeInfo
@@ -146,7 +152,7 @@ class ViewRecipe extends Component {
             recipe_info: this.props.recipe_info,
             stuffs: this.props.stuffs,
             photos: this.props.photos,
-            comments: this.props.comments,
+            comment: this.props.comment,
             main: <RecipeCup glass={this.props.recipe_info.glass} />,
             side: (
               <RecipeInfo
@@ -283,7 +289,7 @@ class ViewRecipe extends Component {
         main: <RecipeCup glass={this.state.recipe_info.glass} />,
         side: (
           <RecipeComment
-            comments={this.state.comments}
+            comment={this.state.comment}
             onAddComment={this.onAddComment}
           />
         )
@@ -295,23 +301,36 @@ class ViewRecipe extends Component {
   };
 
   onAddComment = () => {
-    let comment = document.querySelector("#commentText").value;
-    if (comment !== "" && comment !== undefined && comment !== null) {
+    let commentText = document.querySelector("#commentText").value;
+    if (
+      commentText !== "" &&
+      commentText !== undefined &&
+      commentText !== null
+    ) {
       let now = new Date();
       let time =
-        now.getHours > 9
+        now.getHours() > 9
           ? `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`
           : `0${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
-      let comments = this.state.comments;
-      comments.push({ nick: "사용자", comments: comment, time: time });
+      let thisComment = {
+        nick: this.state.recipe_info.nick,
+        comment: commentText,
+        time: time
+      };
+      let comment = this.state.comment;
+      comment.push();
+      //TODO : 형 로그인 했을 경우 그 로그인 한 사람의 닉네임 어떤식으로 활용해요?
+      //comment 안에 nick 여기에 로그인 한 사람의 닉네임이 들어가야되요
 
-      this.setState({ comments: comments });
+      this.setState({ comment: comment });
       this.setState({
         side: (
-          <RecipeComment comments={comments} onAddComment={this.onAddComment} />
+          <RecipeComment comment={comment} onAddComment={this.onAddComment} />
         )
       });
-
+      this.props.addCommentRequest({ id: this.props.id, comment: thisComment });
+      // 여기 이 api 호출하고 성공할 시 그때 ui 에 추가해주는건 그때 해줘야함
+      // 즉, update 그 function 에서 해야함
       document.querySelector("#commentText").value = "";
     }
   };
