@@ -195,7 +195,6 @@ class SearchResult extends Component {
         ? page !== this.state.pages
         : true;
     const prev = index === 0 ? page !== 1 : true;
-
     this.setState({
       viewRecipeInfo: {
         bShow: true,
@@ -231,12 +230,10 @@ class SearchResult extends Component {
     event.preventDefault();
     event.stopPropagation();
     const { page, index } = this.state.viewRecipeInfo;
-
     if (bNext) {
       //다음
       const len = this.state.searchList[page - 1].list.length;
       if (page === this.state.pages && index === len - 2) {
-        //마지막 직전
         this.setState({
           viewRecipeInfo: {
             ...this.state.viewRecipeInfo,
@@ -260,7 +257,7 @@ class SearchResult extends Component {
             this.setState({
               viewRecipeInfo: {
                 ...this.state.viewRecipeInfo,
-                ID: this.state.searchList[page].list[0].props.props._id,
+                ID: this.state.searchList[page - 1].list[0].props.props._id,
                 page: page + 1,
                 index: 0,
                 prev: true
@@ -400,7 +397,6 @@ class SearchResult extends Component {
     const cocktailID = event.target.id;
     const auth = JSON.parse(localStorage.getItem("myData")); //localstorage에서 가져옴
     const userID = auth.userid;
-    console.log("Like 클릭 ! : ", cocktailID, userID);
 
     const result = this.findCocktailIndex(cocktailID);
     const page = parseInt(result[0]);

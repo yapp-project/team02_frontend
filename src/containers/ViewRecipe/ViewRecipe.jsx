@@ -30,7 +30,7 @@ import heartIcon from "../../static/images/heart-button.svg";
 import arrowLeft from "../../static/images/arrow-left.svg";
 import arrowRight from "../../static/images/arrow-right.svg";
 
-import { dataRequest } from "../../action/userAction.js";
+import { setScrapRequest } from "../../action/userAction.js";
 import { withRouter } from "react-router-dom";
 
 import { addCommentRequest } from "../../action/recipeAction";
@@ -60,7 +60,11 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = { recipeIDRequest, dataRequest, addCommentRequest };
+const mapDispatchToProps = {
+  recipeIDRequest,
+  setScrapRequest,
+  addCommentRequest
+};
 
 class ViewRecipe extends Component {
   state = {
@@ -99,7 +103,6 @@ class ViewRecipe extends Component {
       this.props.recipeIDRequest(id);
       return;
     }
-
     if (
       prevProps.stuff === undefined &&
       prevProps.photos === undefined &&
@@ -174,6 +177,39 @@ class ViewRecipe extends Component {
           }
         );
       } else {
+        if (prevProps.recipe_info !== this.props.recipe_info) {
+          const auth = JSON.parse(localStorage.getItem("myData")); //localstorage에서 가져옴
+          this.setState(
+            {
+              recipe_info: this.props.recipe_info,
+              stuffs: this.props.stuffs,
+              photos: this.props.photos,
+              comments: this.props.comments,
+              main: <RecipeCup glass={this.props.recipe_info.glass} />,
+              side: (
+                <RecipeInfo
+                  alcohol={this.state.recipe_info.alcohol}
+                  recipe={this.state.recipe_info.cocktail}
+                  descripe={this.state.recipe_info.description}
+                  tags={this.state.recipe_info.tags}
+                />
+              ),
+              userID: auth ? auth.userid : ""
+            },
+            () => {
+              document.getElementById(
+                "cocktail"
+              ).innerHTML = this.props.recipe_info.cocktail;
+              document.getElementById(
+                "description"
+              ).innerHTML = this.props.recipe_info.description;
+              document.getElementById(
+                "tag"
+              ).innerHTML = this.props.recipe_info.tags.join(" ");
+            }
+          );
+          return;
+        }
         const nowScrap = this.props.scrap;
         if (nowScrap.result && prevProps.scrap.status !== nowScrap.status) {
           let num = 1;
@@ -181,7 +217,10 @@ class ViewRecipe extends Component {
             num = -1;
           }
           this.setState({
-            recipe_info: { like: this.state.recipe_info.like + num }
+            recipe_info: {
+              ...this.state.recipe_info,
+              like: this.state.recipe_info.like + num
+            }
           });
         }
       }
@@ -263,17 +302,23 @@ class ViewRecipe extends Component {
 
   onAddComment = () => {
     let commentText = document.querySelector("#commentText").value;
-    if (commentText !== "" && commentText !== undefined && commentText !== null) {
+    if (
+      commentText !== "" &&
+      commentText !== undefined &&
+      commentText !== null
+    ) {
       let now = new Date();
       let time =
         now.getHours() > 9
           ? `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`
           : `0${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
-      let thisComment = { nick: this.state.recipe_info.nick, comment: commentText, time: time };
+      let thisComment = {
+        nick: this.state.userID,
+        comment: commentText,
+        time: time
+      };
       let comment = this.state.comment;
-      comment.push();
-      //TODO : 형 로그인 했을 경우 그 로그인 한 사람의 닉네임 어떤식으로 활용해요?
-      //comment 안에 nick 여기에 로그인 한 사람의 닉네임이 들어가야되요
+      comment.push(thisComment);
 
       this.setState({ comment: comment });
       this.setState({
@@ -281,7 +326,7 @@ class ViewRecipe extends Component {
           <RecipeComment comment={comment} onAddComment={this.onAddComment} />
         )
       });
-      this.props.addCommentRequest({id: this.props.id, comment: thisComment});
+      this.props.addCommentRequest({ id: this.props.id, comment: thisComment });
       // 여기 이 api 호출하고 성공할 시 그때 ui 에 추가해주는건 그때 해줘야함
       // 즉, update 그 function 에서 해야함
       document.querySelector("#commentText").value = "";
@@ -316,7 +361,7 @@ class ViewRecipe extends Component {
 
   onLikeClick = event => {
     const type = 3;
-    this.props.dataRequest({
+    this.props.setScrapRequest({
       type,
       data: { cocktailID: this.props.id, userID: this.state.userID }
     });

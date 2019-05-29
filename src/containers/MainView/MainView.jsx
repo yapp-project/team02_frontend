@@ -143,6 +143,7 @@ class MainView extends Component {
 
     //click한 칵테일의 위치를 List에서 찾는 Logic
     const index = this.findCocktailIndex(cocktailID);
+
     const next = index !== this.props.recommend.result.length - 1;
     const prev = index !== 0;
     this.setState({
@@ -262,16 +263,17 @@ class MainView extends Component {
         this.setState({
           viewRecipeInfo: {
             ...this.state.viewRecipeInfo,
-            ID: list[index + 1],
+            ID: list[index + 1]._id,
             index: index + 1,
-            next: false
+            next: false,
+            prev: true
           }
         });
       } else {
         this.setState({
           viewRecipeInfo: {
             ...this.state.viewRecipeInfo,
-            ID: list[index + 1],
+            ID: list[index + 1]._id,
             index: index + 1,
             prev: true
           }
@@ -283,16 +285,17 @@ class MainView extends Component {
         this.setState({
           viewRecipeInfo: {
             ...this.state.viewRecipeInfo,
-            ID: list[index - 1],
+            ID: list[index - 1]._id,
             index: index - 1,
-            prev: false
+            prev: false,
+            next: true
           }
         });
       } else {
         this.setState({
           viewRecipeInfo: {
             ...this.state.viewRecipeInfo,
-            ID: list[index - 1],
+            ID: list[index - 1]._id,
             index: index - 1,
             next: true
           }
