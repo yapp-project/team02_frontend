@@ -69,8 +69,6 @@ class Enrolment extends Component {
   }
 
   selectStep;
-  selectCup;
-  selectAlcohol;
   doneClose;
   contents;
   inputTarget;
@@ -88,7 +86,8 @@ class Enrolment extends Component {
     }
 
     document.addEventListener("DOMContentLoaded", () => {
-      this.selectCup = document.querySelector(".cup-item1").classList[1];
+      // this.selectCup = document.querySelector(".cup-item1").classList[1];
+      // console.log(this.selectCup);
       this.selectAlcohol = document.querySelector(
         ".alcohol-item1"
       ).classList[1];
@@ -136,6 +135,25 @@ class Enrolment extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    let info = this.state.enrolmentData.info;
+    let stuff = this.state.enrolmentData.stuff;
+
+    if (info.name !== "" && info.describe !== "" && info.tags.tags !== "") {
+      let stuffCheck = true;
+
+      stuff.forEach(val => {
+        if(val.name === "" || val.ml === "") stuffCheck = false;
+      });
+
+      if (stuffCheck) {
+        document.getElementById("saveRecipe").style.opacity = 1;
+      } else {
+        document.getElementById("saveRecipe").style.opacity = 0.2;
+      }
+    } else {
+      document.getElementById("saveRecipe").style.opacity = 0.2;
+    }
+
     if (prevProps.result === undefined && this.props.state === "success") {
       this.onUploadImage(this.state.images, this.props.result._id);
       // 이미지 데이터를 제외한 나머지 등록 정보가 서버에 잘 반영되면 여기 분기문으로 들어옴
@@ -207,6 +225,7 @@ class Enrolment extends Component {
   };
 
   changeCup = cupText => {
+    let selectCup = "";
     let cupArea = document.querySelector("#cup-area");
     let cupTarget = document.querySelectorAll(
       ".cup-item1, .cup-item2, .cup-item3, .cup-item4, .cup-item5"
@@ -214,40 +233,43 @@ class Enrolment extends Component {
     let enrolmentData = { ...this.state.enrolmentData };
 
     cupTarget.forEach(val => {
-      val.classList.remove(this.selectCup);
+      if(val.classList.length === 2) {
+        selectCup = val.classList[1];
+        val.classList.remove(selectCup);
+      }
     });
 
     switch (cupText) {
       case "하이볼":
-        cupTarget[0].classList.add(this.selectCup);
+        cupTarget[0].classList.add(selectCup);
         enrolmentData.info.cup = "하이볼";
         this.setState({ enrolmentData });
 
         cupArea.style.backgroundImage = `url(${cup_empty1})`;
         break;
       case "리큐르":
-        cupTarget[1].classList.add(this.selectCup);
+        cupTarget[1].classList.add(selectCup);
         enrolmentData.info.cup = "리큐르";
         this.setState({ enrolmentData });
 
         cupArea.style.backgroundImage = `url(${cup_empty2})`;
         break;
       case "허리케인":
-        cupTarget[2].classList.add(this.selectCup);
+        cupTarget[2].classList.add(selectCup);
         enrolmentData.info.cup = "허리케인";
         this.setState({ enrolmentData });
 
         cupArea.style.backgroundImage = `url(${cup_empty3})`;
         break;
       case "마가렛":
-        cupTarget[3].classList.add(this.selectCup);
+        cupTarget[3].classList.add(selectCup);
         enrolmentData.info.cup = "마가렛";
         this.setState({ enrolmentData });
 
         cupArea.style.backgroundImage = `url(${cup_empty4})`;
         break;
       case "마티니":
-        cupTarget[4].classList.add(this.selectCup);
+        cupTarget[4].classList.add(selectCup);
         enrolmentData.info.cup = "마티니";
         this.setState({ enrolmentData });
 
@@ -259,29 +281,33 @@ class Enrolment extends Component {
   };
 
   onChangeAlcohol = event => {
+    let selectAlcohol = "";
     let alcoholTarget = document.querySelectorAll(".alcohol > li");
     let cupTarget =
       event.target.nodeName === "SPAN" ? event.target.parentNode : event.target;
     let enrolmentData = { ...this.state.enrolmentData };
 
     alcoholTarget.forEach(val => {
-      val.classList.remove(this.selectAlcohol);
+      if(val.classList.length === 2) {
+        selectAlcohol = val.classList[1];
+        val.classList.remove(selectAlcohol);
+      }
     });
 
     if (alcoholTarget[0] === cupTarget) {
-      alcoholTarget[0].classList.add(this.selectAlcohol);
+      alcoholTarget[0].classList.add(selectAlcohol);
       enrolmentData.info.alcohol = 0;
     } else if (alcoholTarget[1] === cupTarget) {
-      alcoholTarget[1].classList.add(this.selectAlcohol);
+      alcoholTarget[1].classList.add(selectAlcohol);
       enrolmentData.info.alcohol = 1;
     } else if (alcoholTarget[2] === cupTarget) {
-      alcoholTarget[2].classList.add(this.selectAlcohol);
+      alcoholTarget[2].classList.add(selectAlcohol);
       enrolmentData.info.alcohol = 2;
     } else if (alcoholTarget[3] === cupTarget) {
-      alcoholTarget[3].classList.add(this.selectAlcohol);
+      alcoholTarget[3].classList.add(selectAlcohol);
       enrolmentData.info.alcohol = 3;
     } else if (alcoholTarget[4] === cupTarget) {
-      alcoholTarget[4].classList.add(this.selectAlcohol);
+      alcoholTarget[4].classList.add(selectAlcohol);
       enrolmentData.info.alcohol = 4;
     }
   };
@@ -474,62 +500,194 @@ class Enrolment extends Component {
   };
 
   onSaveRecipe = () => {
-    let cup = this.state.enrolmentData.info.cup;
-    if (cup === "하이볼") cup = 0;
-    else if (cup === "리큐르") cup = 1;
-    else if (cup === "허리케인") cup = 2;
-    else if (cup === "마가렛") cup = 3;
-    else cup = 4;
-
-    //해쉬태그 분리
-    let tags = this.state.enrolmentData.info.tags;
-    const regexp = /\#[^#\s,;]+/g;
-    tags = tags.match(regexp);
-    if (tags) {
-      tags = tags.map(item => item.replace("#", "")).toString();
-    }
-
-    let data = {
-      name: this.state.enrolmentData.info.name,
-      glass: cup,
-      percent: this.state.enrolmentData.info.alcohol,
-      description: this.state.enrolmentData.info.describe,
-      tag: tags,
-      ingredient: this.state.enrolmentData.stuff,
-      owner: this.state.userID
-    };
-
-    // TODO
-    // 데이터 validation 체크 해야 함
-    this.props.enrolmentRequest(data);
-  };
-
-  onUploadImage = (images, id) => {
-    let formData = new FormData();
-    images.forEach(image => {
-      formData.append("images", image);
-      formData.append("timestamp", (Date.now() / 1000) | 0);
-    });
-
-    formData.append("id", id);
-
-    axios
-      .post(
-        "http://ec2-18-191-88-64.us-east-2.compute.amazonaws.com:9000/recipe/upload",
-        formData,
-        {
-          headers: { "X-Requested-With": "XMLHttpRequest" }
-        }
-      )
-      .then(response => {
-        const data = response.data;
-        // const fileURL = data.secure_url // You should store this URL for future references in your app
-        console.log(id);
-        console.log(data);
-      })
-      .catch(e => {
-        console.error(e);
+    if (this.state.enrolmentData.info.name === "" || this.state.enrolmentData.info.name === undefined) {
+      let stepTarget = document.querySelectorAll(".step-1, .step-2, .step-3");
+      stepTarget.forEach(val => {
+        val.classList.remove(this.selectStep);
       });
+      stepTarget[0].classList.add(this.selectStep);
+        this.setState({ left: <Left contents={this.contents[0]} /> });
+        this.setState({ middle: <Middle /> });
+        this.setState({
+          step: (
+            <Step1
+              onChangeCup={this.onChangeCup}
+              onChangeAlcohol={this.onChangeAlcohol}
+              onSaveName={this.onSaveName}
+              onSaveDescribe={this.onSaveDescribe}
+              onSaveTags={this.onSaveTags}
+              info={this.state.enrolmentData.info}
+            />
+          )
+        }, () => {
+          document.getElementById("recipe-name").focus();
+          alert("레시피 이름을 입력해주세요!");
+        });
+    } else if (this.state.enrolmentData.info.describe === "" || this.state.enrolmentData.info.describe === undefined) {
+      let stepTarget = document.querySelectorAll(".step-1, .step-2, .step-3");
+      stepTarget.forEach(val => {
+        val.classList.remove(this.selectStep);
+      });
+      stepTarget[0].classList.add(this.selectStep);
+        this.setState({ left: <Left contents={this.contents[0]} /> });
+        this.setState({ middle: <Middle /> });
+        this.setState({
+          step: (
+            <Step1
+              onChangeCup={this.onChangeCup}
+              onChangeAlcohol={this.onChangeAlcohol}
+              onSaveName={this.onSaveName}
+              onSaveDescribe={this.onSaveDescribe}
+              onSaveTags={this.onSaveTags}
+              info={this.state.enrolmentData.info}
+            />
+          )
+        }, () => {
+          document.getElementById("recipe-descripe").focus();
+          alert("레시피 설명을 입력해주세요!");
+        });
+    } else if (this.state.enrolmentData.info.tags === "" || this.state.enrolmentData.info.tags === undefined) {
+      let stepTarget = document.querySelectorAll(".step-1, .step-2, .step-3");
+      stepTarget.forEach(val => {
+        val.classList.remove(this.selectStep);
+      });
+      stepTarget[0].classList.add(this.selectStep);
+        this.setState({ left: <Left contents={this.contents[0]} /> });
+        this.setState({ middle: <Middle /> });
+        this.setState({
+          step: (
+            <Step1
+              onChangeCup={this.onChangeCup}
+              onChangeAlcohol={this.onChangeAlcohol}
+              onSaveName={this.onSaveName}
+              onSaveDescribe={this.onSaveDescribe}
+              onSaveTags={this.onSaveTags}
+              info={this.state.enrolmentData.info}
+            />
+          )
+        }, () => {
+          document.getElementById("recipe-tag").focus();
+          alert("레시피 태그를 입력해주세요!");
+        });
+    } else {
+      let stuffs = this.state.enrolmentData.stuff;
+      for (let i = 0; i < stuffs.length; i++) {
+        let stepTarget = document.querySelectorAll(".step-1, .step-2, .step-3");
+
+        if (stuffs[i].name === "") {
+          stepTarget.forEach(val => {
+            val.classList.remove(this.selectStep);
+          });
+          stepTarget[1].classList.add(this.selectStep);
+          this.setState({ left: <Left contents={this.contents[1]} /> });
+          this.setState({ middle: <Middle /> });
+          this.setState({
+            step: (
+              <Step2
+                stuff={this.state.enrolmentData.stuff}
+                idx={this.state.stuffID}
+                onAddStuff={this.onAddStuff}
+                onDeleteStuff={this.onDeleteStuff}
+                onSaveStuffName={this.onSaveStuffName}
+                onSaveStuffVolume={this.onSaveStuffVolume}
+                onSelectColor={this.onSelectColor}
+                validateNumber={this.validateNumber}
+              />
+            )
+          }, () => {
+            let stuffElement = document.querySelectorAll("#stuff-container > div");
+            console.log(stuffElement[i].childNodes[0].childNodes[0].childNodes[1].focus());
+            alert("재료 이름을 입력해주세요!");
+          });
+
+          break;
+        } else if (stuffs[i].ml === "") {
+          stepTarget.forEach(val => {
+            val.classList.remove(this.selectStep);
+          });
+          stepTarget[1].classList.add(this.selectStep);
+          this.setState({ left: <Left contents={this.contents[1]} /> });
+          this.setState({ middle: <Middle /> });
+          this.setState({
+            step: (
+              <Step2
+                stuff={this.state.enrolmentData.stuff}
+                idx={this.state.stuffID}
+                onAddStuff={this.onAddStuff}
+                onDeleteStuff={this.onDeleteStuff}
+                onSaveStuffName={this.onSaveStuffName}
+                onSaveStuffVolume={this.onSaveStuffVolume}
+                onSelectColor={this.onSelectColor}
+                validateNumber={this.validateNumber}
+              />
+            )
+          }, () => {
+            let stuffElement = document.querySelectorAll("#stuff-container > div");
+            console.log(stuffElement[i].childNodes[0].childNodes[0].childNodes[2].focus());
+            alert("재료 용량을 입력해주세요!");
+          }); 
+
+          break;
+        }
+      }
+    }
+    
+  //   let cup = this.state.enrolmentData.info.cup;
+  //   if (cup === "하이볼") cup = 0;
+  //   else if (cup === "리큐르") cup = 1;
+  //   else if (cup === "허리케인") cup = 2;
+  //   else if (cup === "마가렛") cup = 3;
+  //   else cup = 4;
+
+  //   //해쉬태그 분리
+  //   let tags = this.state.enrolmentData.info.tags;
+  //   const regexp = /\#[^#\s,;]+/g;
+  //   tags = tags.match(regexp);
+  //   if (tags) {
+  //     tags = tags.map(item => item.replace("#", "")).toString();
+  //   }
+
+  //   let data = {
+  //     name: this.state.enrolmentData.info.name,
+  //     glass: cup,
+  //     percent: this.state.enrolmentData.info.alcohol,
+  //     description: this.state.enrolmentData.info.describe,
+  //     tag: tags,
+  //     ingredient: this.state.enrolmentData.stuff,
+  //     owner: this.state.userID
+  //   };
+
+  //   // TODO
+  //   // 데이터 validation 체크 해야 함
+  //   this.props.enrolmentRequest(data);
+  // };
+
+  // onUploadImage = (images, id) => {
+  //   let formData = new FormData();
+  //   images.forEach(image => {
+  //     formData.append("images", image);
+  //     formData.append("timestamp", (Date.now() / 1000) | 0);
+  //   });
+
+  //   formData.append("id", id);
+
+  //   axios
+  //     .post(
+  //       "http://ec2-18-191-88-64.us-east-2.compute.amazonaws.com:9000/recipe/upload",
+  //       formData,
+  //       {
+  //         headers: { "X-Requested-With": "XMLHttpRequest" }
+  //       }
+  //     )
+  //     .then(response => {
+  //       const data = response.data;
+  //       // const fileURL = data.secure_url // You should store this URL for future references in your app
+  //       console.log(id);
+  //       console.log(data);
+  //     })
+  //     .catch(e => {
+  //       console.error(e);
+  //     });
   };
 
   handleChange = color => {

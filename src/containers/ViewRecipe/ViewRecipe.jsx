@@ -313,6 +313,14 @@ class ViewRecipe extends Component {
             isUser={this.state.userID ? true : false}
           />
         )
+      }, () => {
+        if(localStorage.getItem("myData") === null) {
+          document.getElementById("commentText").disabled = true ;
+          document.getElementById("commentText").placeholder = "로그인 이후 입력 가능합니다";
+        } else {
+          document.getElementById("commentText").disabled = false ;
+          document.getElementById("commentText").placeholder = "텍스트를 입력해주세요";
+        }
       });
 
       comment.style.backgroundImage = `url(${commentImageP})`;

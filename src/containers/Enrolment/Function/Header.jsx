@@ -19,7 +19,7 @@ const EnrolmentHeader = ({onChangeStepStatus, onSaveRecipe}) => {
             <span>STEP 3</span>
         </span>
 
-        <span className={cx("save")} onClick={onSaveRecipe}>저장하기</span>
+        <span id="saveRecipe" className={cx("save")} onClick={onSaveRecipe}>저장하기</span>
     </div>
   );
 };
