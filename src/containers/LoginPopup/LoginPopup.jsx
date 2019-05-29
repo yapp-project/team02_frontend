@@ -23,7 +23,8 @@ const mapStateToProps = state => {
     bLoginResult: state.userReducer.bLoginResult,
     user: state.userReducer.user,
     bModifyUser: state.userReducer.bModifyUser,
-    bUserDelete: state.userReducer.bUserDelete
+    bUserDelete: state.userReducer.bUserDelete,
+    set_auth: state.userReducer.set_auth
   };
 };
 
@@ -82,6 +83,15 @@ class LoginPopup extends Component {
           if (this.state.checkID) {
             this.setState({ checkID: false });
           }
+          break;
+      }
+    } else if (prevProps.user.state === actions.LOGIN.REQUEST) {
+      this.setState({ loading: false });
+      switch (user.state) {
+        case actions.LOGIN.FAILED:
+          alert("아이디/비밀번호를 다시 확인해 주세요!");
+          break;
+        default:
           break;
       }
     }

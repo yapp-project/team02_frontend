@@ -20,12 +20,37 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
+    case actions.LOGIN.REQUEST: {
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          state: action.type
+        }
+      };
+    }
     case actions.LOGIN.SUCCESS: {
       const { result } = action.payload;
       return {
         ...state,
         set_auth: true,
-        bLoginResult: result
+        bLoginResult: result,
+        user: {
+          ...state.user,
+          state: action.type
+        }
+      };
+    }
+    case actions.LOGIN.FAILED: {
+      const { result } = action.payload;
+      return {
+        ...state,
+        set_auth: false,
+        bLoginResult: result,
+        user: {
+          ...state.user,
+          state: action.type
+        }
       };
     }
     case actions.IDCHECK.REQUEST: {

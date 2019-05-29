@@ -2,6 +2,7 @@ import { all, takeLatest, call, put } from "redux-saga/effects";
 import {
   actions,
   loginSuccess,
+  loginFailed,
   checkIDSuccess,
   registerSuccess,
   registerFailed,
@@ -38,6 +39,9 @@ function* requestLogin(action) {
       if (auth) {
         logout();
       }
+      yield put(loginFailed(false));
+    } else {
+      yield put(loginFailed(false));
     }
   }
 }
