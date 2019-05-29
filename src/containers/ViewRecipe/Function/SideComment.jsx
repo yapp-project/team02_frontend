@@ -15,8 +15,12 @@ const RecipeComment = props => {
               key={`comment${index}`}
               className={cx("detail-content-main-side-comment-item")}
             >
-              <span className={cx("comment-name")}>{input.nick}</span>
-              <span className={cx("comment-content")}>{input.comment}</span>
+              <span className={cx("comment-name")} title={input.nick}>
+                {input.nick}
+              </span>
+              <span className={cx("comment-content")} title={input.comment}>
+                {input.comment}
+              </span>
               <span className={cx("comment-time")}>{input.time}</span>
             </div>
           );

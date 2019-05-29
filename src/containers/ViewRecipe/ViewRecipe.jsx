@@ -345,7 +345,11 @@ class ViewRecipe extends Component {
         this.setState({
           comment: comment,
           side: (
-            <RecipeComment comment={comment} onAddComment={this.onAddComment} />
+            <RecipeComment
+              comment={comment}
+              onAddComment={this.onAddComment}
+              isUser={this.state.userID ? true : false}
+            />
           )
         });
         this.props.addCommentRequest({
