@@ -25,7 +25,6 @@ const RecipeComment = (props) => {
                 id="commentText"
                 className={cx("comment-input")}
                 type="text"
-                placeholder="텍스트를 입력해주세요"
             />
 
             <Button
