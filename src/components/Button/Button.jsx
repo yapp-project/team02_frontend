@@ -10,6 +10,7 @@ const Button = props => {
       key={props.key ? props.key : props.className}
       className={cx(props.className, { button: !props.className })}
       onClick={props.onClick}
+      disabled={props.disabled}
     >
       {props.value}
     </button>

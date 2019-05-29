@@ -9,7 +9,7 @@
   background-color: #0f1835;
   z-index: 2;
 
-  >span {
+  > span {
     display: table-cell;
     vertical-align: middle;
     font-size: 40px;
@@ -28,7 +28,7 @@
       height: 51px;
 
       span::before {
-        content: '';
+        content: "";
         display: inline-block;
         vertical-align: middle;
         height: 100%;
@@ -39,14 +39,12 @@
         margin-top: 15px;
       }
     }
-
   }
-
 }
 
 .detail-content-header::after {
   display: block;
-  content: '';
+  content: "";
   clear: both;
 }
 
@@ -57,7 +55,7 @@
   height: 90%;
   left: 50%;
   top: 50%;
-  transform: translate(-50%,-50%);
+  transform: translate(-50%, -50%);
 }
 
 .detail-content-main-view-image {
@@ -67,7 +65,7 @@
   padding-bottom: 70%;
   left: 50%;
   top: 50%;
-  transform: translate(-50%,-50%);
+  transform: translate(-50%, -50%);
 }
 
 .detail-content-main-side-info {
@@ -108,8 +106,8 @@
     }
 
     span:first-child {
-        font-size: 10px;
-        margin-bottom: 15%;
+      font-size: 10px;
+      margin-bottom: 15%;
     }
   }
 
@@ -119,17 +117,16 @@
 
   .side-info-alcohol::after {
     display: block;
-    content: '';
+    content: "";
     clear: both;
   }
-
 }
 
 .detail-content-main-side-stuff {
   position: relative;
   width: 100%;
   height: calc(100% - 60px);
-  
+
   div {
     height: auto;
   }
@@ -146,7 +143,7 @@
       border-top: 1px solid #707070;
 
       span::before {
-        content: '';
+        content: "";
         display: inline-block;
         vertical-align: middle;
         height: 100%;
@@ -189,9 +186,7 @@
     .detail-content-main-side-stuff-item:first-child {
       border-top: none;
     }
-
   }
-
 }
 
 .detail-content-main-side-photo {
@@ -227,14 +222,14 @@
       margin: 0 5%;
       padding: 4% 0;
       border-bottom: 1px solid #707070;
-  
+
       span::before {
-        content: '';
+        content: "";
         display: inline-block;
         vertical-align: middle;
         height: 100%;
       }
-  
+
       span {
         display: inline-block;
         font-weight: normal;
@@ -242,21 +237,21 @@
         overflow: hidden;
         white-space: nowrap;
       }
-  
+
       .comment-name {
         width: 20%;
         font-size: 15px;
         margin-left: 5%;
         font-weight: bold;
       }
-  
+
       .comment-content {
         width: 60%;
         font-size: 15px;
         margin-left: 5%;
         font-weight: normal;
       }
-  
+
       .comment-time {
         display: block;
         position: absolute;
@@ -271,7 +266,7 @@
   .detail-content-main-side-comment-input {
     height: 74px;
     box-sizing: border-box;
-  
+
     .comment-input {
       display: block;
       position: relative;
@@ -289,8 +284,14 @@
       font-weight: 300;
       text-align: left;
       color: #ffffff;
+
+      &._disabled {
+        background-color: rgba(128, 128, 128, 0.308);
+        cursor: default;
+        font-weight: bold;
+      }
     }
-  
+
     .comment-button {
       display: block;
       position: relative;
@@ -302,8 +303,18 @@
       transform: translateY(-50%);
       border: solid 1px #ffffff;
       background-color: transparent;
+      background-image: url("../../../static/images/arrow_upward_white.png");
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: contain;
       border-radius: 100%;
       box-sizing: border-box;
+      cursor: pointer;
+
+      &._disabled {
+        background-color: rgba(128, 128, 128, 0.308);
+        cursor: default;
+      }
     }
   }
 }

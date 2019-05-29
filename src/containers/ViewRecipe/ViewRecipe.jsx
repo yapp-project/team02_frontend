@@ -140,7 +140,7 @@ class ViewRecipe extends Component {
         }
       );
     } else {
-      //값이 있는 경우
+      //닫았다가 같은 칵테일을 연 경우
       if (
         prevProps.id === this.props.id &&
         !this.state.stuffs.length &&
@@ -177,8 +177,17 @@ class ViewRecipe extends Component {
           }
         );
       } else {
+        // 좌/우 이동하여 칵테일 변경 했을 때
         if (prevProps.recipe_info !== this.props.recipe_info) {
           const auth = JSON.parse(localStorage.getItem("myData")); //localstorage에서 가져옴
+          const info = document.querySelector("#info");
+          const stuff = document.querySelector("#stuff");
+          const photo = document.querySelector("#photo");
+          const comment = document.querySelector("#comment");
+
+          this.initTabButtonStyle({ info, stuff, photo, comment });
+          info.style.backgroundImage = `url(${infoImageP})`;
+          info.style.opacity = 1;
           this.setState(
             {
               recipe_info: this.props.recipe_info,
@@ -210,6 +219,8 @@ class ViewRecipe extends Component {
           );
           return;
         }
+
+        //스크랩하기 버튼 클릭 시 처리
         const nowScrap = this.props.scrap;
         if (nowScrap.result && prevProps.scrap.status !== nowScrap.status) {
           let num = 1;
@@ -227,12 +238,7 @@ class ViewRecipe extends Component {
     }
   }
 
-  onChangeFocusing = event => {
-    let info = document.querySelector("#info");
-    let stuff = document.querySelector("#stuff");
-    let photo = document.querySelector("#photo");
-    let comment = document.querySelector("#comment");
-
+  initTabButtonStyle = ({ info, stuff, photo, comment }) => {
     info.style.backgroundImage = `url(${infoImage})`;
     info.style.opacity = 0.4;
 
@@ -244,7 +250,14 @@ class ViewRecipe extends Component {
 
     comment.style.backgroundImage = `url(${commentImage})`;
     comment.style.opacity = 0.4;
+  };
 
+  onChangeFocusing = event => {
+    let info = document.querySelector("#info");
+    let stuff = document.querySelector("#stuff");
+    let photo = document.querySelector("#photo");
+    let comment = document.querySelector("#comment");
+    this.initTabButtonStyle({ info, stuff, photo, comment });
     if (info === event.target || info === event.target.parentNode) {
       this.setState({
         main: <RecipeCup glass={this.state.recipe_info.glass} />,
@@ -291,6 +304,7 @@ class ViewRecipe extends Component {
           <RecipeComment
             comment={this.state.comment}
             onAddComment={this.onAddComment}
+            isUser={this.state.userID ? true : false}
           />
         )
       }, () => {
@@ -310,34 +324,50 @@ class ViewRecipe extends Component {
 
   onAddComment = () => {
     let commentText = document.querySelector("#commentText").value;
-    if (
-      commentText !== "" &&
-      commentText !== undefined &&
-      commentText !== null
-    ) {
-      let now = new Date();
-      let time =
-        now.getHours() > 9
-          ? `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`
-          : `0${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
-      let thisComment = {
-        nick: this.state.userID,
-        comment: commentText,
-        time: time
-      };
-      let comment = this.state.comment;
-      comment.push(thisComment);
 
-      this.setState({ comment: comment });
-      this.setState({
-        side: (
-          <RecipeComment comment={comment} onAddComment={this.onAddComment} />
-        )
-      });
-      this.props.addCommentRequest({ id: this.props.id, comment: thisComment });
-      // 여기 이 api 호출하고 성공할 시 그때 ui 에 추가해주는건 그때 해줘야함
-      // 즉, update 그 function 에서 해야함
-      document.querySelector("#commentText").value = "";
+    if (!this.state.userID) {
+      alert("회원만 입력 가능합니다.");
+      return false;
+    } else if (!commentText) {
+      alert("내용을 입력해 주세요.");
+      return false;
+    } else {
+      if (
+        commentText !== "" &&
+        commentText !== undefined &&
+        commentText !== null
+      ) {
+        let now = new Date();
+        let time =
+          now.getHours() > 9
+            ? `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`
+            : `0${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
+        let thisComment = {
+          nick: this.state.userID,
+          comment: commentText,
+          time: time
+        };
+        let comment = this.state.comment;
+        comment.push(thisComment);
+
+        this.setState({
+          comment: comment,
+          side: (
+            <RecipeComment
+              comment={comment}
+              onAddComment={this.onAddComment}
+              isUser={this.state.userID ? true : false}
+            />
+          )
+        });
+        this.props.addCommentRequest({
+          id: this.props.id,
+          comment: thisComment
+        });
+        // 여기 이 api 호출하고 성공할 시 그때 ui 에 추가해주는건 그때 해줘야함
+        // 즉, update 그 function 에서 해야함
+        document.querySelector("#commentText").value = "";
+      }
     }
   };
 
