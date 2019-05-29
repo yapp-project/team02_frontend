@@ -15,7 +15,8 @@ const Edit = ({
   onChange,
   defaultValue,
   min,
-  max
+  max,
+  disabled
 }) => {
   return (
     <input
@@ -30,6 +31,7 @@ const Edit = ({
       defaultValue={defaultValue}
       min={min}
       max={max}
+      disabled={disabled}
     />
   );
 };
