@@ -13,7 +13,7 @@ import { loginRequest, logout } from "../../action/userAction";
 import { searchRequest } from "../../action/searchAction";
 import { withRouter } from "react-router-dom";
 
-import { CircleSpinner } from "react-spinners-kit";
+import { GridSpinner } from "react-spinners-kit";
 
 const cx = classNames.bind(styles);
 
@@ -377,8 +377,8 @@ class Header extends Component {
                 </div>
                 {!isScroll && bsearchRequest && (
                   <div className={cx("loading_rect")}>
-                    <CircleSpinner
-                      size={100}
+                    <GridSpinner
+                      size={200}
                       color="white"
                       loading={bsearchRequest}
                     />
@@ -400,8 +400,8 @@ class Header extends Component {
               <div className={cx("searchresult_container")}>
                 {bsearchRequest ? (
                   <div className={cx("notresult_rect")}>
-                    <CircleSpinner
-                      size={100}
+                    <GridSpinner
+                      size={200}
                       color="white"
                       loading={bsearchRequest}
                     />

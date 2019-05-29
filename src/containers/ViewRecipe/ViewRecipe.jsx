@@ -32,6 +32,7 @@ import arrowRight from "../../static/images/arrow-right.svg";
 
 import { setScrapRequest } from "../../action/userAction.js";
 import { withRouter } from "react-router-dom";
+import { CircleSpinner } from "react-spinners-kit";
 
 import { addCommentRequest } from "../../action/recipeAction";
 
@@ -85,7 +86,8 @@ class ViewRecipe extends Component {
     main: <RecipeCup glass="0" />,
     side: <RecipeInfo alcohol="0" recipe="" descripe="" tags={[]} />,
     bShowDelete: false,
-    userID: ""
+    userID: "",
+    bLoading: true
   };
 
   componentDidMount() {
@@ -100,6 +102,7 @@ class ViewRecipe extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.id !== this.props.id) {
       const { id } = this.props;
+      this.setState({ bLoading: true });
       this.props.recipeIDRequest(id);
       return;
     }
@@ -125,7 +128,8 @@ class ViewRecipe extends Component {
               tags={this.state.recipe_info.tags}
             />
           ),
-          userID: auth ? auth.userid : ""
+          userID: auth ? auth.userid : "",
+          bLoading: false
         },
         () => {
           document.getElementById(
@@ -162,7 +166,8 @@ class ViewRecipe extends Component {
                 tags={this.state.recipe_info.tags}
               />
             ),
-            userID: auth ? auth.userid : ""
+            userID: auth ? auth.userid : "",
+            bLoading: false
           },
           () => {
             document.getElementById(
@@ -203,7 +208,8 @@ class ViewRecipe extends Component {
                   tags={this.state.recipe_info.tags}
                 />
               ),
-              userID: auth ? auth.userid : ""
+              userID: auth ? auth.userid : "",
+              bLoading: false
             },
             () => {
               document.getElementById(
@@ -427,7 +433,17 @@ class ViewRecipe extends Component {
         {this.state.bShowDelete && (
           <div className={cx("notifypopup_rect")}>{this.showNotifyPopup()}</div>
         )}
+
         <div className={cx("detail-content")}>
+          <div className={cx("loading_rect", !this.state.bLoading && "_hide")}>
+            <div className={cx("loading_container")}>
+              <CircleSpinner
+                size={100}
+                color="white"
+                loading={this.state.bLoading}
+              />
+            </div>
+          </div>
           {this.props.isPrev && (
             <span
               style={Object.assign({}, toolbarStyleCommon, {
