@@ -304,24 +304,29 @@ class ViewRecipe extends Component {
       comment === event.target ||
       comment === event.target.parentNode
     ) {
-      this.setState({
-        main: <RecipeCup glass={this.state.recipe_info.glass} />,
-        side: (
-          <RecipeComment
-            comment={this.state.comment}
-            onAddComment={this.onAddComment}
-            isUser={this.state.userID ? true : false}
-          />
-        )
-      }, () => {
-        if(localStorage.getItem("myData") === null) {
-          document.getElementById("commentText").disabled = true ;
-          document.getElementById("commentText").placeholder = "로그인 이후 입력 가능합니다";
-        } else {
-          document.getElementById("commentText").disabled = false ;
-          document.getElementById("commentText").placeholder = "텍스트를 입력해주세요";
+      this.setState(
+        {
+          main: <RecipeCup glass={this.state.recipe_info.glass} />,
+          side: (
+            <RecipeComment
+              comment={this.state.comment}
+              onAddComment={this.onAddComment}
+              isUser={this.state.userID ? true : false}
+            />
+          )
+        },
+        () => {
+          if (localStorage.getItem("myData") === null) {
+            document.getElementById("commentText").disabled = true;
+            document.getElementById("commentText").placeholder =
+              "로그인 이후 입력 가능합니다";
+          } else {
+            document.getElementById("commentText").disabled = false;
+            document.getElementById("commentText").placeholder =
+              "텍스트를 입력해주세요";
+          }
         }
-      });
+      );
 
       comment.style.backgroundImage = `url(${commentImageP})`;
       comment.style.opacity = 1;
@@ -540,29 +545,28 @@ class ViewRecipe extends Component {
               id="close-botton"
               onClick={this.props.closeClick}
             />
-            {this.state.userID === this.state.recipe_info.nick &&
-              ((
-                <span
-                  style={Object.assign({}, toolbarStyleCommon, {
-                    backgroundImage: `url(${modifyIcon})`,
-                    backgroundSize: "cover",
-                    opacity: 1
-                  })}
-                  id="edit-botton"
-                  onClick={this.onDetailViewEdit}
-                />
-              ),
-              (
-                <span
-                  style={Object.assign({}, toolbarStyleCommon, {
-                    backgroundImage: `url(${deleteIcon})`,
-                    backgroundSize: "cover",
-                    opacity: 1
-                  })}
-                  id="delete-botton"
-                  onClick={this.onDeleteCocktailClick}
-                />
-              ))}
+            {this.state.userID === this.state.recipe_info.nick && (
+              <span
+                style={Object.assign({}, toolbarStyleCommon, {
+                  backgroundImage: `url(${modifyIcon})`,
+                  backgroundSize: "cover",
+                  opacity: 1
+                })}
+                id="edit-botton"
+                onClick={this.onDetailViewEdit}
+              />
+            )}
+            {this.state.userID === this.state.recipe_info.nick && (
+              <span
+                style={Object.assign({}, toolbarStyleCommon, {
+                  backgroundImage: `url(${deleteIcon})`,
+                  backgroundSize: "cover",
+                  opacity: 1
+                })}
+                id="delete-botton"
+                onClick={this.onDeleteCocktailClick}
+              />
+            )}
             <span
               style={Object.assign({}, toolbarStyleCommon, {
                 backgroundImage: `url(${heartIcon})`,

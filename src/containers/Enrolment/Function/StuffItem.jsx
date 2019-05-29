@@ -33,7 +33,7 @@ const EnrolmentStuffItem = props => {
             className={cx("stuff-item-input-volume")}
             placeholder="용량"
             type="number"
-            defaultValue={props.stuff.volume}
+            value={props.stuff.ml}
             onChange={e => props.onSaveStuffVolume(e, props.idx)}
             min={0}
           />

@@ -12,6 +12,7 @@ import Done from "./Function/Done";
 import { enrolmentRequest } from "../../action/enrolmentAction";
 import axios from "axios";
 import { ChromePicker } from "react-color";
+import { recipeIDRequest } from "../../action/recipeAction";
 
 import cup_empty1 from "../../static/images/glass1_empty_enrolment.png";
 import cup_empty2 from "../../static/images/glass2_empty_enrolment.png";
@@ -30,11 +31,14 @@ const cx = classNames.bind(styles);
 const mapStateToProps = state => {
   return {
     state: state.enrolmentReducer.state,
-    result: state.enrolmentReducer.result
+    result: state.enrolmentReducer.result,
+    recipe_info: state.recipeReducer.recipe_info,
+    stuffs: state.recipeReducer.stuffs,
+    photos: state.recipeReducer.photos
   };
 };
 
-const mapDispatchToProps = { enrolmentRequest };
+const mapDispatchToProps = { enrolmentRequest, recipeIDRequest };
 
 let colorTarget = "";
 
@@ -116,7 +120,11 @@ class Enrolment extends Component {
           "나만의 레시피 만들기 마지막 단계! 직접 만든 음료를 사진으로 찍어 등록하고, 썸네일 사진을 골라주세요."
       }
     ];
+    const recipeID = this.props.match.params.id;
 
+    if (recipeID) {
+      this.props.recipeIDRequest(recipeID);
+    }
     this.setState({
       left: <Left contents={this.contents[0]} />,
       middle: <Middle />,
@@ -142,7 +150,7 @@ class Enrolment extends Component {
       let stuffCheck = true;
 
       stuff.forEach(val => {
-        if(val.name === "" || val.ml === "") stuffCheck = false;
+        if (val.name === "" || val.ml === "") stuffCheck = false;
       });
 
       if (stuffCheck) {
@@ -159,6 +167,65 @@ class Enrolment extends Component {
       // 이미지 데이터를 제외한 나머지 등록 정보가 서버에 잘 반영되면 여기 분기문으로 들어옴
       // 즉, 이제 이미지 업로드 실행!
     }
+
+    const recipeID = this.props.match.params.id;
+    if (recipeID) {
+      if (this.props.recipe_info && !this.state.enrolmentData.info.name) {
+        const glass = this.props.recipe_info.glass;
+        let cup = "하이볼";
+        switch (glass) {
+          case 1:
+            cup = "리큐르";
+            break;
+          case 2:
+            cup = "허리케인";
+            break;
+          case 3:
+            cup = "마가렛";
+            break;
+          case 4:
+            cup = "마티니";
+            break;
+          default:
+            break;
+        }
+        const info = {
+          cup,
+          name: this.props.recipe_info.cocktail,
+          describe: this.props.recipe_info.description,
+          alcohol: this.props.recipe_info.alcohol,
+          tags: this.props.recipe_info.tags
+            .toString()
+            .split(",")
+            .map(item => {
+              return "#" + item;
+            })
+            .join("")
+        };
+        this.setState({
+          ...this.state,
+          enrolmentData: {
+            ...this.state.enrolmentData,
+            info: info,
+            stuff: this.props.stuffs
+          },
+          stuffID: this.props.stuffs.length,
+          color_idx: "",
+          images: this.props.photos,
+          userID: this.state.userID,
+          step: (
+            <Step1
+              onChangeCup={this.onChangeCup}
+              onChangeAlcohol={this.onChangeAlcohol}
+              onSaveName={this.onSaveName}
+              onSaveDescribe={this.onSaveDescribe}
+              onSaveTags={this.onSaveTags}
+              info={info}
+            />
+          )
+        });
+      }
+    }
   }
 
   onChangeStepStatus = event => {
@@ -172,9 +239,9 @@ class Enrolment extends Component {
     switch (clickText) {
       case "STEP 1":
         stepTarget[0].classList.add(this.selectStep);
-        this.setState({ left: <Left contents={this.contents[0]} /> });
-        this.setState({ middle: <Middle /> });
         this.setState({
+          left: <Left contents={this.contents[0]} />,
+          middle: <Middle />,
           step: (
             <Step1
               onChangeCup={this.onChangeCup}
@@ -189,9 +256,9 @@ class Enrolment extends Component {
         break;
       case "STEP 2":
         stepTarget[1].classList.add(this.selectStep);
-        this.setState({ left: <Left contents={this.contents[1]} /> });
-        this.setState({ middle: <Middle /> });
         this.setState({
+          left: <Left contents={this.contents[1]} />,
+          middle: <Middle />,
           step: (
             <Step2
               stuff={this.state.enrolmentData.stuff}
@@ -208,9 +275,9 @@ class Enrolment extends Component {
         break;
       case "STEP 3":
         stepTarget[2].classList.add(this.selectStep);
-        this.setState({ left: <Left contents={this.contents[2]} /> });
-        this.setState({ middle: "" });
         this.setState({
+          left: <Left contents={this.contents[2]} />,
+          middle: "",
           step: <Step3 saveImage={this.onSaveImages} />
         });
         break;
@@ -233,7 +300,7 @@ class Enrolment extends Component {
     let enrolmentData = { ...this.state.enrolmentData };
 
     cupTarget.forEach(val => {
-      if(val.classList.length === 2) {
+      if (val.classList.length === 2) {
         selectCup = val.classList[1];
         val.classList.remove(selectCup);
       }
@@ -288,7 +355,7 @@ class Enrolment extends Component {
     let enrolmentData = { ...this.state.enrolmentData };
 
     alcoholTarget.forEach(val => {
-      if(val.classList.length === 2) {
+      if (val.classList.length === 2) {
         selectAlcohol = val.classList[1];
         val.classList.remove(selectAlcohol);
       }
@@ -366,9 +433,8 @@ class Enrolment extends Component {
         val.ratio = Math.floor((val.ml / enrolmentData.totalVolume) * 100);
       }
     });
-    this.setState({ enrolmentData });
-
     this.setState({
+      enrolmentData,
       step: (
         <Step2
           stuff={this.state.enrolmentData.stuff}
@@ -412,10 +478,9 @@ class Enrolment extends Component {
       ratio: 0
     });
 
-    this.setState({ enrolmentData });
-    this.setState({ stuffID: lastIndexID++ });
-
     this.setState({
+      enrolmentData,
+      stuffID: lastIndexID++,
       step: (
         <Step2
           stuff={this.state.enrolmentData.stuff}
@@ -500,15 +565,19 @@ class Enrolment extends Component {
   };
 
   onSaveRecipe = () => {
-    if (this.state.enrolmentData.info.name === "" || this.state.enrolmentData.info.name === undefined) {
+    if (
+      this.state.enrolmentData.info.name === "" ||
+      this.state.enrolmentData.info.name === undefined
+    ) {
       let stepTarget = document.querySelectorAll(".step-1, .step-2, .step-3");
       stepTarget.forEach(val => {
         val.classList.remove(this.selectStep);
       });
       stepTarget[0].classList.add(this.selectStep);
-        this.setState({ left: <Left contents={this.contents[0]} /> });
-        this.setState({ middle: <Middle /> });
-        this.setState({
+      this.setState(
+        {
+          left: <Left contents={this.contents[0]} />,
+          middle: <Middle />,
           step: (
             <Step1
               onChangeCup={this.onChangeCup}
@@ -519,19 +588,25 @@ class Enrolment extends Component {
               info={this.state.enrolmentData.info}
             />
           )
-        }, () => {
+        },
+        () => {
           document.getElementById("recipe-name").focus();
           alert("레시피 이름을 입력해주세요!");
-        });
-    } else if (this.state.enrolmentData.info.describe === "" || this.state.enrolmentData.info.describe === undefined) {
+        }
+      );
+    } else if (
+      this.state.enrolmentData.info.describe === "" ||
+      this.state.enrolmentData.info.describe === undefined
+    ) {
       let stepTarget = document.querySelectorAll(".step-1, .step-2, .step-3");
       stepTarget.forEach(val => {
         val.classList.remove(this.selectStep);
       });
       stepTarget[0].classList.add(this.selectStep);
-        this.setState({ left: <Left contents={this.contents[0]} /> });
-        this.setState({ middle: <Middle /> });
-        this.setState({
+      this.setState(
+        {
+          left: <Left contents={this.contents[0]} />,
+          middle: <Middle />,
           step: (
             <Step1
               onChangeCup={this.onChangeCup}
@@ -542,19 +617,25 @@ class Enrolment extends Component {
               info={this.state.enrolmentData.info}
             />
           )
-        }, () => {
+        },
+        () => {
           document.getElementById("recipe-descripe").focus();
           alert("레시피 설명을 입력해주세요!");
-        });
-    } else if (this.state.enrolmentData.info.tags === "" || this.state.enrolmentData.info.tags === undefined) {
+        }
+      );
+    } else if (
+      this.state.enrolmentData.info.tags === "" ||
+      this.state.enrolmentData.info.tags === undefined
+    ) {
       let stepTarget = document.querySelectorAll(".step-1, .step-2, .step-3");
       stepTarget.forEach(val => {
         val.classList.remove(this.selectStep);
       });
       stepTarget[0].classList.add(this.selectStep);
-        this.setState({ left: <Left contents={this.contents[0]} /> });
-        this.setState({ middle: <Middle /> });
-        this.setState({
+      this.setState(
+        {
+          left: <Left contents={this.contents[0]} />,
+          middle: <Middle />,
           step: (
             <Step1
               onChangeCup={this.onChangeCup}
@@ -565,10 +646,12 @@ class Enrolment extends Component {
               info={this.state.enrolmentData.info}
             />
           )
-        }, () => {
+        },
+        () => {
           document.getElementById("recipe-tag").focus();
           alert("레시피 태그를 입력해주세요!");
-        });
+        }
+      );
     } else {
       let stuffs = this.state.enrolmentData.stuff;
       for (let i = 0; i < stuffs.length; i++) {
@@ -579,26 +662,35 @@ class Enrolment extends Component {
             val.classList.remove(this.selectStep);
           });
           stepTarget[1].classList.add(this.selectStep);
-          this.setState({ left: <Left contents={this.contents[1]} /> });
-          this.setState({ middle: <Middle /> });
-          this.setState({
-            step: (
-              <Step2
-                stuff={this.state.enrolmentData.stuff}
-                idx={this.state.stuffID}
-                onAddStuff={this.onAddStuff}
-                onDeleteStuff={this.onDeleteStuff}
-                onSaveStuffName={this.onSaveStuffName}
-                onSaveStuffVolume={this.onSaveStuffVolume}
-                onSelectColor={this.onSelectColor}
-                validateNumber={this.validateNumber}
-              />
-            )
-          }, () => {
-            let stuffElement = document.querySelectorAll("#stuff-container > div");
-            console.log(stuffElement[i].childNodes[0].childNodes[0].childNodes[1].focus());
-            alert("재료 이름을 입력해주세요!");
-          });
+          this.setState(
+            {
+              left: <Left contents={this.contents[1]} />,
+              middle: <Middle />,
+              step: (
+                <Step2
+                  stuff={this.state.enrolmentData.stuff}
+                  idx={this.state.stuffID}
+                  onAddStuff={this.onAddStuff}
+                  onDeleteStuff={this.onDeleteStuff}
+                  onSaveStuffName={this.onSaveStuffName}
+                  onSaveStuffVolume={this.onSaveStuffVolume}
+                  onSelectColor={this.onSelectColor}
+                  validateNumber={this.validateNumber}
+                />
+              )
+            },
+            () => {
+              let stuffElement = document.querySelectorAll(
+                "#stuff-container > div"
+              );
+              console.log(
+                stuffElement[
+                  i
+                ].childNodes[0].childNodes[0].childNodes[1].focus()
+              );
+              alert("재료 이름을 입력해주세요!");
+            }
+          );
 
           break;
         } else if (stuffs[i].ml === "") {
@@ -606,88 +698,97 @@ class Enrolment extends Component {
             val.classList.remove(this.selectStep);
           });
           stepTarget[1].classList.add(this.selectStep);
-          this.setState({ left: <Left contents={this.contents[1]} /> });
-          this.setState({ middle: <Middle /> });
-          this.setState({
-            step: (
-              <Step2
-                stuff={this.state.enrolmentData.stuff}
-                idx={this.state.stuffID}
-                onAddStuff={this.onAddStuff}
-                onDeleteStuff={this.onDeleteStuff}
-                onSaveStuffName={this.onSaveStuffName}
-                onSaveStuffVolume={this.onSaveStuffVolume}
-                onSelectColor={this.onSelectColor}
-                validateNumber={this.validateNumber}
-              />
-            )
-          }, () => {
-            let stuffElement = document.querySelectorAll("#stuff-container > div");
-            console.log(stuffElement[i].childNodes[0].childNodes[0].childNodes[2].focus());
-            alert("재료 용량을 입력해주세요!");
-          }); 
+          this.setState(
+            {
+              left: <Left contents={this.contents[1]} />,
+              middle: <Middle />,
+              step: (
+                <Step2
+                  stuff={this.state.enrolmentData.stuff}
+                  idx={this.state.stuffID}
+                  onAddStuff={this.onAddStuff}
+                  onDeleteStuff={this.onDeleteStuff}
+                  onSaveStuffName={this.onSaveStuffName}
+                  onSaveStuffVolume={this.onSaveStuffVolume}
+                  onSelectColor={this.onSelectColor}
+                  validateNumber={this.validateNumber}
+                />
+              )
+            },
+            () => {
+              let stuffElement = document.querySelectorAll(
+                "#stuff-container > div"
+              );
+              console.log(
+                stuffElement[
+                  i
+                ].childNodes[0].childNodes[0].childNodes[2].focus()
+              );
+              alert("재료 용량을 입력해주세요!");
+            }
+          );
 
           break;
         }
       }
     }
-    
-  //   let cup = this.state.enrolmentData.info.cup;
-  //   if (cup === "하이볼") cup = 0;
-  //   else if (cup === "리큐르") cup = 1;
-  //   else if (cup === "허리케인") cup = 2;
-  //   else if (cup === "마가렛") cup = 3;
-  //   else cup = 4;
 
-  //   //해쉬태그 분리
-  //   let tags = this.state.enrolmentData.info.tags;
-  //   const regexp = /\#[^#\s,;]+/g;
-  //   tags = tags.match(regexp);
-  //   if (tags) {
-  //     tags = tags.map(item => item.replace("#", "")).toString();
-  //   }
+    let cup = this.state.enrolmentData.info.cup;
+    if (cup === "하이볼") cup = 0;
+    else if (cup === "리큐르") cup = 1;
+    else if (cup === "허리케인") cup = 2;
+    else if (cup === "마가렛") cup = 3;
+    else cup = 4;
 
-  //   let data = {
-  //     name: this.state.enrolmentData.info.name,
-  //     glass: cup,
-  //     percent: this.state.enrolmentData.info.alcohol,
-  //     description: this.state.enrolmentData.info.describe,
-  //     tag: tags,
-  //     ingredient: this.state.enrolmentData.stuff,
-  //     owner: this.state.userID
-  //   };
+    //해쉬태그 분리
+    let tags = this.state.enrolmentData.info.tags;
+    const regexp = /\#[^#\s,;]+/g;
+    tags = tags.match(regexp);
+    if (tags) {
+      tags = tags.map(item => item.replace("#", "")).toString();
+    }
 
-  //   // TODO
-  //   // 데이터 validation 체크 해야 함
-  //   this.props.enrolmentRequest(data);
-  // };
+    let data = {
+      name: this.state.enrolmentData.info.name,
+      glass: cup,
+      percent: this.state.enrolmentData.info.alcohol,
+      description: this.state.enrolmentData.info.describe,
+      tag: tags,
+      ingredient: this.state.enrolmentData.stuff,
+      owner: this.state.userID
+    };
 
-  // onUploadImage = (images, id) => {
-  //   let formData = new FormData();
-  //   images.forEach(image => {
-  //     formData.append("images", image);
-  //     formData.append("timestamp", (Date.now() / 1000) | 0);
-  //   });
+    // TODO
+    // 데이터 validation 체크 해야 함
+    this.props.enrolmentRequest(data);
+  };
 
-  //   formData.append("id", id);
+  onUploadImage = (images, id) => {
+    let formData = new FormData();
+    images.forEach(image => {
+      formData.append("images", image);
+      formData.append("timestamp", (Date.now() / 1000) | 0);
+    });
 
-  //   axios
-  //     .post(
-  //       "http://ec2-18-191-88-64.us-east-2.compute.amazonaws.com:9000/recipe/upload",
-  //       formData,
-  //       {
-  //         headers: { "X-Requested-With": "XMLHttpRequest" }
-  //       }
-  //     )
-  //     .then(response => {
-  //       const data = response.data;
-  //       // const fileURL = data.secure_url // You should store this URL for future references in your app
-  //       console.log(id);
-  //       console.log(data);
-  //     })
-  //     .catch(e => {
-  //       console.error(e);
-  //     });
+    formData.append("id", id);
+
+    axios
+      .post(
+        "http://ec2-18-191-88-64.us-east-2.compute.amazonaws.com:9000/recipe/upload",
+        formData,
+        {
+          headers: { "X-Requested-With": "XMLHttpRequest" }
+        }
+      )
+      .then(response => {
+        const data = response.data;
+        // const fileURL = data.secure_url // You should store this URL for future references in your app
+        console.log(id);
+        console.log(data);
+      })
+      .catch(e => {
+        console.error(e);
+      });
   };
 
   handleChange = color => {
