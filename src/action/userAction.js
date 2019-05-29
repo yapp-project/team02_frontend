@@ -61,6 +61,15 @@ export function loginSuccess(result) {
   };
 }
 
+export function loginFailed(result) {
+  return {
+    type: actions.LOGIN.FAILED,
+    payload: {
+      result
+    }
+  };
+}
+
 export function registerRequest(userid, password) {
   return {
     type: actions.REGISTER.REQUEST,
