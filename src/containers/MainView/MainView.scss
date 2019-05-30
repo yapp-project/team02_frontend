@@ -10,6 +10,18 @@
   font-weight: 300;
   src: url("../../static/NotoSans-Light.otf") format("opentype");
 }
+
+@font-face {
+  font-family: "NotoSansCJKkr-Regular";
+  font-weight: normal;
+  src: url("../../static/NotoSansCJKkr-Regular.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "NotoSansCJKkr-Medium";
+  font-weight: 500;
+  src: url("../../static/NotoSansCJKkr-Medium.otf") format("opentype");
+}
 html,
 body {
   padding: 0;
@@ -302,6 +314,7 @@ body {
         overflow: hidden;
         overflow-x: auto;
         -ms-overflow-style: none; // IE에서 스크롤바 감춤
+        scrollbar-width: none; //파이어폭스
         &::-webkit-scrollbar {
           display: none !important; // 윈도우 크롬 등
         }
