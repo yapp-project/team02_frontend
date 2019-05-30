@@ -114,8 +114,7 @@ function* requestData(action) {
     } else if (type === 1) {
       result = yield call(getMyRecipes, data.userID);
     } else if (type === 2) {
-      // result = yield call(deleteCocktail, id);
-      result = true;
+      result = yield call(deleteCocktail, data.userID);
     } else if (type === 3) {
       result = yield call(setScrap, data.userID, data.cocktailID);
     }

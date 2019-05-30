@@ -141,10 +141,9 @@ class SearchResult extends Component {
           num = 1;
         }
 
-        const { index, page, ID } = this.state.viewRecipeInfo;
+        const { index, page } = this.state.viewRecipeInfo;
         const { searchList } = this.state;
 
-        // this.props.recommend.result[index].scrap += num;
         //state.list에 반영
         this.setState({
           searchList: searchList.map(item =>

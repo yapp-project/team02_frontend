@@ -143,11 +143,26 @@ body {
     height: 100%;
     grid-row: 2 / span 1;
 
-    // div {
-    // -ms-overflow-style: -ms-autohiding-scrollbar; // IE에서 스크롤바 감춤
-    // &::-webkit-scrollbar {
-    //   display: none !important; // 윈도우 크롬 등
-    // }
-    // }
+    div {
+      -ms-overflow-style: -ms-autohiding-scrollbar; // IE에서 스크롤바 감춤
+
+      &::-webkit-scrollbar {
+        display: none !important; // 윈도우 크롬 등
+      }
+
+      &:hover {
+        &::-webkit-scrollbar {
+          display: block !important; // 윈도우 크롬 등
+          width: 10px;
+          background-color: rgba(128, 128, 128, 0.185);
+          border-radius: 15px;
+        }
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background-color: #030303;
+        border-radius: 15px;
+      }
+    }
   }
 }

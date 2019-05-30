@@ -472,6 +472,7 @@
         width: 250px;
         height: 100px;
         background-color: #0f1835;
+        border: 1px solid rgba(0, 0, 0, 0.548);
 
         .text {
           display: inline-block;
@@ -480,8 +481,8 @@
           background-color: transparent;
           font-family: NotoSansCJKkr;
           font-weight: bold;
-          font-size: 25px;
-          line-height: 1.8;
+          font-size: 20px;
+          line-height: 2.5;
           color: #ff365d;
         }
 
