@@ -358,7 +358,7 @@ class Header extends Component {
             searchAction={this.onSearchAction}
           />
         )}
-        {bShowSearch && bSearchAction && (
+        {bShowSearch && bSearchAction ? (
           <div className={cx("searchresult_rect", bHideSearch ? "_over" : "")}>
             {searchresult.cocktails.length > 0 ? (
               <div className={cx("searchresult_container")}>
@@ -415,7 +415,10 @@ class Header extends Component {
               </div>
             )}
           </div>
+        ) : (
+          <div className={cx("opacity_rect")} />
         )}
+
         {bShowLogin ? (
           <LoginPopup
             id={this.state.popupID}
