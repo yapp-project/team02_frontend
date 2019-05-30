@@ -120,11 +120,7 @@ class Enrolment extends Component {
           "나만의 레시피 만들기 마지막 단계! 직접 만든 음료를 사진으로 찍어 등록하고, 썸네일 사진을 골라주세요."
       }
     ];
-    const recipeID = this.props.match.params.id;
 
-    if (recipeID) {
-      this.props.recipeIDRequest(recipeID);
-    }
     this.setState({
       left: <Left contents={this.contents[0]} />,
       middle: <Middle />,
@@ -140,6 +136,11 @@ class Enrolment extends Component {
       ),
       done: <Done onSaveRecipe={this.onSaveRecipe} />
     });
+
+    const recipeID = this.props.match.params.id;
+    if (recipeID) {
+      this.props.recipeIDRequest(recipeID);
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -382,8 +383,19 @@ class Enrolment extends Component {
   onSaveName = event => {
     let enrolmentData = { ...this.state.enrolmentData };
     enrolmentData.info.name = event.target.value;
-    this.setState({ enrolmentData });
-
+    this.setState({
+      enrolmentData,
+      step: (
+        <Step1
+          onChangeCup={this.onChangeCup}
+          onChangeAlcohol={this.onChangeAlcohol}
+          onSaveName={this.onSaveName}
+          onSaveDescribe={this.onSaveDescribe}
+          onSaveTags={this.onSaveTags}
+          info={this.state.enrolmentData.info}
+        />
+      )
+    });
     if (this.inputTarget) {
       this.inputTarget[0].value = event.target.value;
     }
@@ -392,13 +404,37 @@ class Enrolment extends Component {
   onSaveDescribe = event => {
     let enrolmentData = { ...this.state.enrolmentData };
     enrolmentData.info.describe = event.target.value;
-    this.setState({ enrolmentData });
+    this.setState({
+      enrolmentData,
+      step: (
+        <Step1
+          onChangeCup={this.onChangeCup}
+          onChangeAlcohol={this.onChangeAlcohol}
+          onSaveName={this.onSaveName}
+          onSaveDescribe={this.onSaveDescribe}
+          onSaveTags={this.onSaveTags}
+          info={this.state.enrolmentData.info}
+        />
+      )
+    });
   };
 
   onSaveTags = event => {
     let enrolmentData = { ...this.state.enrolmentData };
     enrolmentData.info.tags = event.target.value;
-    this.setState({ enrolmentData });
+    this.setState({
+      enrolmentData,
+      step: (
+        <Step1
+          onChangeCup={this.onChangeCup}
+          onChangeAlcohol={this.onChangeAlcohol}
+          onSaveName={this.onSaveName}
+          onSaveDescribe={this.onSaveDescribe}
+          onSaveTags={this.onSaveTags}
+          info={this.state.enrolmentData.info}
+        />
+      )
+    });
   };
 
   onSaveStuffColor = (event, idx) => {

@@ -68,7 +68,7 @@ const EnrolmentStep1 = props => {
           className={cx("recipe-name")}
           placeholder="레시피 이름"
           onChange={props.onSaveName}
-          defaultValue={props.info.name}
+          value={props.info.name}
         />
       </div>
 
@@ -80,7 +80,7 @@ const EnrolmentStep1 = props => {
           className={cx("recipe-descripe")}
           placeholder="이 레시피에 대한 설명"
           onChange={props.onSaveDescribe}
-          defaultValue={props.info.describe}
+          value={props.info.describe}
         />
       </div>
 
@@ -154,7 +154,7 @@ const EnrolmentStep1 = props => {
           className={cx("recipe-tag")}
           placeholder="#태그명"
           onChange={props.onSaveTags}
-          defaultValue={props.info.tags}
+          value={props.info.tags}
         />
       </div>
     </div>
