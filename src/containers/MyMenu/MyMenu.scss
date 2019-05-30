@@ -18,9 +18,15 @@ body {
   .top_rect {
     grid-row: 1 / span 1;
     background-color: #080f24;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+
     .top_container {
       display: grid;
-      height: auto;
+      position: absolute;
+      width: 100%;
+      height: 100%;
       grid-template-columns: auto 749px auto;
       grid-template-rows: 208px 112.5px;
 
@@ -47,11 +53,16 @@ body {
         grid-row: 2 / span 1;
         grid-column: 2 / span 1;
 
+        position: absolute;
+        width: 100%;
+        height: 100%;
         display: flex;
-        height: auto;
+
         .tab_button {
+          position: absolute;
+          width: auto;
           &:nth-child(n + 2) {
-            margin-left: 99px;
+            margin-left: 154px;
           }
 
           .text {
@@ -89,10 +100,12 @@ body {
           }
         }
         .register_rect {
+          position: absolute;
           display: flex;
           align-items: center;
-          margin-left: 297px;
-          height: auto;
+          width: auto;
+          height: 100%;
+          right: 0;
 
           .button {
             width: 40px;
