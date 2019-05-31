@@ -335,6 +335,12 @@ body {
             }
           }
         }
+
+        @media (max-width: 470px) {
+          & {
+            padding-left: 0;
+          }
+        }
       }
 
       &:hover {
@@ -355,7 +361,7 @@ body {
 
     @media (max-width: 470px) {
       & {
-        padding-left: 5%;
+        padding-left: 2%;
       }
     }
   }
