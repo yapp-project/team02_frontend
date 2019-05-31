@@ -2,6 +2,7 @@
   position: absolute;
   display: grid;
   grid-template-rows: 80px auto;
+  overflow: hidden;
   &.one {
     grid-template-rows: auto;
   }

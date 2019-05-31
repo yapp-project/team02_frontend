@@ -23,13 +23,21 @@ class MyMenu extends Component {
     scrapArray: [],
     recipesArray: [],
     page: 1,
-    pages: 1
+    pages: 1,
+    isMobile: false
   };
 
   componentDidMount() {
     const auth = JSON.parse(localStorage.getItem("myData")); //localstorage에서 가져옴
     if (auth) {
-      this.setState({ userid: auth.userid });
+      let _isMobile = false;
+      if (
+        navigator.userAgent.toLowerCase().indexOf("iphone") > 0 ||
+        navigator.userAgent.toLowerCase().indexOf("android") > 0
+      ) {
+        _isMobile = true;
+      }
+      this.setState({ userid: auth.userid, isMobile: _isMobile });
       this.props.scrapRequest({ type: 0, data: { userID: auth.userid } });
       this.props.recipeRequest({ type: 1, data: { userID: auth.userid } });
     }
@@ -146,18 +154,20 @@ class MyMenu extends Component {
                   {recipesArray.length}
                 </div>
               </div>
-              <div className={cx("register_rect")}>
-                <div
-                  className={cx("button")}
-                  onClick={this.onCreateRecipesClick}
-                />
-                <div
-                  className={cx("button_text")}
-                  onClick={this.onCreateRecipesClick}
-                >
-                  레시피 등록하기
+              {!this.state.isMobile && (
+                <div className={cx("register_rect")}>
+                  <div
+                    className={cx("button")}
+                    onClick={this.onCreateRecipesClick}
+                  />
+                  <div
+                    className={cx("button_text")}
+                    onClick={this.onCreateRecipesClick}
+                  >
+                    레시피 등록하기
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </div>

@@ -93,14 +93,28 @@ class Header extends Component {
     userID: "",
     password: "",
     bSearchAction: false,
-    isScroll: false
+    isScroll: false,
+    isMobile: false
   };
 
   componentDidMount() {
     const auth = JSON.parse(localStorage.getItem("myData")); //localstorage에서 가져옴
+
     //자동 로그인 기능
     if (auth) {
-      this.setState({ userID: auth.userid, password: auth.password });
+      let _isMobile = false;
+      if (
+        navigator.userAgent.toLowerCase().indexOf("iphone") > 0 ||
+        navigator.userAgent.toLowerCase().indexOf("android") > 0
+      ) {
+        _isMobile = true;
+      }
+
+      this.setState({
+        userID: auth.userid,
+        password: auth.password,
+        isMobile: _isMobile
+      });
       this.props.loginRequest(auth.userid, auth.password);
     }
   }
@@ -343,7 +357,7 @@ class Header extends Component {
               value={this.props.bLoginResult ? "" : "로그인"}
               onClick={this.onShowLogin}
             />
-            {this.props.bLoginResult && (
+            {!this.state.isMobile && this.props.bLoginResult && (
               <Button
                 className={cx("create_recipes")}
                 onClick={this.onCreateRecipesClick}
@@ -358,7 +372,7 @@ class Header extends Component {
             searchAction={this.onSearchAction}
           />
         )}
-        {bShowSearch && bSearchAction && (
+        {bShowSearch && bSearchAction ? (
           <div className={cx("searchresult_rect", bHideSearch ? "_over" : "")}>
             {searchresult.cocktails.length > 0 ? (
               <div className={cx("searchresult_container")}>
@@ -415,7 +429,10 @@ class Header extends Component {
               </div>
             )}
           </div>
+        ) : (
+          <div className={cx("opacity_rect")} />
         )}
+
         {bShowLogin ? (
           <LoginPopup
             id={this.state.popupID}

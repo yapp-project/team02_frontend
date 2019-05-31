@@ -115,6 +115,7 @@
       font-size: 20px;
       color: #080f24;
       text-align: center;
+      font-family: NotoSansCJKkr-Regular;
       margin-bottom: 29.7px;
       cursor: pointer;
     }
@@ -379,7 +380,7 @@
       border-radius: 18px;
       border-color: transparent;
       background-color: #bbbbbb;
-      font-family: NotoSansCJKkr;
+      font-family: NotoSansCJKkr-Regular;
       font-size: 20px;
       color: #080f24;
       text-align: center;
@@ -392,7 +393,7 @@
       border-radius: 18px;
       border-color: transparent;
       background-color: #bbbbbb;
-      font-family: NotoSansCJKkr;
+      font-family: NotoSansCJKkr-Regular;
       font-size: 20px;
       color: #080f24;
       text-align: center;
@@ -472,6 +473,7 @@
         width: 250px;
         height: 100px;
         background-color: #0f1835;
+        border: 1px solid rgba(0, 0, 0, 0.548);
 
         .text {
           display: inline-block;
@@ -480,8 +482,8 @@
           background-color: transparent;
           font-family: NotoSansCJKkr;
           font-weight: bold;
-          font-size: 25px;
-          line-height: 1.8;
+          font-size: 20px;
+          line-height: 2.5;
           color: #ff365d;
         }
 
@@ -628,7 +630,7 @@
       border-radius: 18px;
       border-color: transparent;
       background-color: #bbbbbb;
-      font-family: NotoSansCJKkr;
+      font-family: NotoSansCJKkr-Regular;
       font-size: 20px;
       color: #080f24;
       text-align: center;
@@ -641,7 +643,7 @@
       border-radius: 18px;
       border-color: transparent;
       background-color: #7a7a7a;
-      font-family: NotoSansCJKkr;
+      font-family: NotoSansCJKkr-Regular;
       font-size: 20px;
       color: #080f24;
       text-align: center;

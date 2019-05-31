@@ -59,7 +59,8 @@ class Enrolment extends Component {
       stuffID: 0,
       color_idx: "",
       images: [],
-      userID: ""
+      userID: "",
+      colorClose: ""
     };
 
     this.onChangeStepStatus = this.onChangeStepStatus.bind(this);
@@ -76,7 +77,6 @@ class Enrolment extends Component {
   doneClose;
   contents;
   inputTarget;
-  colorClose;
 
   componentDidMount() {
     //사용자 인증!
@@ -96,7 +96,6 @@ class Enrolment extends Component {
         ".alcohol-item1"
       ).classList[1];
       this.doneClose = document.querySelector("#done-container").classList[1];
-      this.colorClose = document.querySelector("#color-picker").classList[1];
       this.inputTarget = document.querySelectorAll(
         "#recipe-name, #recipe-descripe, #recipe-tag"
       );
@@ -564,9 +563,12 @@ class Enrolment extends Component {
 
   onSelectColor = event => {
     let colorContainer = document.querySelector("#color-picker");
+    this.setState({'colorClose': colorContainer.classList[1]},
+    () => {
+      colorContainer.classList.remove(this.state.colorClose);
+    });
 
     colorTarget = event.target.id;
-    colorContainer.classList.remove(this.colorClose);
   };
 
   onSelectColorClose = () => {
@@ -580,7 +582,7 @@ class Enrolment extends Component {
       .replace(/\s/g, "")
       .split(",");
 
-    colorContainer.classList.add(this.colorClose);
+    colorContainer.classList.add(this.state.colorClose);
 
     enrolmentData.stuff[targetNumber].color =
       "#" +
@@ -778,10 +780,13 @@ class Enrolment extends Component {
 
     //해쉬태그 분리
     let tags = this.state.enrolmentData.info.tags;
+
     const regexp = /\#[^#\s,;]+/g;
     tags = tags.match(regexp);
     if (tags) {
-      tags = tags.map(item => item.replace("#", "")).toString();
+      tags = tags.map(item => {
+        return item.replace("#", "")
+      });
     }
 
     let data = {
