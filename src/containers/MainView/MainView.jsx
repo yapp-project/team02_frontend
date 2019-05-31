@@ -42,7 +42,8 @@ class MainView extends Component {
       prev: false,
       next: false
     },
-    bScrapAction: false
+    bScrapAction: false,
+    isMobile: false
   };
 
   /**
@@ -53,6 +54,12 @@ class MainView extends Component {
   componentDidMount() {
     //1. 추천 해쉬태그 서버 통신
     const _recommend = this.props.recommend;
+    if (
+      navigator.userAgent.toLowerCase().indexOf("iphone") > 0 ||
+      navigator.userAgent.toLowerCase().indexOf("android") > 0
+    ) {
+      this.setState({ isMobile: true });
+    }
     if (!_recommend.tags.length) {
       this.props.recommendRequest();
     } else {
@@ -351,15 +358,20 @@ class MainView extends Component {
               세상의 다양한 칵테일 레시피를 공유하다.
             </div>
           </div>
-          <div className={cx("register_rect")}>
-            <div className={cx("button")} onClick={this.onCreateRecipesClick} />
-            <div
-              className={cx("button_text")}
-              onClick={this.onCreateRecipesClick}
-            >
-              레시피 등록하기
+          {!this.state.isMobile && (
+            <div className={cx("register_rect")}>
+              <div
+                className={cx("button")}
+                onClick={this.onCreateRecipesClick}
+              />
+              <div
+                className={cx("button_text")}
+                onClick={this.onCreateRecipesClick}
+              >
+                레시피 등록하기
+              </div>
             </div>
-          </div>
+          )}
         </div>
         <div className={cx("hashtag_rect")}>
           <div className={cx("hashtag_container")}>

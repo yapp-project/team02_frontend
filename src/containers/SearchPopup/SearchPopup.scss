@@ -17,6 +17,12 @@
     color: #ffffff;
     border: 0px;
     outline: none;
+
+    @media (max-width: 470px) {
+      & {
+        min-width: 0px;
+      }
+    }
   }
 
   .type {

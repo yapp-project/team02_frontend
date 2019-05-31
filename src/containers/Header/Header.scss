@@ -177,6 +177,12 @@
     &._hide {
       display: none;
     }
+
+    @media (max-width: 470px) {
+      & {
+        grid-column: 1 / span 3;
+      }
+    }
   }
 
   .searchresult_rect {

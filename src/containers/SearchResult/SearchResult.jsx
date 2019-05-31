@@ -42,14 +42,23 @@ class SearchResult extends Component {
       index: 0, //현재 ID가 List에 위치한 index
       prev: false,
       next: false
-    }
+    },
+    isMobile: false
   };
 
   componentDidMount() {
+    let _isMobile = false;
+    if (
+      navigator.userAgent.toLowerCase().indexOf("iphone") > 0 ||
+      navigator.userAgent.toLowerCase().indexOf("android") > 0
+    ) {
+      _isMobile = true;
+    }
     this.setState({
       page: this.props.page,
       pages: this.props.pages,
-      showModify: this.props.modify
+      showModify: this.props.modify,
+      isMobile: _isMobile
     });
   }
 
@@ -341,11 +350,13 @@ class SearchResult extends Component {
   showModifyPopup = () => {
     return (
       <div id="modifyPopup" className={cx("modify_popup")}>
-        <div className={cx("container")}>
-          <div className={cx("text")} onClick={this.onPopupModifyClick}>
-            수정하기
+        {!this.state.isMobile && (
+          <div className={cx("container")}>
+            <div className={cx("text")} onClick={this.onPopupModifyClick}>
+              수정하기
+            </div>
           </div>
-        </div>
+        )}
         <div className={cx("container")}>
           <div className={cx("text")} onClick={this.onDeleteCocktailClick}>
             삭제하기
