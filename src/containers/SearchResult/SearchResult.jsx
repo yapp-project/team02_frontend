@@ -131,8 +131,9 @@ class SearchResult extends Component {
     //스크랩 한 경우
     if (this.props.scrap.result) {
       if (
-        prevProps.scrap.status !== this.props.scrap.status ||
-        prevState.viewRecipeInfo.ID !== this.state.viewRecipeInfo.ID
+        prevState.viewRecipeInfo.ID.length > 0 &&
+        (prevProps.scrap.status !== this.props.scrap.status ||
+          prevState.viewRecipeInfo.ID !== this.state.viewRecipeInfo.ID)
       ) {
         let num = 0; //0-save 1-delete
         if (this.props.scrap.status === "delete") {
@@ -143,7 +144,6 @@ class SearchResult extends Component {
 
         const { index, page } = this.state.viewRecipeInfo;
         const { searchList } = this.state;
-
         //state.list에 반영
         this.setState({
           searchList: searchList.map(item =>
@@ -166,9 +166,9 @@ class SearchResult extends Component {
                   )
                 }
               : item
-          )
+          ),
+          bScrapAction: false
         });
-        this.setState({ bScrapAction: false });
         return;
       }
     }
@@ -413,6 +413,7 @@ class SearchResult extends Component {
 
   debounceRequestScrap = debounce(
     ({ page, index, cocktailID, type, userID }) => {
+      this.props.setScrapRequest({ type, data: { cocktailID, userID } });
       this.setState({
         viewRecipeInfo: {
           ID: cocktailID,
@@ -420,7 +421,6 @@ class SearchResult extends Component {
           index
         }
       });
-      this.props.setScrapRequest({ type, data: { cocktailID, userID } });
     },
     300
   );
