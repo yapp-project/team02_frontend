@@ -116,11 +116,7 @@ const EnrolmentStep3 = props => {
   const images = files.map(file => (
     <div
       id={file.idx}
-      style={Object.assign(
-        {},
-        thumb,
-        file.display ? "display : block" : "display : none"
-      )}
+      style={thumb}
       key={file.name}
     >
       <div style={thumbInner}>
