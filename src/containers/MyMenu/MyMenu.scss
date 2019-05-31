@@ -46,6 +46,12 @@ body {
         grid-column: 2 / span 1;
 
         cursor: default;
+
+        @media (max-width: 750px) {
+          & {
+            grid-column: 1 / span 1;
+          }
+        }
       }
 
       .tab_container {
@@ -130,6 +136,18 @@ body {
             color: #7a7a7a;
             cursor: pointer;
           }
+        }
+
+        @media (max-width: 750px) {
+          & {
+            grid-column: 1 / span 1;
+          }
+        }
+      }
+
+      @media (max-width: 750px) {
+        & {
+          grid-template-columns: auto;
         }
       }
     }
