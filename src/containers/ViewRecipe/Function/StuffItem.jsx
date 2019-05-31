@@ -12,11 +12,15 @@ const EnrolmentStuffItem = props => {
   return (
     <div className={cx("detail-content-main-side-stuff-item")}>
       <span style={style} className={cx("stuff-color")} />
-      <span className={cx("stuff-name")}>{props.name}</span>
+      <span className={cx("stuff-name")} title={props.name}>
+        {props.name}
+      </span>
       <span className={cx("stuff-volume")} title={props.volume}>
         {props.volume}
       </span>
-      <span className={cx("stuff-ratio")}>{props.ratio}</span>
+      <span className={cx("stuff-ratio")} title={props.ratio}>
+        {props.ratio}
+      </span>
     </div>
   );
 };

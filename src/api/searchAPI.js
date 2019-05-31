@@ -20,10 +20,13 @@ export async function searchCocktails(word, type, filter, page, number) {
     } else {
       url = "recipe/ingredient/new";
     }
+    const start = parseInt(number.start);
+    const end = parseInt(number.end);
     body = {
       ingredient: word,
       page: page,
-      range: number
+      start,
+      end
     };
   }
 

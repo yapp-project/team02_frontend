@@ -42,14 +42,23 @@ class SearchResult extends Component {
       index: 0, //현재 ID가 List에 위치한 index
       prev: false,
       next: false
-    }
+    },
+    isMobile: false
   };
 
   componentDidMount() {
+    let _isMobile = false;
+    if (
+      navigator.userAgent.toLowerCase().indexOf("iphone") > 0 ||
+      navigator.userAgent.toLowerCase().indexOf("android") > 0
+    ) {
+      _isMobile = true;
+    }
     this.setState({
       page: this.props.page,
       pages: this.props.pages,
-      showModify: this.props.modify
+      showModify: this.props.modify,
+      isMobile: _isMobile
     });
   }
 
@@ -131,8 +140,9 @@ class SearchResult extends Component {
     //스크랩 한 경우
     if (this.props.scrap.result) {
       if (
-        prevProps.scrap.status !== this.props.scrap.status ||
-        prevState.viewRecipeInfo.ID !== this.state.viewRecipeInfo.ID
+        prevState.viewRecipeInfo.ID.length > 0 &&
+        (prevProps.scrap.status !== this.props.scrap.status ||
+          prevState.viewRecipeInfo.ID !== this.state.viewRecipeInfo.ID)
       ) {
         let num = 0; //0-save 1-delete
         if (this.props.scrap.status === "delete") {
@@ -141,10 +151,8 @@ class SearchResult extends Component {
           num = 1;
         }
 
-        const { index, page, ID } = this.state.viewRecipeInfo;
+        const { index, page } = this.state.viewRecipeInfo;
         const { searchList } = this.state;
-
-        // this.props.recommend.result[index].scrap += num;
         //state.list에 반영
         this.setState({
           searchList: searchList.map(item =>
@@ -167,9 +175,9 @@ class SearchResult extends Component {
                   )
                 }
               : item
-          )
+          ),
+          bScrapAction: false
         });
-        this.setState({ bScrapAction: false });
         return;
       }
     }
@@ -342,11 +350,13 @@ class SearchResult extends Component {
   showModifyPopup = () => {
     return (
       <div id="modifyPopup" className={cx("modify_popup")}>
-        <div className={cx("container")}>
-          <div className={cx("text")} onClick={this.onPopupModifyClick}>
-            수정하기
+        {!this.state.isMobile && (
+          <div className={cx("container")}>
+            <div className={cx("text")} onClick={this.onPopupModifyClick}>
+              수정하기
+            </div>
           </div>
-        </div>
+        )}
         <div className={cx("container")}>
           <div className={cx("text")} onClick={this.onDeleteCocktailClick}>
             삭제하기
@@ -414,6 +424,7 @@ class SearchResult extends Component {
 
   debounceRequestScrap = debounce(
     ({ page, index, cocktailID, type, userID }) => {
+      this.props.setScrapRequest({ type, data: { cocktailID, userID } });
       this.setState({
         viewRecipeInfo: {
           ID: cocktailID,
@@ -421,7 +432,6 @@ class SearchResult extends Component {
           index
         }
       });
-      this.props.setScrapRequest({ type, data: { cocktailID, userID } });
     },
     300
   );

@@ -105,6 +105,26 @@
       }
     }
 
+    .loading_rect {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: 100;
+      background-color: #ffffff41;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .loading_container {
+        width: auto;
+        height: auto;
+      }
+
+      &._hide {
+        display: none;
+      }
+    }
+
     .detail-content-main {
       position: relative;
       width: 100%;

@@ -18,17 +18,22 @@ body {
   .top_rect {
     grid-row: 1 / span 1;
     background-color: #080f24;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+
     .top_container {
       display: grid;
-      height: auto;
+      position: absolute;
+      width: 100%;
+      height: 100%;
       grid-template-columns: auto 749px auto;
       grid-template-rows: 208px 112.5px;
 
       .userid {
         height: auto;
-        font-family: NotoSansCJKkr;
+        font-family: AvenirLT;
         font-size: 55px;
-        font-weight: normal;
         font-style: normal;
         font-stretch: normal;
         line-height: 1.49;
@@ -41,22 +46,33 @@ body {
         grid-column: 2 / span 1;
 
         cursor: default;
+
+        @media (max-width: 750px) {
+          & {
+            grid-column: 1 / span 1;
+          }
+        }
       }
 
       .tab_container {
         grid-row: 2 / span 1;
         grid-column: 2 / span 1;
 
+        position: absolute;
+        width: 100%;
+        height: 100%;
         display: flex;
-        height: auto;
+
         .tab_button {
+          position: absolute;
+          width: auto;
           &:nth-child(n + 2) {
-            margin-left: 99px;
+            margin-left: 154px;
           }
 
           .text {
             height: auto;
-            font-family: NotoSansCJKkr;
+            font-family: NotoSansCJKkr-Medium;
             font-size: 20px;
             font-weight: 500;
             font-style: normal;
@@ -89,10 +105,12 @@ body {
           }
         }
         .register_rect {
+          position: absolute;
           display: flex;
           align-items: center;
-          margin-left: 297px;
-          height: auto;
+          width: auto;
+          height: 100%;
+          right: 0;
 
           .button {
             width: 40px;
@@ -108,7 +126,7 @@ body {
           .button_text {
             height: auto;
             margin-left: 10px;
-            font-family: NotoSansCJKkr;
+            font-family: NotoSansCJKkr-Medium;
             font-size: 20px;
             font-weight: 500;
             font-style: normal;
@@ -118,6 +136,18 @@ body {
             color: #7a7a7a;
             cursor: pointer;
           }
+        }
+
+        @media (max-width: 750px) {
+          & {
+            grid-column: 1 / span 1;
+          }
+        }
+      }
+
+      @media (max-width: 750px) {
+        & {
+          grid-template-columns: auto;
         }
       }
     }
@@ -130,11 +160,27 @@ body {
     height: 100%;
     grid-row: 2 / span 1;
 
-    // div {
-    // -ms-overflow-style: -ms-autohiding-scrollbar; // IE에서 스크롤바 감춤
-    // &::-webkit-scrollbar {
-    //   display: none !important; // 윈도우 크롬 등
-    // }
-    // }
+    div {
+      -ms-overflow-style: -ms-autohiding-scrollbar; // IE에서 스크롤바 감춤
+      scrollbar-width: none; //파이어폭스
+      &::-webkit-scrollbar {
+        display: none !important; // 윈도우 크롬 등
+      }
+
+      &:hover {
+        scrollbar-width: unset; //파이어폭스
+        &::-webkit-scrollbar {
+          display: block !important; // 윈도우 크롬 등
+          width: 10px;
+          background-color: rgba(128, 128, 128, 0.185);
+          border-radius: 15px;
+        }
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background-color: #030303;
+        border-radius: 15px;
+      }
+    }
   }
 }

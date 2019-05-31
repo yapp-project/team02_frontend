@@ -443,7 +443,7 @@ class LoginPopup extends Component {
   showNotifyPopup = () => {
     return (
       <div className={cx("showNotifyPopup")}>
-        <div className={cx("text")}>정말로 탈퇴 하겠습니까?</div>
+        <div className={cx("text")}>정말로 탈퇴 하시겠습니까?</div>
         <div className={cx("container")}>
           <Button
             className={cx("ok")}

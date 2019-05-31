@@ -32,6 +32,7 @@ import arrowRight from "../../static/images/arrow-right.svg";
 
 import { setScrapRequest } from "../../action/userAction.js";
 import { withRouter } from "react-router-dom";
+import { CircleSpinner } from "react-spinners-kit";
 
 import { addCommentRequest } from "../../action/recipeAction";
 
@@ -85,7 +86,8 @@ class ViewRecipe extends Component {
     main: <RecipeCup glass="0" />,
     side: <RecipeInfo alcohol="0" recipe="" descripe="" tags={[]} />,
     bShowDelete: false,
-    userID: ""
+    userID: "",
+    bLoading: true
   };
 
   componentDidMount() {
@@ -100,6 +102,7 @@ class ViewRecipe extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.id !== this.props.id) {
       const { id } = this.props;
+      this.setState({ bLoading: true });
       this.props.recipeIDRequest(id);
       return;
     }
@@ -125,7 +128,8 @@ class ViewRecipe extends Component {
               tags={this.state.recipe_info.tags}
             />
           ),
-          userID: auth ? auth.userid : ""
+          userID: auth ? auth.userid : "",
+          bLoading: false
         },
         () => {
           document.getElementById(
@@ -162,7 +166,8 @@ class ViewRecipe extends Component {
                 tags={this.state.recipe_info.tags}
               />
             ),
-            userID: auth ? auth.userid : ""
+            userID: auth ? auth.userid : "",
+            bLoading: false
           },
           () => {
             document.getElementById(
@@ -203,7 +208,8 @@ class ViewRecipe extends Component {
                   tags={this.state.recipe_info.tags}
                 />
               ),
-              userID: auth ? auth.userid : ""
+              userID: auth ? auth.userid : "",
+              bLoading: false
             },
             () => {
               document.getElementById(
@@ -298,24 +304,29 @@ class ViewRecipe extends Component {
       comment === event.target ||
       comment === event.target.parentNode
     ) {
-      this.setState({
-        main: <RecipeCup glass={this.state.recipe_info.glass} />,
-        side: (
-          <RecipeComment
-            comment={this.state.comment}
-            onAddComment={this.onAddComment}
-            isUser={this.state.userID ? true : false}
-          />
-        )
-      }, () => {
-        if(localStorage.getItem("myData") === null) {
-          document.getElementById("commentText").disabled = true ;
-          document.getElementById("commentText").placeholder = "로그인 이후 입력 가능합니다";
-        } else {
-          document.getElementById("commentText").disabled = false ;
-          document.getElementById("commentText").placeholder = "텍스트를 입력해주세요";
+      this.setState(
+        {
+          main: <RecipeCup glass={this.state.recipe_info.glass} />,
+          side: (
+            <RecipeComment
+              comment={this.state.comment}
+              onAddComment={this.onAddComment}
+              isUser={this.state.userID ? true : false}
+            />
+          )
+        },
+        () => {
+          if (localStorage.getItem("myData") === null) {
+            document.getElementById("commentText").disabled = true;
+            document.getElementById("commentText").placeholder =
+              "로그인 이후 입력 가능합니다";
+          } else {
+            document.getElementById("commentText").disabled = false;
+            document.getElementById("commentText").placeholder =
+              "텍스트를 입력해주세요";
+          }
         }
-      });
+      );
 
       comment.style.backgroundImage = `url(${commentImageP})`;
       comment.style.opacity = 1;
@@ -435,7 +446,17 @@ class ViewRecipe extends Component {
         {this.state.bShowDelete && (
           <div className={cx("notifypopup_rect")}>{this.showNotifyPopup()}</div>
         )}
+
         <div className={cx("detail-content")}>
+          <div className={cx("loading_rect", !this.state.bLoading && "_hide")}>
+            <div className={cx("loading_container")}>
+              <CircleSpinner
+                size={100}
+                color="white"
+                loading={this.state.bLoading}
+              />
+            </div>
+          </div>
           {this.props.isPrev && (
             <span
               style={Object.assign({}, toolbarStyleCommon, {
@@ -524,29 +545,28 @@ class ViewRecipe extends Component {
               id="close-botton"
               onClick={this.props.closeClick}
             />
-            {this.state.userID === this.state.recipe_info.nick &&
-              ((
-                <span
-                  style={Object.assign({}, toolbarStyleCommon, {
-                    backgroundImage: `url(${modifyIcon})`,
-                    backgroundSize: "cover",
-                    opacity: 1
-                  })}
-                  id="edit-botton"
-                  onClick={this.onDetailViewEdit}
-                />
-              ),
-              (
-                <span
-                  style={Object.assign({}, toolbarStyleCommon, {
-                    backgroundImage: `url(${deleteIcon})`,
-                    backgroundSize: "cover",
-                    opacity: 1
-                  })}
-                  id="delete-botton"
-                  onClick={this.onDeleteCocktailClick}
-                />
-              ))}
+            {this.state.userID === this.state.recipe_info.nick && (
+              <span
+                style={Object.assign({}, toolbarStyleCommon, {
+                  backgroundImage: `url(${modifyIcon})`,
+                  backgroundSize: "cover",
+                  opacity: 1
+                })}
+                id="edit-botton"
+                onClick={this.onDetailViewEdit}
+              />
+            )}
+            {this.state.userID === this.state.recipe_info.nick && (
+              <span
+                style={Object.assign({}, toolbarStyleCommon, {
+                  backgroundImage: `url(${deleteIcon})`,
+                  backgroundSize: "cover",
+                  opacity: 1
+                })}
+                id="delete-botton"
+                onClick={this.onDeleteCocktailClick}
+              />
+            )}
             <span
               style={Object.assign({}, toolbarStyleCommon, {
                 backgroundImage: `url(${heartIcon})`,
