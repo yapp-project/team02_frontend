@@ -8,6 +8,9 @@ const EnrolmentMiddle = (props) => {
   return (
     <div className={cx("middle")}>
         <span id="cup-area"></span>
+        <div className={cx("drink-container")}>
+          <div id="test" className={cx("drink-color")}></div>
+        </div>
     </div>
   );
 };

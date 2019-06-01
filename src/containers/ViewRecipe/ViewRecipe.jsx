@@ -100,6 +100,7 @@ class ViewRecipe extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    console.log('test');
     if (prevProps.id !== this.props.id) {
       const { id } = this.props;
       this.setState({ bLoading: true });
