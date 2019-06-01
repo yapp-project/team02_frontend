@@ -567,8 +567,12 @@
       height: 20px;
       right: 25px;
       top: 25px;
-      border: 1px solid #000;
       cursor: pointer;
+      background-image: url('../../../static/images/glass1_empty_enrolment.png');
+      background-image: url('../../../static/images/doneClose.svg');
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
     }
 
     .done-icon {
@@ -578,9 +582,11 @@
       margin-top: 62px;
       margin-left: auto;
       margin-right: auto;
-      border: 1px solid #707070;
-      border-radius: 100px;
       background-color: inherit;
+      background-image: url('../../../static/images/doneCock.png');
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
     }
 
     .done-title {

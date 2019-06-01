@@ -13,6 +13,7 @@ import { enrolmentRequest } from "../../action/enrolmentAction";
 import axios from "axios";
 import { ChromePicker } from "react-color";
 import { recipeIDRequest } from "../../action/recipeAction";
+import { CircleSpinner } from "react-spinners-kit";
 
 import cup_empty1 from "../../static/images/glass1_empty_enrolment.png";
 import cup_empty2 from "../../static/images/glass2_empty_enrolment.png";
@@ -60,7 +61,8 @@ class Enrolment extends Component {
       color_idx: "",
       images: [],
       userID: "",
-      colorClose: ""
+      colorClose: "",
+      bLoading: false
     };
 
     this.onChangeStepStatus = this.onChangeStepStatus.bind(this);
@@ -133,7 +135,7 @@ class Enrolment extends Component {
           info={this.state.enrolmentData.info}
         />
       ),
-      done: <Done onSaveRecipe={this.onSaveRecipe} />
+      done: <Done onDoneClose={this.onDoneClose} />
     });
 
     const recipeID = this.props.match.params.id;
@@ -801,6 +803,8 @@ class Enrolment extends Component {
 
     // TODO
     // 데이터 validation 체크 해야 함
+
+    this.setState({'bLoading': true});
     this.props.enrolmentRequest(data);
   };
 
@@ -826,22 +830,48 @@ class Enrolment extends Component {
         // const fileURL = data.secure_url // You should store this URL for future references in your app
         console.log(id);
         console.log(data);
+
+        this.setState({'bLoading': false});
+        let done = document.getElementById('done-container');
+
+        this.doneClose = done.classList[1];
+
+        done.classList.remove(done.classList[1]);
       })
       .catch(e => {
         console.error(e);
       });
   };
 
+  onDoneClose = () => {
+    // let done = document.getElementById('done-container');
+    // done.classList.add(this.doneClose);
+    this.props.history.push("/");
+  }
+
   handleChange = color => {
     let target = document.querySelector(`#${colorTarget}`);
     target.style.backgroundColor = color.hex;
   };
+
+//   <div className={cx("loading_rect", !this.state.bLoading && "_hide")}>
+//   <div className={cx("loading_container")}>
+//     <CircleSpinner
+//       size={100}
+//       color="white"
+//       loading={this.state.bLoading}
+//     />
+//   </div>
+// </div>
 
   render() {
     const { left, middle, step, done } = this.state;
 
     return (
       <div className={cx("enrolment-container")}>
+      
+        
+
         <div id={"color-picker"} className={cx("color-picker", "close")}>
           <ChromePicker onChange={this.handleChange} />
           <span

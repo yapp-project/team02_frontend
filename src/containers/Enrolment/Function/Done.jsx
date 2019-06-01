@@ -9,7 +9,7 @@ const EnrolmentDone = (props) => {
   return (
     <div id="done-container" className={cx("done-container", "close")}>
         <div className={cx("done-notification-area")}>
-            <span className={cx("done-closeButton")} onClick={props.onSaveRecipe}></span>
+            <span className={cx("done-closeButton")} onClick={props.onDoneClose}></span>
 
             <span className={cx("done-icon")}></span>
 
