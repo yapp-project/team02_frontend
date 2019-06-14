@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24.812 20.3">
+    <defs>
+        <style>
+            .cls-1{opacity:.4}.cls-2{fill:#fff}
+        </style>
+    </defs>
+    <g id="재료_아이콘" class="cls-1" data-name="재료 아이콘">
+        <path id="패스_33" d="M20.413 0l-1.354 3.383H0l3.383 11.278h13.534l4.962-12.405h2.932V0z" class="cls-2" data-name="패스 33"/>
+        <ellipse id="타원_64" cx="2.256" cy="2.256" class="cls-2" data-name="타원 64" rx="2.256" ry="2.256" transform="translate(2.819 15.789)"/>
+        <ellipse id="타원_65" cx="2.256" cy="2.256" class="cls-2" data-name="타원 65" rx="2.256" ry="2.256" transform="translate(12.969 15.789)"/>
+    </g>
+</svg>

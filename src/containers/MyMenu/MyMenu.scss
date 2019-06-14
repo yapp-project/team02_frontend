@@ -1,0 +1,186 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  //width: 100%;
+  height: 100%;
+  overflow: hidden;
+  div {
+    height: 100%;
+  }
+}
+.mymenu_container {
+  position: absolute;
+  width: 100%;
+  display: grid;
+  grid-template-rows: 330.5px auto;
+
+  .top_rect {
+    grid-row: 1 / span 1;
+    background-color: #080f24;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+
+    .top_container {
+      display: grid;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      grid-template-columns: auto 749px auto;
+      grid-template-rows: 208px 112.5px;
+
+      .userid {
+        height: auto;
+        font-family: AvenirLT;
+        font-size: 55px;
+        font-style: normal;
+        font-stretch: normal;
+        line-height: 1.49;
+        letter-spacing: normal;
+        text-align: left;
+        align-self: center;
+        color: #ffffff;
+
+        grid-row: 1 / span 1;
+        grid-column: 2 / span 1;
+
+        cursor: default;
+
+        @media (max-width: 750px) {
+          & {
+            grid-column: 1 / span 1;
+          }
+        }
+      }
+
+      .tab_container {
+        grid-row: 2 / span 1;
+        grid-column: 2 / span 1;
+
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+
+        .tab_button {
+          position: absolute;
+          width: auto;
+          &:nth-child(n + 2) {
+            margin-left: 154px;
+          }
+
+          .text {
+            height: auto;
+            font-family: NotoSansCJKkr-Medium;
+            font-size: 20px;
+            font-weight: 500;
+            font-style: normal;
+            font-stretch: normal;
+            letter-spacing: normal;
+            text-align: left;
+            color: #7a7a7a;
+            display: inline-block;
+          }
+          .number {
+            height: auto;
+            font-family: Arita-dotum-_TTF;
+            font-size: 40px;
+            font-style: normal;
+            font-stretch: normal;
+            letter-spacing: normal;
+            text-align: left;
+            color: #7a7a7a;
+          }
+
+          cursor: pointer;
+
+          &.selected {
+            .text {
+              color: #83d1e6;
+            }
+            .number {
+              color: #83d1e6;
+            }
+          }
+        }
+        .register_rect {
+          position: absolute;
+          display: flex;
+          align-items: center;
+          width: auto;
+          height: 100%;
+          right: 0;
+
+          .button {
+            width: 40px;
+            height: 40px;
+            background-color: transparent;
+            background-image: url("../../static/images/gray_button.svg");
+            background-repeat: no-repeat;
+            background-size: contain;
+
+            outline-style: none;
+            cursor: pointer;
+          }
+          .button_text {
+            height: auto;
+            margin-left: 10px;
+            font-family: NotoSansCJKkr-Medium;
+            font-size: 20px;
+            font-weight: 500;
+            font-style: normal;
+            font-stretch: normal;
+            letter-spacing: normal;
+            text-align: left;
+            color: #7a7a7a;
+            cursor: pointer;
+          }
+        }
+
+        @media (max-width: 750px) {
+          & {
+            grid-column: 1 / span 1;
+          }
+        }
+      }
+
+      @media (max-width: 750px) {
+        & {
+          grid-template-columns: auto;
+        }
+      }
+    }
+  }
+
+  .bottom_rect {
+    position: absolute;
+    background-color: #0f1835;
+    width: 100%;
+    height: 100%;
+    grid-row: 2 / span 1;
+
+    div {
+      -ms-overflow-style: -ms-autohiding-scrollbar; // IE에서 스크롤바 감춤
+      scrollbar-width: none; //파이어폭스
+      &::-webkit-scrollbar {
+        display: none !important; // 윈도우 크롬 등
+      }
+
+      &:hover {
+        scrollbar-width: unset; //파이어폭스
+        &::-webkit-scrollbar {
+          display: block !important; // 윈도우 크롬 등
+          width: 10px;
+          background-color: rgba(128, 128, 128, 0.185);
+          border-radius: 15px;
+        }
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background-color: #030303;
+        border-radius: 15px;
+      }
+    }
+  }
+}

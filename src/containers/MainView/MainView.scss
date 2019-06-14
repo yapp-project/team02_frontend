@@ -1,13 +1,368 @@
-$bg-color: red;
-
-html,
-body {
-  margin: 0;
-  width: 100%;
-  overflow: hidden;
+@import "../../static/colors.scss";
+@import "../../static/variables.scss";
+@font-face {
+  font-family: "LasEnterPersonalUseOnly";
+  font-weight: 500;
+  src: url("../../static/LasEnter_PersonalUseOnly.ttf") format("truetype");
+}
+@font-face {
+  font-family: "NotoSansCJKkr";
+  font-weight: 300;
+  src: url("../../static/NotoSans-Light.otf") format("opentype");
 }
 
-.body {
+@font-face {
+  font-family: "NotoSansCJKkr-Regular";
+  font-weight: normal;
+  src: url("../../static/NotoSansCJKkr-Regular.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "NotoSansCJKkr-Medium";
+  font-weight: 500;
+  src: url("../../static/NotoSansCJKkr-Medium.otf") format("opentype");
+}
+html,
+body {
+  padding: 0;
   margin: 0;
+  width: 100%;
   height: 100%;
+  overflow: hidden;
+  div {
+    height: 100%;
+  }
+}
+
+//반응형 Layout Cover
+.mainview {
+  background-color: $main-color;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: 215px 115px auto;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+
+  .viewreipe_rect {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
+
+  //중간 text Style
+  .explanation_rect {
+    grid-column: 1 / span 5;
+    display: grid;
+    grid-template-columns: 20.5% 755px auto;
+    grid-template-rows: 92.8px 57px 66px;
+
+    .left {
+      grid-column: 1 / span 1;
+      grid-row: 2 / span 2;
+      .logo {
+        float: right;
+        width: 74px;
+        height: 117px;
+        margin-top: 6px;
+        margin-right: 20px;
+        background-image: url("../../static/images/main_logo.svg");
+        background-repeat: no-repeat;
+        background-size: contain;
+      }
+    }
+    .title {
+      grid-column: 2 / span 2;
+      grid-row: 2 / span 1;
+      font-family: AvenirLT;
+      font-size: 55px;
+      font-weight: 900;
+      font-style: oblique;
+      font-stretch: normal;
+      line-height: 1.18;
+      letter-spacing: normal;
+      text-align: left;
+      color: #ffffff;
+    }
+
+    .contents {
+      grid-column: 2 / span 1;
+      grid-row: 3 / span 1;
+      display: flex;
+      align-items: center;
+      .text {
+        height: auto;
+        font-family: NotoSansCJKkr;
+        font-size: 45px;
+        font-weight: 300;
+        color: #ffffff;
+      }
+    }
+    .register_rect {
+      grid-row: 3 / span 1;
+      display: flex;
+      align-items: center;
+      padding-left: 28px;
+
+      .button {
+        width: 40px;
+        height: 40px;
+        background-color: transparent;
+        background-image: url("../../static/images/plusbtn.svg");
+        background-repeat: no-repeat;
+        background-size: contain;
+
+        outline-style: none;
+        cursor: pointer;
+      }
+      .button_text {
+        margin-left: 10px;
+        height: 20px;
+        color: #83d1e6;
+        font-size: 20px;
+        font-family: NotoSansCJKkr;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        cursor: pointer;
+      }
+    }
+    @media (max-width: 1200px) {
+      & {
+        grid-template-columns: 20.5% auto;
+        grid-template-rows: 57px auto 66px;
+      }
+      .left {
+        grid-row: 1 / span 4;
+      }
+      .title {
+        grid-column: 2 / span 2;
+        grid-row: 1 / span 1;
+      }
+      .contents {
+        grid-column: 2 / span 2;
+        grid-row: 2 / span 1;
+      }
+      .register_rect {
+        grid-column: 2 / span 2;
+        grid-row: 3 / span 1;
+        padding-left: 0px;
+      }
+    }
+
+    @media (max-width: 470px) {
+      & {
+        grid-template-columns: auto;
+        grid-template-rows: 57px auto;
+        margin-top: 0;
+      }
+      .left {
+        display: none;
+      }
+      .title {
+        grid-column: 1;
+      }
+      .contents {
+        grid-column: 1;
+      }
+      .register_rect {
+        grid-column: 1;
+        padding-left: 0px;
+      }
+    }
+  }
+  //hashtag rect style
+  .hashtag_rect {
+    grid-column: 1 / span 5;
+    padding-left: 20.5%;
+
+    .hashtag_container {
+      overflow: hidden;
+      overflow-x: auto;
+      white-space: nowrap;
+      display: flex;
+      -ms-overflow-style: none; // IE에서 스크롤바 감춤
+      &::-webkit-scrollbar {
+        display: none !important; // 윈도우 크롬 등
+      }
+
+      .hastag_inner {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .hashtag {
+          background-color: transparent;
+          font-size: 35px;
+          color: #7a7a7a;
+          font-family: AvenirLT;
+          height: 52px;
+          margin-left: 126px;
+          cursor: pointer;
+          outline: none;
+          border: 0;
+          line-height: 1.5;
+
+          @media (max-width: 470px) {
+            & {
+              margin-left: 30px;
+            }
+          }
+
+          &:first-child {
+            margin-left: 0%;
+          }
+
+          &.selected {
+            color: #83d1e6;
+          }
+        }
+      }
+    }
+
+    @media (max-width: 470px) {
+      & {
+        padding-left: 0;
+      }
+    }
+  }
+  //cocktail 결과 Layout style
+  .image_rect {
+    position: absolute;
+    grid-row: 3 / span 1;
+    grid-column: 1 / span 5;
+    width: 100%;
+    height: 100%;
+    background-color: $main-color;
+    display: flex;
+
+    .innercontainer {
+      // position: absolute;
+      display: flex;
+      align-items: center;
+      flex-wrap: nowrap;
+      overflow: hidden;
+      width: 100%;
+      height: auto;
+      // max-width: 1518px;
+      max-height: 590px;
+
+      .loading_rect {
+        position: absolute;
+        z-index: 100;
+        width: auto;
+        height: auto;
+        left: 50%;
+
+        &._hide {
+          display: none;
+        }
+      }
+
+      .nodata_rect {
+        position: absolute;
+        width: 100%;
+        height: auto;
+
+        .nodata_image {
+          width: auto;
+          height: 100px;
+          background-image: url("../../static/images/error.png");
+          background-repeat: no-repeat;
+          background-position: center;
+          background-size: contain;
+        }
+
+        .nodata_text {
+          width: auto;
+          height: auto;
+          margin-top: 20px;
+          font-family: NotoSansCJKkr;
+          font-size: 40px;
+          color: #ffffff;
+          text-align: center;
+        }
+      }
+
+      .prevbspan {
+        position: absolute;
+        background-image: url("../../static/images/mainrightarrow.svg");
+        background-repeat: no-repeat;
+        -webkit-transform: rotate(180deg);
+        transform: rotate(180deg);
+        width: 116.3px;
+        height: 116.3px;
+
+        cursor: pointer;
+        display: none;
+        z-index: 50;
+      }
+      .nextspan {
+        position: absolute;
+        right: 0;
+        background-image: url("../../static/images/mainrightarrow.svg");
+        background-repeat: no-repeat;
+        width: 116.3px;
+        height: 116.3px;
+        cursor: pointer;
+        display: none;
+        z-index: 50;
+      }
+
+      //cocktail result layout
+      .cocktailcontainer {
+        display: flex;
+        overflow: hidden;
+        overflow-x: auto;
+        -ms-overflow-style: none; // IE에서 스크롤바 감춤
+        scrollbar-width: none; //파이어폭스
+        &::-webkit-scrollbar {
+          display: none !important; // 윈도우 크롬 등
+        }
+        padding-left: 20.5%;
+
+        .cocktail {
+          display: inline-block;
+          position: relative;
+          width: 360px;
+          max-height: 590px;
+          margin-right: 26px;
+          &:hover {
+            img {
+              opacity: 0.7;
+            }
+            div {
+              visibility: visible;
+            }
+          }
+        }
+
+        @media (max-width: 470px) {
+          & {
+            padding-left: 0;
+          }
+        }
+      }
+
+      &:hover {
+        .prevbspan {
+          display: block;
+          &._hide {
+            display: none;
+          }
+        }
+        .nextspan {
+          display: block;
+          &._hide {
+            display: none;
+          }
+        }
+      }
+    }
+
+    @media (max-width: 470px) {
+      & {
+        padding-left: 2%;
+      }
+    }
+  }
 }

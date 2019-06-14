@@ -1,0 +1,320 @@
+.detail-content-header {
+  display: table;
+  position: relative;
+  width: 100%;
+  padding: 0 30px 0 42px;
+  height: 100px;
+  box-sizing: border-box;
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.6);
+  background-color: #0f1835;
+  z-index: 2;
+
+  > span {
+    display: table-cell;
+    vertical-align: middle;
+    font-size: 40px;
+    font-weight: bold;
+  }
+
+  .detail-content-header-info {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: right;
+    font-size: 15px;
+    font-weight: normal;
+
+    .detail-content-header-info-count {
+      display: block;
+      height: 51px;
+
+      span::before {
+        content: "";
+        display: inline-block;
+        vertical-align: middle;
+        height: 100%;
+      }
+
+      span {
+        display: inline-block;
+        margin-top: 15px;
+      }
+    }
+  }
+}
+
+.detail-content-header::after {
+  display: block;
+  content: "";
+  clear: both;
+}
+
+.detail-content-main-view-cup {
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 90%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.detail-content-main-view-image {
+  position: absolute;
+  display: block;
+  width: 70%;
+  padding-bottom: 70%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.detail-content-main-side-info {
+  width: 80%;
+  height: 86%;
+  padding: 7% 10%;
+
+  .side-info {
+    display: block;
+    margin-top: 50px;
+    font-size: 15px;
+    font-weight: bold;
+  }
+
+  .side-info:nth-child(1) {
+    margin-top: 0;
+  }
+
+  .content {
+    font-weight: normal;
+    margin-top: 21px;
+  }
+
+  .alcohol {
+    display: block;
+    width: 92px;
+    height: 92px;
+    margin-top: 20px;
+    padding: 14px;
+    border: 1px solid #ffffff;
+    box-sizing: border-box;
+    border-radius: 10px;
+
+    span {
+      display: block;
+      font-size: 12px;
+      color: #fff;
+    }
+
+    span:first-child {
+      font-size: 10px;
+      margin-bottom: 15%;
+    }
+  }
+
+  .tags {
+    color: #97d9eb;
+  }
+
+  .side-info-alcohol::after {
+    display: block;
+    content: "";
+    clear: both;
+  }
+}
+
+.detail-content-main-side-stuff {
+  position: relative;
+  width: 100%;
+  height: calc(100% - 60px);
+
+  div {
+    height: auto;
+  }
+
+  .detail-content-main-side-stuff-container {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+
+    .detail-content-main-side-stuff-item {
+      width: 90%;
+      margin: 0 5%;
+      padding: 22px 0;
+      border-top: 1px solid #707070;
+
+      span::before {
+        content: "";
+        display: inline-block;
+        vertical-align: middle;
+        height: 100%;
+      }
+
+      span {
+        font-size: 20px;
+        font-weight: normal;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+
+      .stuff-color {
+        display: inline-block;
+        width: 8%;
+        margin-left: 5%;
+      }
+
+      .stuff-name {
+        display: inline-block;
+        width: 35%;
+        margin-left: 5%;
+      }
+
+      .stuff-volume {
+        display: inline-block;
+        width: 15%;
+        font-size: 15px;
+        margin-left: 5%;
+      }
+
+      .stuff-ratio {
+        display: inline-block;
+        width: 15%;
+        margin-left: 10%;
+      }
+    }
+
+    .detail-content-main-side-stuff-item:first-child {
+      border-top: none;
+    }
+  }
+}
+
+.detail-content-main-side-photo {
+  margin: 10%;
+
+  .photo-item {
+    display: inline-block;
+    width: 31%;
+    padding-bottom: 25%;
+    margin: 0 3.5% 3.5% 0;
+    border: 1px solid #707070;
+    box-sizing: border-box;
+  }
+
+  .photo-item:nth-child(3n) {
+    margin-right: 0;
+  }
+}
+
+.detail-content-main-side-comment {
+  height: calc(100% - 60px);
+
+  div {
+    height: auto;
+  }
+
+  .detail-content-main-side-comment-container {
+    height: calc(100% - 74px);
+
+    .detail-content-main-side-comment-item {
+      position: relative;
+      width: 90%;
+      margin: 0 5%;
+      padding: 4% 0;
+      border-bottom: 1px solid #707070;
+
+      span::before {
+        content: "";
+        display: inline-block;
+        vertical-align: middle;
+        height: 100%;
+      }
+
+      span {
+        display: inline-block;
+        font-weight: normal;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+
+      .comment-name {
+        width: 20%;
+        font-size: 15px;
+        margin-left: 5%;
+        font-weight: bold;
+      }
+
+      .comment-content {
+        width: 60%;
+        font-size: 15px;
+        margin-left: 5%;
+        font-weight: normal;
+      }
+
+      .comment-time {
+        display: block;
+        position: absolute;
+        font-size: 10px;
+        font-weight: normal;
+        right: 0;
+        bottom: 10%;
+      }
+    }
+  }
+
+  .detail-content-main-side-comment-input {
+    height: 74px;
+    box-sizing: border-box;
+
+    .comment-input {
+      display: block;
+      position: relative;
+      width: 80%;
+      padding: 2.5% 5%;
+      margin: 0 0 5% 5%;
+      float: left;
+      top: 50%;
+      transform: translateY(-50%);
+      border-radius: 20px;
+      background-color: transparent;
+      border: solid 1px #ffffff;
+      box-sizing: border-box;
+      font-size: 15px;
+      font-weight: 300;
+      text-align: left;
+      color: #ffffff;
+
+      &._disabled {
+        background-color: rgba(128, 128, 128, 0.308);
+        cursor: default;
+        font-weight: bold;
+      }
+    }
+
+    .comment-button {
+      display: block;
+      position: relative;
+      width: 8%;
+      padding-bottom: 8%;
+      margin-right: 5%;
+      float: right;
+      top: 50%;
+      transform: translateY(-50%);
+      border: solid 1px #ffffff;
+      background-color: transparent;
+      background-image: url("../../../static/images/arrow_upward_white.png");
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: contain;
+      border-radius: 100%;
+      box-sizing: border-box;
+      cursor: pointer;
+
+      &._disabled {
+        background-color: rgba(128, 128, 128, 0.308);
+        cursor: default;
+      }
+    }
+  }
+}
