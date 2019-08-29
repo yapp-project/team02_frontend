@@ -28,7 +28,7 @@ const SearchResultItem = ({
           e.target.src = xbox;
           e.target.className = cx("item_img", "_xbox");
         }}
-        src={image}
+        src={image[0]}
         alt="사진"
       />
       {modify && (
@@ -42,7 +42,11 @@ const SearchResultItem = ({
           </div>
         </div>
       )}
-      <div id={_id} className={cx("information_rect")} onClick={informationClick}>
+      <div
+        id={_id}
+        className={cx("information_rect")}
+        onClick={informationClick}
+      >
         <div className={cx("inner")}>
           <div className={cx("cocktailName")}>{name}</div>
           <div className={cx("bottom")}>
