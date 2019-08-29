@@ -21,7 +21,8 @@ const mapStateToProps = state => {
   return {
     bLoginResult: state.userReducer.bLoginResult,
     set_auth: state.userReducer.set_auth,
-    searchReducer: state.searchReducer
+    searchReducer: state.searchReducer,
+    networkStatus: state.searchReducer.networkStatus
   };
 };
 
@@ -128,6 +129,15 @@ class Header extends Component {
       bSearchAction
     } = this.state;
     const { searchReducer } = this.props;
+    if (
+      this.props.networkStatus.status === 0 &&
+      bShowSearch &&
+      bsearchRequest
+    ) {
+      this.setState({ bsearchRequest: false, isScroll: false });
+      return;
+    }
+
     if (this.props.bLoginResult && bShowLogin) {
       if (this.state.popupID !== "usermodify") {
         this.setState({ bShowLogin: false });
@@ -423,7 +433,11 @@ class Header extends Component {
                 ) : (
                   <div className={cx("notresult_rect")}>
                     <div className={cx("image_rect")} />
-                    <div className={cx("text_rect")}>검색 결과가 없습니다!</div>
+                    <div className={cx("text_rect")}>
+                      {this.props.networkStatus.status === 0
+                        ? "서버 연결에 실패하였습니다"
+                        : "검색 결과가 없습니다!"}
+                    </div>
                   </div>
                 )}
               </div>

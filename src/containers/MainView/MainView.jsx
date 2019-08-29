@@ -19,7 +19,8 @@ const cx = classNames.bind(styles);
 const mapStateToProps = state => {
   return {
     recommend: state.searchReducer.recommend,
-    scrap: state.userReducer.scrap
+    scrap: state.userReducer.scrap,
+    networkStatus: state.searchReducer.networkStatus
   };
 };
 
@@ -71,6 +72,10 @@ class MainView extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    if (this.props.networkStatus.status === 0 && this.state.loading) {
+      this.setState({ loading: false });
+      return;
+    }
     //최초 통신한 경우 첫번째 태그에 대한 검색 결과 가져와야 함
     if (
       !prevProps.recommend.tags.length &&
@@ -395,7 +400,9 @@ class MainView extends Component {
                 <div className={cx("nodata_rect")}>
                   <div className={cx("nodata_image")} />
                   <div className={cx("nodata_text")}>
-                    현재 등록된 레시피가 없습니다.
+                    {this.props.networkStatus.status === 0
+                      ? "서버 연결에 실패하였습니다"
+                      : "현재 등록된 레시피가 없습니다."}
                   </div>
                 </div>
               )}

@@ -2,7 +2,8 @@ import { all, takeLatest, call, put } from "redux-saga/effects";
 import {
   actions,
   searchSuccess,
-  recommendSuccess
+  recommendSuccess,
+  recommendFailed
 } from "../action/searchAction";
 import { searchCocktails, getRecommendTags } from "../api/searchAPI";
 
@@ -22,14 +23,46 @@ function* searchCocktail(action) {
     data.pages = result.pagination;
     data.page = parseInt(result.page, 10);
     yield put(searchSuccess(data));
-  } catch (error) {}
+  } catch (error) {
+    if (!error) {
+      yield put(
+        recommendFailed({
+          status: 0,
+          reson: "ERR_CONNECTION_REFUSED"
+        })
+      );
+    } else {
+      yield put(
+        recommendFailed({
+          status: error.status,
+          reson: error.result
+        })
+      );
+    }
+  }
 }
 
 function* _getRecommendTags() {
   try {
     const result = yield call(getRecommendTags);
     yield put(recommendSuccess(result));
-  } catch (error) {}
+  } catch (error) {
+    if (!error) {
+      yield put(
+        recommendFailed({
+          status: 0,
+          reson: "ERR_CONNECTION_REFUSED"
+        })
+      );
+    } else {
+      yield put(
+        recommendFailed({
+          status: error.status,
+          reson: error.result
+        })
+      );
+    }
+  }
 }
 
 export default function* saga() {

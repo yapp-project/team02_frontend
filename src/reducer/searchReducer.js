@@ -1,6 +1,7 @@
 import { actions } from "../action/searchAction";
 
 const initialState = {
+  networkStatus: { status: -1, reson: "" },
   searchword: [], //검색한 word
   type: 0, //검색 type
   filter: 0, //검색 필터
@@ -26,7 +27,8 @@ const reducer = (state = initialState, action) => {
           recommend: {
             ...state.recommend,
             result: data.cocktailArray
-          }
+          },
+          networkStatus: { status: 200, reson: "" }
         };
       } else {
         return {
@@ -39,7 +41,8 @@ const reducer = (state = initialState, action) => {
             cocktails: data.cocktailArray,
             page: data.page,
             pages: data.pages
-          }
+          },
+          networkStatus: { status: 200, reson: "" }
         };
       }
     }
@@ -50,7 +53,15 @@ const reducer = (state = initialState, action) => {
         recommend: {
           ...state.recommend,
           tags: data
-        }
+        },
+        networkStatus: { status: 200, reson: "" }
+      };
+    }
+    case actions.RECOMMEND.FAILED: {
+      const { data } = action.payload;
+      return {
+        ...state,
+        networkStatus: { status: data.status, reson: data.reson }
       };
     }
     default:
