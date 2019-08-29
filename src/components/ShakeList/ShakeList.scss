@@ -1,0 +1,14 @@
+.shakelist {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+/*container가 flex가 되어야함*/
+.shakelist_container {
+  position: absolute;
+  display: inline-flex;
+  flex-direction: column-reverse;
+  width: 100%;
+  height: 67%;
+  bottom: 1%;
+}

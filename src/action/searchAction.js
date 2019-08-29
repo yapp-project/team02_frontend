@@ -50,3 +50,12 @@ export function recommendSuccess(data) {
     }
   };
 }
+
+export function recommendFailed(data) {
+  return {
+    type: actions.RECOMMEND.FAILED,
+    payload: {
+      data
+    }
+  };
+}

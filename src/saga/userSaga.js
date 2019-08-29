@@ -34,7 +34,9 @@ function* requestLogin(action) {
     localStorage.setItem("myData", JSON.stringify(localData));
     yield put(loginSuccess(result));
   } catch (error) {
-    if (error.status === 404) {
+    if (!error) {
+      yield put(loginFailed(false));
+    } else if (error.status === 404) {
       const auth = JSON.parse(localStorage.getItem("myData"));
       if (auth) {
         logout();

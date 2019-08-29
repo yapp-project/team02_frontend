@@ -25,7 +25,7 @@ const EnrolmentStuffItem = props => {
           <Edit
             className={cx("stuff-item-input-stuff")}
             placeholder="재료 이름"
-            defaultValue={props.stuff.name}
+            value={props.stuff.name}
             onChange={e => props.onSaveStuffName(e, props.idx)}
           />
 
@@ -40,9 +40,9 @@ const EnrolmentStuffItem = props => {
 
           <span className={cx("volume-text")}> ml</span>
 
-          <span className={cx("stuff-item-ratio")}>{`${
-            props.stuff.ratio
-          } %`}</span>
+          <span
+            className={cx("stuff-item-ratio")}
+          >{`${props.stuff.ratio} %`}</span>
         </div>
 
         <span className={cx("stuff-delete")} onClick={props.onDeleteStuff} />

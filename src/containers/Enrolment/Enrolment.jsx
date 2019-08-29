@@ -15,17 +15,17 @@ import { ChromePicker } from "react-color";
 import { recipeIDRequest } from "../../action/recipeAction";
 import { CircleSpinner } from "react-spinners-kit";
 
-import cup_empty1 from "../../static/images/glass1_empty_enrolment.png";
-import cup_empty2 from "../../static/images/glass2_empty_enrolment.png";
-import cup_empty3 from "../../static/images/glass3_empty_enrolment.png";
-import cup_empty4 from "../../static/images/glass4_empty_enrolment.png";
-import cup_empty5 from "../../static/images/glass5_empty_enrolment.png";
+// import cup_empty1 from "../../static/images/glass1_empty_enrolment.png";
+// import cup_empty2 from "../../static/images/glass2_empty_enrolment.png";
+// import cup_empty3 from "../../static/images/glass3_empty_enrolment.png";
+// import cup_empty4 from "../../static/images/glass4_empty_enrolment.png";
+// import cup_empty5 from "../../static/images/glass5_empty_enrolment.png";
 
-import cup_full1 from "../../static/images/glass1_full_enrolment.png";
-import cup_full2 from "../../static/images/glass2_full_enrolment.png";
-import cup_full3 from "../../static/images/glass3_full_enrolment.png";
-import cup_full4 from "../../static/images/glass4_full_enrolment.png";
-import cup_full5 from "../../static/images/glass5_full_enrolment.png";
+import cup_empty1 from "../../static/images/glass1_full_enrolment.png";
+import cup_empty2 from "../../static/images/glass2_full_enrolment.png";
+import cup_empty3 from "../../static/images/glass3_full_enrolment.png";
+import cup_empty4 from "../../static/images/glass4_full_enrolment.png";
+import cup_empty5 from "../../static/images/glass5_full_enrolment.png";
 
 const cx = classNames.bind(styles);
 
@@ -54,7 +54,7 @@ class Enrolment extends Component {
       done: "",
       enrolmentData: {
         info: { cup: "하이볼", name: "", describe: "", alcohol: 0, tags: "" },
-        stuff: [{ color: "#4d191a", name: "", ml: "", ratio: 0 }],
+        stuff: [],
         totalVolume: 0
       },
       stuffID: 0,
@@ -86,9 +86,9 @@ class Enrolment extends Component {
     if (auth) {
       this.setState({ userID: auth.userid });
     } else {
-      alert("회원만 등록 가능합니다.");
-      this.props.history.goBack();
-      return false;
+      // alert("회원만 등록 가능합니다.");
+      // this.props.history.goBack();
+      // return false;
     }
 
     document.addEventListener("DOMContentLoaded", () => {
@@ -238,12 +238,55 @@ class Enrolment extends Component {
       val.classList.remove(this.selectStep);
     });
 
+    const _stuff = this.state.enrolmentData.stuff;
+    const { cup } = this.state.enrolmentData.info;
+    let startposition = "",
+      endposition = "",
+      cupImage = "";
+    switch (cup) {
+      case "하이볼":
+        startposition = "7%";
+        endposition = "60.5%";
+        cupImage = cup_empty1;
+        break;
+      case "리큐르":
+        startposition = "30%";
+        endposition = "39.7%";
+        cupImage = cup_empty2;
+        break;
+      case "허리케인":
+        startposition = "31%";
+        endposition = "38.5%";
+        cupImage = cup_empty3;
+        break;
+      case "마가렛":
+        startposition = "35%";
+        endposition = "36.5%";
+        cupImage = cup_empty4;
+        break;
+      case "마티니":
+        startposition = "41%";
+        endposition = "31.5%";
+        cupImage = cup_empty5;
+        break;
+      default:
+        break;
+    }
+
     switch (clickText) {
       case "STEP 1":
         stepTarget[0].classList.add(this.selectStep);
         this.setState({
           left: <Left contents={this.contents[0]} />,
-          middle: <Middle />,
+          middle: (
+            <Middle
+              stuff={_stuff}
+              direction={0}
+              startposition={startposition}
+              endposition={endposition}
+              cupImage={cupImage}
+            />
+          ),
           step: (
             <Step1
               onChangeCup={this.onChangeCup}
@@ -258,9 +301,25 @@ class Enrolment extends Component {
         break;
       case "STEP 2":
         stepTarget[1].classList.add(this.selectStep);
+        if (this.state.enrolmentData.stuff.length === 0) {
+          this.state.enrolmentData.stuff.push({
+            color: "#4d191a",
+            name: "",
+            ml: "",
+            ratio: 0
+          });
+        }
         this.setState({
           left: <Left contents={this.contents[1]} />,
-          middle: <Middle />,
+          middle: (
+            <Middle
+              stuff={_stuff}
+              direction={0}
+              startposition={startposition}
+              endposition={endposition}
+              cupImage={cupImage}
+            />
+          ),
           step: (
             <Step2
               stuff={this.state.enrolmentData.stuff}
@@ -270,6 +329,7 @@ class Enrolment extends Component {
               onSaveStuffName={this.onSaveStuffName}
               onSaveStuffVolume={this.onSaveStuffVolume}
               onSelectColor={this.onSelectColor}
+              onShakeMe={this.onShakeMe}
               validateNumber={this.validateNumber}
             />
           )
@@ -295,7 +355,8 @@ class Enrolment extends Component {
 
   changeCup = cupText => {
     let selectCup = "";
-    let cupArea = document.querySelector("#cup-area");
+    //let cupArea = document.querySelector("#cup-area");
+    let cup_image = "";
     let cupTarget = document.querySelectorAll(
       ".cup-item1, .cup-item2, .cup-item3, .cup-item4, .cup-item5"
     );
@@ -312,41 +373,81 @@ class Enrolment extends Component {
       case "하이볼":
         cupTarget[0].classList.add(selectCup);
         enrolmentData.info.cup = "하이볼";
-        this.setState({ enrolmentData });
-
-        cupArea.style.backgroundImage = `url(${cup_empty1})`;
+        // cupArea.style.backgroundImage = `url(${cup_empty1})`;
+        //cupArea.src = cup_empty1;
+        cup_image = cup_empty1;
         break;
       case "리큐르":
         cupTarget[1].classList.add(selectCup);
         enrolmentData.info.cup = "리큐르";
-        this.setState({ enrolmentData });
-
-        cupArea.style.backgroundImage = `url(${cup_empty2})`;
+        // cupArea.style.backgroundImage = `url(${cup_empty2})`;
+        //cupArea.src = cup_empty2;
+        cup_image = cup_empty2;
         break;
       case "허리케인":
         cupTarget[2].classList.add(selectCup);
         enrolmentData.info.cup = "허리케인";
-        this.setState({ enrolmentData });
-
-        cupArea.style.backgroundImage = `url(${cup_empty3})`;
+        // cupArea.style.backgroundImage = `url(${cup_empty3})`;
+        //cupArea.src = cup_empty3;
+        cup_image = cup_empty3;
         break;
       case "마가렛":
         cupTarget[3].classList.add(selectCup);
         enrolmentData.info.cup = "마가렛";
-        this.setState({ enrolmentData });
-
-        cupArea.style.backgroundImage = `url(${cup_empty4})`;
+        // cupArea.style.backgroundImage = `url(${cup_empty4})`;
+        //cupArea.src = cup_empty4;
+        cup_image = cup_empty4;
         break;
       case "마티니":
         cupTarget[4].classList.add(selectCup);
         enrolmentData.info.cup = "마티니";
-        this.setState({ enrolmentData });
-
-        cupArea.style.backgroundImage = `url(${cup_empty5})`;
+        // cupArea.style.backgroundImage = `url(${cup_empty5})`;
+        //cupArea.src = cup_empty5;
+        cup_image = cup_empty5;
         break;
       default:
         break;
     }
+    const _stuff = this.state.enrolmentData.stuff;
+    const { cup } = this.state.enrolmentData.info;
+    let startposition = "",
+      endposition = "";
+    switch (cup) {
+      case "하이볼":
+        startposition = "7%";
+        endposition = "60.5%";
+        break;
+      case "리큐르":
+        startposition = "30%";
+        endposition = "39.7%";
+        break;
+      case "허리케인":
+        startposition = "31%";
+        endposition = "38.5%";
+        break;
+      case "마가렛":
+        startposition = "35%";
+        endposition = "36.5%";
+        break;
+      case "마티니":
+        startposition = "41%";
+        endposition = "31.5%";
+        break;
+      default:
+        break;
+    }
+    this.setState({
+      enrolmentData,
+      middle: (
+        <Middle
+          stuff={_stuff}
+          cupImage={cup_image}
+          direction={0}
+          startposition={startposition}
+          endposition={endposition}
+        />
+      )
+    });
   };
 
   onChangeAlcohol = event => {
@@ -379,6 +480,55 @@ class Enrolment extends Component {
       alcoholTarget[4].classList.add(selectAlcohol);
       enrolmentData.info.alcohol = 4;
     }
+  };
+
+  onShakeMe = event => {
+    const _stuff = this.state.enrolmentData.stuff;
+    const { cup } = this.state.enrolmentData.info;
+    let startposition = "",
+      endposition = "",
+      cup_image = "";
+    switch (cup) {
+      case "하이볼":
+        startposition = "7%";
+        endposition = "60.5%";
+        cup_image = cup_empty1;
+        break;
+      case "리큐르":
+        startposition = "30%";
+        endposition = "39.7%";
+        cup_image = cup_empty2;
+        break;
+      case "허리케인":
+        startposition = "31%";
+        endposition = "38.5%";
+        cup_image = cup_empty3;
+        break;
+      case "마가렛":
+        startposition = "35%";
+        endposition = "36.5%";
+        cup_image = cup_empty4;
+        break;
+      case "마티니":
+        startposition = "41%";
+        endposition = "31.5%";
+        cup_image = cup_empty5;
+        break;
+      default:
+        break;
+    }
+
+    this.setState({
+      middle: (
+        <Middle
+          stuff={_stuff}
+          cupImage={cup_image}
+          direction={0}
+          startposition={startposition}
+          endposition={endposition}
+        />
+      )
+    });
   };
 
   onSaveName = event => {
@@ -439,19 +589,34 @@ class Enrolment extends Component {
   };
 
   onSaveStuffColor = (event, idx) => {
-    let enrolmentData = { ...this.state.enrolmentData };
-    enrolmentData.stuff[idx].name = event.target.value;
+    let enrolmentData = this.state.enrolmentData;
+    enrolmentData.stuff[idx].color = event.target.value;
     this.setState({ enrolmentData });
   };
 
   onSaveStuffName = (event, idx) => {
-    let enrolmentData = { ...this.state.enrolmentData };
+    let enrolmentData = this.state.enrolmentData;
     enrolmentData.stuff[idx].name = event.target.value;
-    this.setState({ enrolmentData });
+    this.setState({
+      enrolmentData,
+      step: (
+        <Step2
+          stuff={enrolmentData.stuff}
+          idx={this.state.stuffID}
+          onAddStuff={this.onAddStuff}
+          onDeleteStuff={this.onDeleteStuff}
+          onSaveStuffName={this.onSaveStuffName}
+          onSaveStuffVolume={this.onSaveStuffVolume}
+          onSelectColor={this.onSelectColor}
+          onShakeMe={this.onShakeMe}
+          validateNumber={this.validateNumber}
+        />
+      )
+    });
   };
 
   onSaveStuffVolume = (event, idx) => {
-    let enrolmentData = { ...this.state.enrolmentData };
+    let enrolmentData = this.state.enrolmentData;
     let beforeVolume =
       enrolmentData.stuff[idx].ml === ""
         ? 0
@@ -481,6 +646,7 @@ class Enrolment extends Component {
           onSaveStuffName={this.onSaveStuffName}
           onSaveStuffVolume={this.onSaveStuffVolume}
           onSelectColor={this.onSelectColor}
+          onShakeMe={this.onShakeMe}
           validateNumber={this.validateNumber}
         />
       )
@@ -505,7 +671,7 @@ class Enrolment extends Component {
       document.querySelector("#stuff-container").style.position = "relative";
     }
 
-    let enrolmentData = { ...this.state.enrolmentData };
+    let enrolmentData = this.state.enrolmentData;
     let lastIndexID = this.state.stuffID;
 
     enrolmentData.stuff.push({
@@ -527,6 +693,7 @@ class Enrolment extends Component {
           onSaveStuffName={this.onSaveStuffName}
           onSaveStuffVolume={this.onSaveStuffVolume}
           onSelectColor={this.onSelectColor}
+          onShakeMe={this.onShakeMe}
           validateNumber={this.validateNumber}
         />
       )
@@ -551,22 +718,38 @@ class Enrolment extends Component {
       document.querySelector("#stuff-container").style.position = "absolute";
     }
 
-    let enrolmentData = { ...this.state.enrolmentData };
-    let clickIndex = event.target.parentNode.parentNode.parentNode.getAttribute(
-      "stuff"
-    );
+    let enrolmentData = this.state.enrolmentData.stuff.concat();
+    let clickIndex = event.target.parentNode.parentNode.getAttribute("stuff");
 
-    enrolmentData.stuff[clickIndex] = {};
+    enrolmentData.splice(clickIndex, 1);
 
-    this.setState(enrolmentData);
+    let lastIndexID = this.state.stuffID;
 
-    event.target.parentNode.parentNode.remove();
+    this.setState({
+      enrolmentData: {
+        ...this.state.enrolmentData,
+        stuff: enrolmentData
+      },
+      stuffID: lastIndexID--,
+      step: (
+        <Step2
+          stuff={enrolmentData}
+          idx={this.state.stuffID}
+          onAddStuff={this.onAddStuff}
+          onDeleteStuff={this.onDeleteStuff}
+          onSaveStuffName={this.onSaveStuffName}
+          onSaveStuffVolume={this.onSaveStuffVolume}
+          onSelectColor={this.onSelectColor}
+          onShakeMe={this.onShakeMe}
+          validateNumber={this.validateNumber}
+        />
+      )
+    });
   };
 
   onSelectColor = event => {
     let colorContainer = document.querySelector("#color-picker");
-    this.setState({'colorClose': colorContainer.classList[1]},
-    () => {
+    this.setState({ colorClose: colorContainer.classList[1] }, () => {
       colorContainer.classList.remove(this.state.colorClose);
     });
 
@@ -715,6 +898,7 @@ class Enrolment extends Component {
                   onSaveStuffName={this.onSaveStuffName}
                   onSaveStuffVolume={this.onSaveStuffVolume}
                   onSelectColor={this.onSelectColor}
+                  onShakeMe={this.onShakeMe}
                   validateNumber={this.validateNumber}
                 />
               )
@@ -751,6 +935,7 @@ class Enrolment extends Component {
                   onSaveStuffName={this.onSaveStuffName}
                   onSaveStuffVolume={this.onSaveStuffVolume}
                   onSelectColor={this.onSelectColor}
+                  onShakeMe={this.onShakeMe}
                   validateNumber={this.validateNumber}
                 />
               )
@@ -787,7 +972,7 @@ class Enrolment extends Component {
     tags = tags.match(regexp);
     if (tags) {
       tags = tags.map(item => {
-        return item.replace("#", "")
+        return item.replace("#", "");
       });
     }
 
@@ -804,7 +989,7 @@ class Enrolment extends Component {
     // TODO
     // 데이터 validation 체크 해야 함
 
-    this.setState({'bLoading': true});
+    this.setState({ bLoading: true });
     this.props.enrolmentRequest(data);
   };
 
@@ -831,8 +1016,8 @@ class Enrolment extends Component {
         console.log(id);
         console.log(data);
 
-        this.setState({'bLoading': false});
-        let done = document.getElementById('done-container');
+        this.setState({ bLoading: false });
+        let done = document.getElementById("done-container");
 
         this.doneClose = done.classList[1];
 
@@ -847,31 +1032,28 @@ class Enrolment extends Component {
     // let done = document.getElementById('done-container');
     // done.classList.add(this.doneClose);
     this.props.history.push("/");
-  }
+  };
 
   handleChange = color => {
     let target = document.querySelector(`#${colorTarget}`);
     target.style.backgroundColor = color.hex;
   };
 
-//   <div className={cx("loading_rect", !this.state.bLoading && "_hide")}>
-//   <div className={cx("loading_container")}>
-//     <CircleSpinner
-//       size={100}
-//       color="white"
-//       loading={this.state.bLoading}
-//     />
-//   </div>
-// </div>
+  //   <div className={cx("loading_rect", !this.state.bLoading && "_hide")}>
+  //   <div className={cx("loading_container")}>
+  //     <CircleSpinner
+  //       size={100}
+  //       color="white"
+  //       loading={this.state.bLoading}
+  //     />
+  //   </div>
+  // </div>
 
   render() {
     const { left, middle, step, done } = this.state;
 
     return (
       <div className={cx("enrolment-container")}>
-      
-        
-
         <div id={"color-picker"} className={cx("color-picker", "close")}>
           <ChromePicker onChange={this.handleChange} />
           <span

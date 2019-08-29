@@ -83,7 +83,7 @@ class ViewRecipe extends Component {
     stuffs: [],
     photos: [],
     comment: [],
-    main: <RecipeCup glass="0" />,
+    main: <RecipeCup glass="0" stuffs={[]} />,
     side: <RecipeInfo alcohol="0" recipe="" descripe="" tags={[]} />,
     bShowDelete: false,
     userID: "",
@@ -100,7 +100,6 @@ class ViewRecipe extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log('test');
     if (prevProps.id !== this.props.id) {
       const { id } = this.props;
       this.setState({ bLoading: true });
@@ -120,7 +119,12 @@ class ViewRecipe extends Component {
           stuffs: this.props.stuffs,
           photos: this.props.photos,
           comment: this.props.comment,
-          main: <RecipeCup glass={this.props.recipe_info.glass} />,
+          main: (
+            <RecipeCup
+              glass={this.props.recipe_info.glass}
+              stuffs={this.props.stuffs}
+            />
+          ),
           side: (
             <RecipeInfo
               alcohol={this.state.recipe_info.alcohol}
@@ -158,7 +162,12 @@ class ViewRecipe extends Component {
             stuffs: this.props.stuffs,
             photos: this.props.photos,
             comment: this.props.comment,
-            main: <RecipeCup glass={this.props.recipe_info.glass} />,
+            main: (
+              <RecipeCup
+                glass={this.props.recipe_info.glass}
+                stuffs={this.props.stuffs}
+              />
+            ),
             side: (
               <RecipeInfo
                 alcohol={this.state.recipe_info.alcohol}
@@ -200,7 +209,12 @@ class ViewRecipe extends Component {
               stuffs: this.props.stuffs,
               photos: this.props.photos,
               comments: this.props.comments,
-              main: <RecipeCup glass={this.props.recipe_info.glass} />,
+              main: (
+                <RecipeCup
+                  glass={this.props.recipe_info.glass}
+                  stuffs={this.props.stuffs}
+                />
+              ),
               side: (
                 <RecipeInfo
                   alcohol={this.state.recipe_info.alcohol}
@@ -267,7 +281,12 @@ class ViewRecipe extends Component {
     this.initTabButtonStyle({ info, stuff, photo, comment });
     if (info === event.target || info === event.target.parentNode) {
       this.setState({
-        main: <RecipeCup glass={this.state.recipe_info.glass} />,
+        main: (
+          <RecipeCup
+            glass={this.state.recipe_info.glass}
+            stuffs={this.props.stuffs}
+          />
+        ),
         side: (
           <RecipeInfo
             alcohol={this.state.recipe_info.alcohol}
@@ -282,7 +301,12 @@ class ViewRecipe extends Component {
       info.style.opacity = 1;
     } else if (stuff === event.target || stuff === event.target.parentNode) {
       this.setState({
-        main: <RecipeCup glass={this.state.recipe_info.glass} />,
+        main: (
+          <RecipeCup
+            glass={this.state.recipe_info.glass}
+            stuffs={this.props.stuffs}
+          />
+        ),
         side: <RecipeStuff stuffs={this.state.stuffs} />
       });
 
@@ -307,7 +331,12 @@ class ViewRecipe extends Component {
     ) {
       this.setState(
         {
-          main: <RecipeCup glass={this.state.recipe_info.glass} />,
+          main: (
+            <RecipeCup
+              glass={this.state.recipe_info.glass}
+              stuffs={this.props.stuffs}
+            />
+          ),
           side: (
             <RecipeComment
               comment={this.state.comment}
@@ -449,7 +478,7 @@ class ViewRecipe extends Component {
         )}
 
         <div className={cx("detail-content")}>
-          <div className={cx("loading_rect", !this.state.bLoading && "_hide")}>
+          {/* <div className={cx("loading_rect", !this.state.bLoading && "_hide")}>
             <div className={cx("loading_container")}>
               <CircleSpinner
                 size={100}
@@ -457,7 +486,7 @@ class ViewRecipe extends Component {
                 loading={this.state.bLoading}
               />
             </div>
-          </div>
+          </div> */}
           {this.props.isPrev && (
             <span
               style={Object.assign({}, toolbarStyleCommon, {
