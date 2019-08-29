@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
+    <defs>
+        <style>
+            .cls-1,.cls-3{fill:none}.cls-1{stroke:#7a7a7a;stroke-width:2px}.cls-2{stroke:none}
+        </style>
+    </defs>
+    <g id="그룹_33" data-name="그룹 33" transform="translate(-383 -347.139)">
+        <g id="사각형_400" class="cls-1" data-name="사각형 400">
+            <path d="M0 0h40v40H0z" class="cls-2" transform="translate(383 347.139)"/>
+            <path d="M1 1h38v38H1z" class="cls-3" transform="translate(383 347.139)"/>
+        </g>
+        <path id="선_95" d="M0 0h16.673" class="cls-1" data-name="선 95" transform="translate(394.164 366.989)"/>
+        <path id="선_96" d="M0 0h16.673" class="cls-1" data-name="선 96" transform="rotate(90 21.928 380.572)"/>
+    </g>
+</svg>
